@@ -8,8 +8,22 @@ const transporter = nodemailer.createTransport({
     auth: {
         user: process.env.BREVO_SMTP_USER,
         pass: process.env.BREVO_API_KEY
-    }
+    },
+
+    connectionTimeout: 15000,
+    greetingTimeout: 15000,
+    socketTimeout: 20000
 });
+transporter.verify()
+    .then(() => {
+        console.log('[MAIL] Brevo SMTP connection successful');
+    })
+    .catch((error) => {
+        console.error(
+            '[MAIL] Brevo SMTP verification failed:',
+            error.message
+        );
+    });
 
 async function sendPasswordResetEmail({ to, resetUrl }) {
 

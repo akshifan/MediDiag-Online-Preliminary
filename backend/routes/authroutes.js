@@ -697,10 +697,42 @@ const role = ALLOWED_ROLES.includes(rawRole) ? rawRole : null;
       });
     }
 
-    req.session.user = { id: user.id, email: user.email, role: user.role };
-    return role === 'patient'
-      ? res.redirect('/patient/dashboard')
-      : res.redirect('/doctor/dashboard');
+    req.session.user = {
+  id: user.id,
+  email: user.email,
+  role: user.role
+};
+
+// Explicitly persist the session before redirecting.
+// This is especially important on Render.
+req.session.save((sessionError) => {
+  if (sessionError) {
+    console.error(
+      '[REGISTER] SESSION SAVE ERROR:',
+      sessionError
+    );
+
+    return res.status(500).render('registerpage/register', {
+      title: 'Register - MediDiag',
+      errors: {},
+      values: req.body || {},
+      role: role || null,
+      error: 'Registration succeeded, but the login session could not be created. Please try logging in again.'
+    });
+  }
+
+  console.log(
+    '[REGISTER] SESSION SAVED:',
+    req.sessionID,
+    req.session.user
+  );
+
+  if (role === 'patient') {
+    return res.redirect('/patient/dashboard');
+  }
+
+  return res.redirect('/doctor/dashboard');
+});
   } catch (error) {
     console.error("Registration error:", error);
     return res.status(500).render("registerpage/register", {

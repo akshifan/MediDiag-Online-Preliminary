@@ -19,6 +19,11 @@ if (typeof fetch !== 'function') {
 }
 
 const app = express();
+// Render runs Express behind an HTTPS reverse proxy.
+// Trust the first proxy so secure cookies work correctly.
+if (process.env.NODE_ENV === 'production') {
+  app.set('trust proxy', 1);
+}
 app.disable('x-powered-by');
 const server = http.createServer(app);
 const io = socketIo(server);
@@ -37,20 +42,33 @@ if (!process.env.SESSION_SECRET) {
 
 // NOTE: MemoryStore is dev-only. For production, swap in a persistent store
 // such as connect-pg-simple or connect-redis.
+// ============================================================
+// SESSION CONFIGURATION
+// ============================================================
+
+if (!process.env.SESSION_SECRET) {
+  console.warn(
+    '[server] WARNING: SESSION_SECRET is not set. ' +
+    'Set SESSION_SECRET in Render.'
+  );
+}
+
+const isProduction = process.env.NODE_ENV === 'production';
+
 app.use(session({
-  secret: process.env.SESSION_SECRET || 'medidiag-dev-only-secret-change-me',
+  secret:
+    process.env.SESSION_SECRET ||
+    'medidiag-dev-only-secret-change-me',
+
   resave: false,
+
   saveUninitialized: false,
 
   cookie: {
-    // Localhost uses HTTP, so secure must be false.
-    // Production HTTPS can use secure=true.
-    secure: process.env.NODE_ENV === 'production'
-      && process.env.APP_BASE_URL?.startsWith('https://'),
-
+    secure: isProduction,
+    httpOnly: true,
     sameSite: 'lax',
-    maxAge: 24 * 60 * 60 * 1000,
-    httpOnly: true
+    maxAge: 24 * 60 * 60 * 1000
   }
 }));
 
