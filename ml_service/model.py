@@ -528,6 +528,9 @@ if not ml_model.load_model():
 # -------------------------
 # Gemini Chat Functions (separate from diagnosis)
 # -------------------------
+# -------------------------
+# Gemini Chat Functions
+# -------------------------
 def chat_with_gemini(message):
     models = [
         "gemini-3.6-flash",
@@ -536,33 +539,100 @@ def chat_with_gemini(message):
 
     for model_name in models:
         try:
+            print(f"[Gemini Chat] Requesting model: {model_name}")
+
             response = client.chat.completions.create(
                 model=model_name,
                 messages=[
                     {
                         "role": "system",
                         "content": (
-                            "You are a helpful medical assistant for a hospital "
-                            "support team. Provide general health information "
-                            "and support. DO NOT diagnose symptoms - refer to "
-                            "the symptom checker."
+                            "You are MediDiag Assistant, a helpful and cautious "
+                            "medical information assistant.\n\n"
+
+                            "Your job is to provide general health information "
+                            "and guidance. Do not make a definitive medical "
+                            "diagnosis. The separate Symptom Checker is used "
+                            "for preliminary automated analysis.\n\n"
+
+                            "For health questions:\n"
+                            "1. Acknowledge the user's concern empathetically.\n"
+                            "2. Explain possible general causes or considerations.\n"
+                            "3. Give practical, safe next steps.\n"
+                            "4. Mention important warning signs when appropriate.\n"
+                            "5. Clearly state that the information is not a "
+                            "substitute for professional medical advice.\n\n"
+
+                            "Give a complete response. Do not stop in the middle "
+                            "of a sentence. Keep responses reasonably concise "
+                            "but provide enough information to be useful."
                         )
                     },
                     {
                         "role": "user",
-                        "content": message
+                        "content": str(message).strip()
                     }
                 ],
                 temperature=0.7,
-                max_tokens=500
+                max_tokens=1000
             )
 
-            return response.choices[0].message.content.strip()
+            # -------------------------
+            # Safely extract response
+            # -------------------------
+            if not response:
+                raise Exception("Gemini returned no response object")
+
+            if not response.choices:
+                raise Exception("Gemini returned no choices")
+
+            choice = response.choices[0]
+
+            content = getattr(
+                getattr(choice, "message", None),
+                "content",
+                None
+            )
+
+            if not content:
+                raise Exception("Gemini returned empty message content")
+
+            content = str(content).strip()
+
+            if not content:
+                raise Exception("Gemini returned blank content")
+
+            finish_reason = getattr(
+                choice,
+                "finish_reason",
+                None
+            )
+
+            print(
+                f"[Gemini Chat] model={model_name} "
+                f"finish_reason={finish_reason} "
+                f"response_length={len(content)}"
+            )
+
+            # If the provider reports that the response was cut because
+            # of the output limit, log it clearly.
+            if finish_reason in ["length", "max_tokens"]:
+                print(
+                    "[Gemini Chat] WARNING: response reached output limit"
+                )
+
+            return content
 
         except Exception as e:
-            print(f"[Gemini Chat Error - {model_name}]: {e}")
+            print(
+                f"[Gemini Chat Error - {model_name}]: "
+                f"{type(e).__name__}: {e}"
+            )
 
-    return "The AI assistant is temporarily unavailable. Please try again."
+    return (
+        "I'm sorry, but the AI assistant is temporarily unavailable. "
+        "Please try again in a moment or contact a healthcare professional."
+    )
 
 # -------------------------
 # Routes (ML Model Only - No Fallback)

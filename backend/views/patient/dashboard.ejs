@@ -415,31 +415,69 @@
         }
 
         function addMessage(sender, text) {
-            const msgDiv = document.createElement("div");
-            msgDiv.className = `msg ${sender}-msg`;
-            
-            const avatar = sender === "user" 
-                ? `<div class="msg-avatar user-avatar">${window.CURRENT_USER.patientName.charAt(0).toUpperCase()}</div>`
-                : `<div class="msg-avatar"><i class="fas fa-robot"></i></div>`;
-            
-            const senderName = sender === "user" ? "You" : "MediDiag Assistant";
-            
-            msgDiv.innerHTML = `
-                ${avatar}
-                <div class="msg-content">
-                    <div class="msg-header">
-                        <strong>${senderName}</strong>
-                        <span class="msg-time">${getCurrentTime()}</span>
-                    </div>
-                    <div class="msg-body">
-                        <p>${text}</p>
-                    </div>
-                </div>
-            `;
-            
-            chatWindow.appendChild(msgDiv);
-            chatWindow.scrollTop = chatWindow.scrollHeight;
-        }
+    const msgDiv = document.createElement("div");
+    msgDiv.className = `msg ${sender}-msg`;
+
+    const avatar = document.createElement("div");
+    avatar.className =
+        sender === "user"
+            ? "msg-avatar user-avatar"
+            : "msg-avatar";
+
+    if (sender === "user") {
+        const name =
+            window.CURRENT_USER?.patientName || "P";
+
+        avatar.textContent =
+            name.charAt(0).toUpperCase();
+    } else {
+        avatar.innerHTML =
+            '<i class="fas fa-robot"></i>';
+    }
+
+    const content = document.createElement("div");
+    content.className = "msg-content";
+
+    const header = document.createElement("div");
+    header.className = "msg-header";
+
+    const senderName = document.createElement("strong");
+    senderName.textContent =
+        sender === "user"
+            ? "You"
+            : "MediDiag Assistant";
+
+    const time = document.createElement("span");
+    time.className = "msg-time";
+    time.textContent = getCurrentTime();
+
+    header.appendChild(senderName);
+    header.appendChild(time);
+
+    const body = document.createElement("div");
+    body.className = "msg-body";
+
+    const paragraph = document.createElement("p");
+
+    // IMPORTANT:
+    // textContent prevents AI output from being interpreted as HTML.
+    paragraph.textContent = String(text || "");
+
+    body.appendChild(paragraph);
+
+    content.appendChild(header);
+    content.appendChild(body);
+
+    msgDiv.appendChild(avatar);
+    msgDiv.appendChild(content);
+
+    chatWindow.appendChild(msgDiv);
+
+    // Always scroll to the latest complete message.
+    requestAnimationFrame(() => {
+        chatWindow.scrollTop = chatWindow.scrollHeight;
+    });
+}
 
         sendBtn.addEventListener("click", sendMessage);
         input.addEventListener("keypress", e => {
@@ -470,13 +508,24 @@
                 const data = await res.json();
                 
                 // Add AI response on new line
-                setTimeout(() => {
-                    addMessage("ai", data.reply || "I'm sorry, I'm unable to respond right now. Please try again later or contact our support team.");
-                }, 500);
+                const reply = String(data.reply || "").trim();
+
+if (reply) {
+    setTimeout(() => {
+        addMessage("ai", reply);
+    }, 300);
+} else {
+    setTimeout(() => {
+        addMessage(
+            "ai",
+            "I'm sorry, I couldn't generate a response right now. Please try again."
+        );
+    }, 300);
+}
                 
             } catch (err) {
                 setTimeout(() => {
-                    addMessage("ai", "âš ï¸ I'm experiencing connection issues right now. Please check your internet connection and try again, or contact our support team for immediate assistance.");
+                    addMessage("ai", " I'm experiencing connection issues right now. Please check your internet connection and try again, or contact our support team for immediate assistance.");
                 }, 500);
             } finally {
                 // Re-enable send button
