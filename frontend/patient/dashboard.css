@@ -418,8 +418,7 @@
 
     gap: 10px !important;
 
-    width: 100%;
-    max-width: 100%;
+    width: 180px !important;
 
     height: 120px;
 
@@ -858,6 +857,7 @@
     grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
     gap: 8px !important;
     max-height: 460px;
+    max-width: 100%;
   }
   .appointment-scroll-grid .appointment-item { padding: 10px 8px; }
   .appointment-scroll-grid .doctor-avatar-small {
