@@ -678,20 +678,14 @@ def retrain_route():
 # -------------------------
 # Run the application
 # -------------------------
-if __name__ == "__main__":
+if __name__ == '__main__':
+    import os
+
     port = int(os.environ.get("PORT", 5000))
 
-    print(f"[ml_service] Starting on 0.0.0.0:{port}")
-    print("[ml_service] Model Type: ML-Only (No Fallback)")
-    print(f"[ml_service] Model Status: {'TRAINED' if model is not None else 'NOT TRAINED'}")
-    print(f"[ml_service] Diseases recognized: {len(diseases)}")
+    print(f"[ml_service] Starting on 0.0.0.0:{port} debug=False")
 
-    if ml_model.trained:
-        print(f"[ml_service] Diseases recognized: {len(ml_model.label_encoder.classes_)}")
-        for disease in ml_model.label_encoder.classes_:
-            print(f"  - {disease}")
-
-app.run(
+    app.run(
         host="0.0.0.0",
         port=port,
         debug=False
