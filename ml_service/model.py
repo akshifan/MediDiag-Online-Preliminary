@@ -679,7 +679,7 @@ def retrain_route():
 # Run the application
 # -------------------------
 if __name__ == '__main__':
-    port = int(os.environ.get('ML_PORT', 5000))
+    port = int(os.environ.get('PORT', os.environ.get('ML_PORT', 5000)))
     debug = os.environ.get('ML_DEBUG', 'false').lower() == 'true'
     print(f"[ml_service] Starting on 0.0.0.0:{port}  debug={debug}")
     print(f"[ml_service] Model Type: ML-Only (No Fallback)")
