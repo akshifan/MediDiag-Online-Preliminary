@@ -3119,6 +3119,7 @@ body.launch-home .portal-card .portal-btn:hover {
       height: 275px !important;
         min-height: 200px !important;
         padding: 0 !important;
+        border:#b1e9d8 1px solid !important;
     }
 
     /* Top icon area */
