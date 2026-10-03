@@ -418,7 +418,8 @@
 
     gap: 10px !important;
 
-    width: 180px !important;
+    width: 100%;
+    max-width: 100%;
 
     height: 120px;
 
@@ -435,11 +436,11 @@
 
 /* Individual recent appointment */
 .appointment-scroll-grid .appointment-item {
-    flex: 0 0 220px !important;
+    flex: 0 0 280px !important;
 
-    width: 220px !important;
-    min-width: 220px !important;
-    max-width: 220px !important;
+    width: 280px !important;
+    min-width: 280px !important;
+    max-width: 280px !important;
 
     height: 105px !important;
 
@@ -455,6 +456,9 @@
     padding: 10px !important;
 
     border-radius: 10px;
+     position: relative;
+
+    overflow: hidden;
 }
 
 /* Doctor row */
@@ -481,25 +485,48 @@
 
     font-size: 0.76rem !important;
     line-height: 1.2;
+     white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 /* Specialization */
 .appointment-scroll-grid .appointment-details .specialization {
     font-size: 0.62rem !important;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 /* Date */
 .appointment-scroll-grid .appointment-date {
     font-size: 0.6rem !important;
+        white-space: nowrap;
+
 }
 
 /* Status */
 .appointment-scroll-grid .appointment-status {
     align-self: flex-start;
 
-    padding: 3px 7px;
+    display: inline-flex;
+    align-items: center;
+
+    width: fit-content;
+    max-width: 100%;
+
+    box-sizing: border-box;
+
+    padding: 3px 8px;
 
     font-size: 0.56rem !important;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    flex-shrink: 0;
 }
 
 /* Scrollbar */
@@ -857,7 +884,15 @@
     grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
     gap: 8px !important;
     max-height: 460px;
-    max-width: 100%;
+    width: 100% !important;
+        max-width: 100% !important;
+
+        gap: 10px !important;
+
+        height: 125px;
+
+        overflow-x: auto !important;
+        overflow-y: hidden !important;
   }
   .appointment-scroll-grid .appointment-item { padding: 10px 8px; }
   .appointment-scroll-grid .doctor-avatar-small {
@@ -901,6 +936,9 @@
 @media (max-width: 340px) {
   .appointment-scroll-grid {
     grid-template-columns: 1fr !important;
+    width: 260px !important;
+        min-width: 260px !important;
+        max-width: 260px !important;
   }
 }
 
