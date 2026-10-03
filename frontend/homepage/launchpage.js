@@ -7,23 +7,24 @@ class LaunchPage {
     this.initParallaxEffect();
   }
 
-  initMedicalBackground() {
-    // Create floating medical icons in background
+    initMedicalBackground() {
     const medicalIcons = ['❤️', '🩺', '💊', '🏥', '⏱️', '📋', '🔬', '💉'];
-    const medicalBackground = document.createElement('div');
-    medicalBackground.className = 'medical-background';
-    
+    let medicalBackground = document.querySelector('.medical-background');
+    if (!medicalBackground) {
+      medicalBackground = document.createElement('div');
+      medicalBackground.className = 'medical-background';
+      document.body.appendChild(medicalBackground);
+    }
+
     medicalIcons.forEach((icon, index) => {
       const medicalIcon = document.createElement('div');
       medicalIcon.className = `medical-icon ${this.getIconClass(icon)}`;
       medicalIcon.textContent = icon;
       medicalIcon.style.animationDelay = `${index * 2}s`;
       medicalIcon.style.left = `${Math.random() * 90}%`;
-      medicalIcon.style.top = `${Math.random() * 90}%`;
+      medicalIcon.style.top  = `${Math.random() * 90}%`;
       medicalBackground.appendChild(medicalIcon);
     });
-    
-    document.body.appendChild(medicalBackground);
   }
 
   getIconClass(icon) {
@@ -100,63 +101,88 @@ class LaunchPage {
   }
 
   initPortalCards() {
-    const portalCards = document.querySelectorAll('.portal-card');
-    
-    portalCards.forEach((card, index) => {
-      // Add sequential appearance delay
-      card.style.animationDelay = `${index * 0.2}s`;
-      
-      card.addEventListener('click', (e) => {
-        if (e.target.classList.contains('btn')) return;
-        
-        const role = card.dataset.role;
-        if (role) {
-          this.animateCardClick(card, () => {
-            window.location.href = `/auth/register?role=${role}`;
-          });
-        }
-      });
+  const portalCards = document.querySelectorAll('.portal-card');
 
-      // Enhanced hover effects with medical theme
-      card.addEventListener('mouseenter', () => {
-        card.style.transform = 'translateY(-12px) scale(1.02)';
-        this.createHoverParticles(card);
-      });
+  portalCards.forEach((card, index) => {
 
-      card.addEventListener('mouseleave', () => {
-        card.style.transform = 'translateY(0) scale(1)';
-      });
+    // Sequential appearance delay
+    card.style.animationDelay = `${index * 0.2}s`;
 
-      // Add touch effects for mobile
-      card.addEventListener('touchstart', () => {
-        card.style.transform = 'translateY(-5px) scale(1.01)';
-      });
+    /*
+     * IMPORTANT:
+     * The CARD itself is NOT clickable.
+     *
+     * Only the "Continue as Patient" /
+     * "Continue as Doctor" button navigates.
+     */
 
-      card.addEventListener('touchend', () => {
-        card.style.transform = 'translateY(0) scale(1)';
+    const portalButton = card.querySelector('.portal-btn');
+
+    if (portalButton) {
+
+      portalButton.addEventListener('click', (e) => {
+
+        // Allow the <a href="..."> to perform
+        // its normal navigation.
+        e.stopPropagation();
+
+        // Small button click animation only
+        portalButton.style.transform = 'scale(0.96)';
+
+        setTimeout(() => {
+          portalButton.style.transform = '';
+        }, 120);
       });
+    }
+
+
+    /*
+     * Hover effect for the CARD.
+     * Hovering is allowed, but clicking the card
+     * does nothing.
+     */
+
+    card.addEventListener('mouseenter', () => {
+
+      card.style.transform =
+        'translateY(-8px) scale(1.01)';
+
+      this.createHoverParticles(card);
     });
-  }
 
-  animateCardClick(card, callback) {
-    // Create click animation
-    card.style.transform = 'scale(0.95)';
-    card.style.transition = 'transform 0.2s ease';
-    
-    // Add pulse effect
-    card.style.boxShadow = '0 0 0 0 rgba(59, 130, 246, 0.7)';
-    
-    setTimeout(() => {
-      card.style.transform = 'scale(1)';
-      card.style.boxShadow = '0 0 0 20px rgba(59, 130, 246, 0)';
-    }, 200);
-    
-    setTimeout(() => {
-      card.style.transition = '';
-      card.style.boxShadow = '';
-      if (callback) callback();
-    }, 400);
-  }
+
+    card.addEventListener('mouseleave', () => {
+
+      card.style.transform =
+        'translateY(0) scale(1)';
+    });
+
+
+    /*
+     * Mobile touch effect.
+     * This is ONLY visual.
+     * It does NOT navigate.
+     */
+
+    card.addEventListener('touchstart', () => {
+
+      card.style.transform =
+        'translateY(-4px) scale(1.005)';
+
+    }, { passive: true });
+
+
+    card.addEventListener('touchend', () => {
+
+      card.style.transform =
+        'translateY(0) scale(1)';
+
+    }, { passive: true });
+
+  });
+}
+
+  
 
   createHoverParticles(card) {
     const particles = 6;

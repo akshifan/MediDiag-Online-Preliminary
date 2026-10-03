@@ -1,0 +1,1788 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Chat with Doctor - MediDiag</title>
+
+    <link rel="stylesheet" href="/main/main.css">
+    <link rel="stylesheet" href="/navbar/navbar.css">
+    <link rel="stylesheet" href="/patient/dashboard.css">
+    <link rel="stylesheet" href="/footer/footer.css">
+    <link
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+        rel="stylesheet"
+    >
+    <link rel="stylesheet" href="/portal/portal-fixes.css">
+</head>
+
+<body>
+
+<%- include('../headers/launchheader') %>
+
+<div class="container patient-dashboard">
+
+    <div class="dashboard-grid">
+
+        <aside class="sidebar">
+
+            <div class="sidebar-header">
+                <h3><%= patient.full_name %></h3>
+            </div>
+
+            <nav class="sidebar-nav">
+                <ul>
+
+                    <li>
+                        <a href="/patient/dashboard">
+                            <i class="fas fa-tachometer-alt"></i>
+                            Dashboard
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="/patient/doctors">
+                            <i class="fas fa-user-md"></i>
+                            Find Doctors
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="/patient/appointments">
+                            <i class="fas fa-calendar-check"></i>
+                            My Appointments
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="/patient/chats" class="active">
+                            <i class="fas fa-comments"></i>
+                            Chats
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="/patient/profile">
+                            <i class="fas fa-user"></i>
+                            Profile
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="/auth/logout">
+                            <i class="fas fa-sign-out-alt"></i>
+                            Logout
+                        </a>
+                    </li>
+
+                </ul>
+            </nav>
+
+        </aside>
+
+
+        <main class="dashboard-content patient-chat-page">
+
+            <!-- =====================================================
+                 CHAT HEADER
+                 ===================================================== -->
+
+            <div class="patient-chat-header">
+
+                <div class="patient-chat-heading">
+
+                    <h2>
+                        <i class="fas fa-comments"></i>
+                        Chat with Dr. <%= doctorName %>
+                    </h2>
+
+                    <p>
+                        Continue your conversation with your doctor.
+                    </p>
+
+                </div>
+
+                <a
+                    href="/patient/chats"
+                    class="patient-chat-back"
+                >
+                    <i class="fas fa-arrow-left"></i>
+                    Back
+                </a>
+
+            </div>
+
+
+            <!-- =====================================================
+                 CHAT BODY
+                 Messages + Input
+                 ===================================================== -->
+
+
+                <!-- =========================
+                     MESSAGES
+                     ========================= -->
+
+                <div
+                    id="doctorChatWindow"
+                    class="patient-chat-messages"
+                >
+
+                    <div
+                        id="doctorChatMessages"
+                        class="patient-chat-message-list"
+                    >
+
+                        <!-- Welcome message -->
+
+                        <div class="patient-message-row doctor-message welcome-message">
+
+                            <div class="patient-message-avatar">
+                                <i class="fas fa-user-md"></i>
+                            </div>
+
+                            <div class="patient-message-content">
+
+                                <div class="patient-message-meta">
+
+                                    <strong>
+                                        Dr. <%= doctorName %>
+                                    </strong>
+
+                                </div>
+
+                                <div class="patient-message-bubble welcome-bubble">
+                                    You can send a message here.
+                                    Your doctor will see it in their Patient Chats.
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =========================
+                     MESSAGE INPUT
+                     ========================= -->
+
+                <div class="patient-chat-input-row">
+
+                    <input
+                        id="doctorChatInput"
+                        type="text"
+                        placeholder="Type your message..."
+                        autocomplete="off"
+                        maxlength="2000"
+                    >
+
+                    <button
+                        id="doctorChatSend"
+                        type="button"
+                        class="patient-chat-send"
+                    >
+                        <i class="fas fa-paper-plane"></i>
+                        <span>Send</span>
+                    </button>
+
+                </div>
+
+            
+
+        </main>
+
+    </div>
+
+</div>
+
+
+<%- include('../main/footer') %>
+
+
+<!-- =========================================================
+     PAGE DATA
+     ========================================================= -->
+
+<script id="PAGE_DATA" type="application/json">
+<%- JSON.stringify({
+    doctorId: doctorId,
+    doctorName: doctorName,
+    patientId: patient.id
+}) %>
+</script>
+
+
+<script src="/navbar/navbar.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+
+
+<script>
+(function () {
+
+    'use strict';
+
+    /* =========================================================
+       PAGE DATA
+       ========================================================= */
+
+    let data = {};
+
+    try {
+
+        const pageData =
+            document.getElementById('PAGE_DATA');
+
+        data =
+            pageData && pageData.textContent
+                ? JSON.parse(pageData.textContent)
+                : {};
+
+    } catch (error) {
+
+        console.error(
+            'Patient chat PAGE_DATA error:',
+            error
+        );
+
+        return;
+    }
+
+
+    /* =========================================================
+       ELEMENTS
+       ========================================================= */
+
+    const messagesEl =
+        document.getElementById('doctorChatMessages');
+
+    const chatWindow =
+        document.getElementById('doctorChatWindow');
+
+    const inputEl =
+        document.getElementById('doctorChatInput');
+
+    const sendBtn =
+        document.getElementById('doctorChatSend');
+
+
+    if (
+        !data.patientId ||
+        !data.doctorId ||
+        !messagesEl ||
+        !chatWindow ||
+        !inputEl ||
+        !sendBtn
+    ) {
+
+        console.error(
+            'Patient chat: required elements/data missing.'
+        );
+
+        return;
+    }
+
+
+    /* =========================================================
+       ESCAPE HTML
+       ========================================================= */
+
+    function escapeHtml(value) {
+
+        return String(value ?? '')
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#039;');
+
+    }
+
+
+    /* =========================================================
+       FORMAT TIME
+       ========================================================= */
+
+    function formatTime(timestamp) {
+
+        if (!timestamp) {
+            return '';
+        }
+
+        const date = new Date(timestamp);
+
+        if (Number.isNaN(date.getTime())) {
+            return '';
+        }
+
+        return date.toLocaleTimeString([], {
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+
+    }
+
+
+    /* =========================================================
+       NORMALIZE MESSAGE
+       
+       Supports:
+       
+       sender / text / timestamp
+
+       AND
+
+       sender_role / message / created_at
+       ========================================================= */
+
+    function normalizeMessage(message) {
+
+        if (!message) {
+            return null;
+        }
+
+        const sender =
+            message.sender ||
+            message.sender_role ||
+            '';
+
+        const text =
+            message.text ??
+            message.message ??
+            '';
+
+        const timestamp =
+            message.timestamp ||
+            message.created_at ||
+            null;
+
+        if (!String(text).trim()) {
+            return null;
+        }
+
+        let normalizedSender =
+            String(sender).toLowerCase();
+
+        if (
+            normalizedSender === 'doctor' ||
+            normalizedSender === 'patient'
+        ) {
+
+            return {
+                sender: normalizedSender,
+                text: String(text),
+                timestamp: timestamp
+            };
+
+        }
+
+        return null;
+    }
+
+
+    /* =========================================================
+       CREATE MESSAGE
+       ========================================================= */
+
+    function appendMessage(message) {
+
+        const normalized =
+            normalizeMessage(message);
+
+        if (!normalized) {
+            return;
+        }
+
+        const isPatient =
+            normalized.sender === 'patient';
+
+        const row =
+            document.createElement('div');
+
+        row.className =
+            'patient-message-row ' +
+            (
+                isPatient
+                    ? 'patient-message'
+                    : 'doctor-message'
+            );
+
+
+        /* =========================
+           AVATAR
+           ========================= */
+
+        const avatar =
+            document.createElement('div');
+
+        avatar.className =
+            'patient-message-avatar';
+
+        if (isPatient) {
+
+            avatar.classList.add(
+                'patient-avatar'
+            );
+
+            avatar.textContent = 'Y';
+
+        } else {
+
+            avatar.innerHTML =
+                '<i class="fas fa-user-md"></i>';
+
+        }
+
+
+        /* =========================
+           CONTENT
+           ========================= */
+
+        const content =
+            document.createElement('div');
+
+        content.className =
+            'patient-message-content';
+
+
+        /* =========================
+           META
+           ========================= */
+
+        const meta =
+            document.createElement('div');
+
+        meta.className =
+            'patient-message-meta';
+
+
+        const sender =
+            document.createElement('strong');
+
+        sender.textContent =
+            isPatient
+                ? 'You'
+                : 'Dr. ' + (
+                    data.doctorName ||
+                    'Doctor'
+                );
+
+
+        const time =
+            document.createElement('span');
+
+        time.className =
+            'patient-message-time';
+
+        time.textContent =
+            formatTime(
+                normalized.timestamp
+            );
+
+
+        meta.appendChild(sender);
+
+        if (time.textContent) {
+            meta.appendChild(time);
+        }
+
+
+        /* =========================
+           BUBBLE
+           ========================= */
+
+        const bubble =
+            document.createElement('div');
+
+        bubble.className =
+            'patient-message-bubble';
+
+        bubble.textContent =
+            normalized.text;
+
+
+        content.appendChild(meta);
+
+        content.appendChild(bubble);
+
+
+        /* =========================
+           PATIENT = RIGHT
+           DOCTOR = LEFT
+           ========================= */
+
+        if (isPatient) {
+
+            row.appendChild(content);
+            row.appendChild(avatar);
+
+        } else {
+
+            row.appendChild(avatar);
+            row.appendChild(content);
+
+        }
+
+
+        messagesEl.appendChild(row);
+
+
+        /* =========================
+           SCROLL TO BOTTOM
+           ========================= */
+
+        requestAnimationFrame(function () {
+
+            chatWindow.scrollTop =
+                chatWindow.scrollHeight;
+
+        });
+
+    }
+
+
+    /* =========================================================
+       SOCKET.IO
+       ========================================================= */
+
+    const socket =
+        typeof io === 'function'
+            ? io()
+            : null;
+
+
+    if (socket) {
+
+        socket.on('connect', function () {
+
+            socket.emit(
+                'join-chat-thread',
+                {
+                    patientId: data.patientId,
+                    doctorId: data.doctorId
+                }
+            );
+
+        });
+
+
+        socket.on(
+            'chat-message',
+            function (message) {
+
+                const normalized =
+                    normalizeMessage(message);
+
+                if (!normalized) {
+                    return;
+                }
+
+                /*
+                 * Only display incoming doctor messages.
+                 * Patient messages are already displayed
+                 * after successful POST.
+                 */
+
+                if (
+                    normalized.sender ===
+                    'doctor'
+                ) {
+
+                    appendMessage(
+                        normalized
+                    );
+
+                }
+
+            }
+        );
+
+    }
+
+
+    /* =========================================================
+       LOAD EXISTING MESSAGES
+       ========================================================= */
+
+    async function loadExistingMessages() {
+
+        try {
+
+            const response =
+                await fetch(
+                    '/patient/chat/doctor/' +
+                    encodeURIComponent(
+                        data.doctorId
+                    ) +
+                    '/messages',
+                    {
+                        headers: {
+                            'Accept':
+                                'application/json'
+                        }
+                    }
+                );
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    'Failed to load messages'
+                );
+
+            }
+
+
+            const result =
+                await response.json();
+
+
+            const messages =
+                result &&
+                Array.isArray(
+                    result.messages
+                )
+                    ? result.messages
+                    : [];
+
+
+            /*
+             * Remove only the temporary
+             * welcome message when actual
+             * conversation messages exist.
+             */
+
+            if (messages.length > 0) {
+
+                const welcome =
+                    messagesEl.querySelector(
+                        '.welcome-message'
+                    );
+
+                if (welcome) {
+                    welcome.remove();
+                }
+
+            }
+
+
+            messages.forEach(
+                function (message) {
+
+                    const normalized =
+                        normalizeMessage(
+                            message
+                        );
+
+                    if (normalized) {
+
+                        appendMessage(
+                            normalized
+                        );
+
+                    }
+
+                }
+            );
+
+
+            requestAnimationFrame(
+                function () {
+
+                    chatWindow.scrollTop =
+                        chatWindow.scrollHeight;
+
+                }
+            );
+
+
+        } catch (error) {
+
+            console.error(
+                'Loading doctor chat failed:',
+                error
+            );
+
+        }
+
+    }
+
+
+    /* =========================================================
+       SEND MESSAGE
+       ========================================================= */
+
+    async function sendMessage() {
+
+        const text =
+            String(
+                inputEl.value || ''
+            ).trim();
+
+
+        if (!text) {
+            return;
+        }
+
+
+        sendBtn.disabled = true;
+        inputEl.disabled = true;
+
+
+        try {
+
+            const response =
+                await fetch(
+                    '/patient/chat/doctor/' +
+                    encodeURIComponent(
+                        data.doctorId
+                    ) +
+                    '/message',
+                    {
+                        method: 'POST',
+
+                        headers: {
+                            'Content-Type':
+                                'application/json',
+
+                            'Accept':
+                                'application/json'
+                        },
+
+                        body: JSON.stringify({
+                            text: text
+                        })
+                    }
+                );
+
+
+            const result =
+                await response.json();
+
+
+            if (
+                !response.ok ||
+                !result ||
+                !result.success
+            ) {
+
+                throw new Error(
+                    result &&
+                    result.error
+                        ? result.error
+                        : 'Failed to send message'
+                );
+
+            }
+
+
+            /*
+             * Remove welcome message
+             * once the first real message
+             * is sent.
+             */
+
+            const welcome =
+                messagesEl.querySelector(
+                    '.welcome-message'
+                );
+
+            if (welcome) {
+                welcome.remove();
+            }
+
+
+            /*
+             * Add the saved message.
+             *
+             * Handles both API formats.
+             */
+
+            if (result.message) {
+
+                const normalized =
+                    normalizeMessage(
+                        result.message
+                    );
+
+                if (normalized) {
+
+                    appendMessage(
+                        normalized
+                    );
+
+                }
+
+            }
+
+
+            inputEl.value = '';
+
+
+        } catch (error) {
+
+            console.error(
+                'Patient chat send error:',
+                error
+            );
+
+            alert(
+                error.message ||
+                'Unable to send message.'
+            );
+
+
+        } finally {
+
+            sendBtn.disabled = false;
+            inputEl.disabled = false;
+
+            inputEl.focus();
+
+        }
+
+    }
+
+
+    /* =========================================================
+       SEND BUTTON
+       ========================================================= */
+
+    sendBtn.addEventListener(
+        'click',
+        sendMessage
+    );
+
+
+    /* =========================================================
+       ENTER TO SEND
+       ========================================================= */
+
+    inputEl.addEventListener(
+        'keydown',
+        function (event) {
+
+            if (
+                event.key === 'Enter' &&
+                !event.shiftKey
+            ) {
+
+                event.preventDefault();
+
+                sendMessage();
+
+            }
+
+        }
+    );
+
+
+    /* =========================================================
+       INITIAL LOAD
+       ========================================================= */
+
+    loadExistingMessages();
+
+
+})();
+</script>
+
+
+<style>
+
+/* ============================================================
+   PATIENT CHAT
+   EVERYTHING IS SCOPED TO THIS PAGE
+   ============================================================ */
+
+.patient-chat-page {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+
+/* ============================================================
+   CHAT HEADER
+   ============================================================ */
+
+.patient-chat-header {
+    width: 100%;
+    min-height: 68px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 10px;
+
+    padding: 11px 13px;
+
+    box-sizing: border-box;
+
+    background: #f8fffd;
+
+    border: 1px solid #bcefe0;
+    border-radius: 14px;
+
+    margin-bottom: 10px;
+
+    box-shadow:
+        0 3px 10px rgba(16, 185, 129, 0.05);
+}
+
+
+.patient-chat-heading {
+    min-width: 0;
+}
+
+
+.patient-chat-heading h2 {
+    margin: 0;
+
+    display: flex;
+    align-items: center;
+
+    gap: 6px;
+
+    color: #075f4c;
+
+    font-size: 0.95rem;
+    font-weight: 700;
+
+    line-height: 1.2;
+}
+
+
+.patient-chat-heading h2 i {
+    color: #008f70;
+    font-size: 0.88rem;
+}
+
+
+.patient-chat-heading p {
+    margin: 4px 0 0;
+
+    color: #55716b;
+
+    font-size: 0.66rem;
+
+    line-height: 1.3;
+}
+
+
+/* ============================================================
+   BACK BUTTON
+   ============================================================ */
+
+.patient-chat-back {
+    flex-shrink: 0;
+
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 4px;
+
+    padding: 7px 11px;
+
+    border-radius: 18px;
+
+    background: #e6faf4;
+
+    color: #009b78;
+
+    text-decoration: none;
+
+    font-size: 0.66rem;
+    font-weight: 700;
+
+    white-space: nowrap;
+
+    transition: 0.2s ease;
+}
+
+
+.patient-chat-back:hover {
+    background: #d5f5eb;
+    color: #007c63;
+}
+
+
+.patient-chat-back i {
+    font-size: 0.62rem;
+}
+
+
+/* ============================================================
+   CHAT BODY
+   This is the ONLY second main chat container.
+   ============================================================ */
+
+.patient-chat-body {
+    width: 100%;
+
+    box-sizing: border-box;
+
+    padding: 10px;
+
+    background: #f8fffd;
+
+    border: 1px solid #bcefe0;
+
+    border-radius: 14px;
+
+    box-shadow:
+        0 5px 16px rgba(16, 185, 129, 0.07);
+}
+
+
+/* ============================================================
+   MESSAGE WINDOW
+   ============================================================ */
+
+.patient-chat-messages {
+    width: 100%;
+
+    height: 355px;
+
+    box-sizing: border-box;
+
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    padding: 10px;
+
+    background: #effbf7;
+
+    border: 1px solid #bcefe0;
+
+    border-radius: 11px;
+
+    scroll-behavior: smooth;
+}
+
+
+/* Scrollbar */
+
+.patient-chat-messages::-webkit-scrollbar {
+    width: 5px;
+}
+
+.patient-chat-messages::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.patient-chat-messages::-webkit-scrollbar-thumb {
+    background: #9bdfd0;
+    border-radius: 10px;
+}
+
+
+/* ============================================================
+   MESSAGE LIST
+   IMPORTANT:
+   No min-height.
+   No flex: 1.
+   No fixed message height.
+   ============================================================ */
+
+.patient-chat-message-list {
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 9px;
+
+    box-sizing: border-box;
+}
+
+
+/* ============================================================
+   MESSAGE ROW
+   ============================================================ */
+
+.patient-chat-message-list
+.patient-message-row {
+
+    width: 100%;
+
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: 7px;
+
+    margin: 0;
+    padding: 0;
+
+    box-sizing: border-box;
+
+    background: transparent !important;
+
+    border: 0 !important;
+
+    box-shadow: none !important;
+
+    min-height: 0 !important;
+
+    height: auto !important;
+
+    flex: none !important;
+}
+
+
+/* Doctor = LEFT */
+
+.patient-chat-message-list
+.doctor-message {
+
+    justify-content: flex-start;
+
+    flex-direction: row;
+}
+
+
+/* Patient = RIGHT */
+
+.patient-chat-message-list
+.patient-message {
+
+    justify-content: flex-end;
+
+    flex-direction: row;
+}
+
+
+/* ============================================================
+   AVATAR
+   ============================================================ */
+
+.patient-message-avatar {
+
+    width: 32px;
+    height: 32px;
+
+    min-width: 32px;
+    max-width: 32px;
+
+    flex: 0 0 32px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background:
+        linear-gradient(
+            135deg,
+            #08a77d,
+            #34d6a8
+        );
+
+    color: #ffffff;
+
+    font-size: 0.65rem;
+    font-weight: 700;
+
+    box-shadow:
+        0 3px 8px rgba(0, 150, 115, 0.15);
+
+    box-sizing: border-box;
+}
+
+
+.patient-message-avatar i {
+    font-size: 0.68rem;
+}
+
+
+/* Patient avatar */
+
+.patient-message .patient-message-avatar {
+    order: 2;
+}
+
+
+/* ============================================================
+   MESSAGE CONTENT
+   ============================================================ */
+
+.patient-message-content {
+
+    width: auto;
+
+    max-width: 76%;
+
+    min-width: 0;
+
+    display: flex;
+
+    flex-direction: column;
+
+    box-sizing: border-box;
+
+    flex: 0 1 auto;
+}
+
+
+/* ============================================================
+   MESSAGE META
+   Name + time
+   ============================================================ */
+
+.patient-message-meta {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 6px;
+
+    min-height: 14px;
+
+    margin: 0 0 3px;
+
+    padding: 0;
+
+    color: #075f4c;
+
+    font-size: 0.64rem;
+
+    line-height: 1.1;
+
+    white-space: nowrap;
+}
+
+
+.patient-message-meta strong {
+    margin: 0;
+
+    color: #075f4c;
+
+    font-size: 0.65rem;
+
+    font-weight: 700;
+}
+
+
+.patient-message-time {
+
+    color: #718b85;
+
+    font-size: 0.55rem;
+
+    font-weight: 400;
+
+    line-height: 1;
+}
+
+
+/* Patient meta aligned right */
+
+.patient-message .patient-message-meta {
+    justify-content: flex-end;
+}
+
+
+/* ============================================================
+   MESSAGE BUBBLE
+   IMPORTANT:
+   width is fit-content.
+   This prevents huge doctor bubbles.
+   ============================================================ */
+
+.patient-message-bubble {
+
+    display: block;
+
+    width: fit-content;
+
+    max-width: 100%;
+
+    box-sizing: border-box;
+
+    padding: 8px 11px;
+
+    margin: 0;
+
+    background: #ffffff;
+
+    border: 1px solid #ccefe5;
+
+    border-radius: 9px;
+
+    color: #304d47;
+
+    font-size: 0.68rem;
+
+    line-height: 1.4;
+
+    word-break: break-word;
+
+    overflow-wrap: anywhere;
+
+    white-space: pre-wrap;
+
+    box-shadow:
+        0 2px 6px rgba(16, 185, 129, 0.04);
+
+    height: auto !important;
+
+    min-height: 0 !important;
+
+    max-height: none;
+}
+
+
+/* Doctor bubble */
+
+.doctor-message
+.patient-message-bubble {
+
+    align-self: flex-start;
+
+    background: #ffffff;
+}
+
+
+/* Patient bubble */
+
+.patient-message
+.patient-message-bubble {
+
+    align-self: flex-end;
+
+    background: #d9f6ed;
+
+    border-color: #b9e9dc;
+
+    color: #315b51;
+}
+
+
+/* ============================================================
+   WELCOME MESSAGE
+   SMALL COMPACT BUBBLE
+   ============================================================ */
+
+.patient-chat-message-list
+.welcome-message {
+
+    align-items: flex-start;
+
+    margin-bottom: 1px;
+}
+
+
+.welcome-message
+.patient-message-content {
+
+    max-width: 78%;
+}
+
+
+.welcome-message
+.patient-message-bubble {
+
+    width: fit-content;
+
+    max-width: 100%;
+
+    padding: 8px 10px;
+
+    line-height: 1.45;
+
+    text-align: left;
+}
+
+
+/* ============================================================
+   INPUT ROW
+   ============================================================ */
+
+.patient-chat-input-row {
+
+    width: 100%;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    margin-top: 9px;
+
+    box-sizing: border-box;
+}
+
+
+/* ============================================================
+   INPUT
+   ============================================================ */
+
+.patient-chat-input-row input {
+
+    flex: 1 1 auto;
+
+    width: 100%;
+
+    min-width: 0;
+
+    height: 42px;
+
+    box-sizing: border-box;
+
+    padding: 0 11px;
+
+    border: 1px solid #bcefe0;
+
+    border-radius: 10px;
+
+    background: #ffffff;
+
+    color: #304d47;
+
+    font-family: inherit;
+
+    font-size: 0.68rem;
+
+    outline: none;
+
+    transition: 0.2s ease;
+}
+
+
+.patient-chat-input-row input::placeholder {
+    color: #78938d;
+}
+
+
+.patient-chat-input-row input:focus {
+
+    border-color: #0bb58a;
+
+    box-shadow:
+        0 0 0 3px rgba(
+            16,
+            185,
+            129,
+            0.10
+        );
+}
+
+
+/* ============================================================
+   SEND BUTTON
+   ============================================================ */
+
+.patient-chat-send {
+
+    flex: 0 0 auto;
+
+    height: 42px;
+
+    min-width: 68px;
+
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 5px;
+
+    padding: 0 13px;
+
+    border: 0;
+
+    border-radius: 10px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #00a878,
+            #38d6a5
+        );
+
+    color: #ffffff;
+
+    font-family: inherit;
+
+    font-size: 0.68rem;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 4px 10px rgba(
+            0,
+            168,
+            120,
+            0.18
+        );
+
+    transition: 0.2s ease;
+}
+
+
+.patient-chat-send i {
+    font-size: 0.68rem;
+}
+
+
+.patient-chat-send:hover {
+
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 6px 13px rgba(
+            0,
+            168,
+            120,
+            0.22
+        );
+}
+
+
+.patient-chat-send:active {
+    transform: translateY(0);
+}
+
+
+.patient-chat-send:disabled {
+
+    opacity: 0.6;
+
+    cursor: not-allowed;
+
+    transform: none;
+}
+
+
+/* ============================================================
+   MOBILE
+   ============================================================ */
+
+@media (max-width: 600px) {
+
+    .patient-chat-header {
+
+        min-height: 64px;
+
+        padding: 10px 11px;
+
+        border-radius: 12px;
+
+        gap: 8px;
+    }
+
+
+    .patient-chat-heading h2 {
+
+        font-size: 0.86rem;
+    }
+
+
+    .patient-chat-heading h2 i {
+
+        font-size: 0.8rem;
+    }
+
+
+    .patient-chat-heading p {
+
+        font-size: 0.60rem;
+    }
+
+
+    .patient-chat-back {
+
+        padding: 6px 9px;
+
+        font-size: 0.61rem;
+    }
+
+
+    .patient-chat-body {
+
+        padding: 8px;
+
+        border-radius: 12px;
+    }
+
+
+    .patient-chat-messages {
+
+        height: 355px;
+
+        padding: 8px;
+
+        border-radius: 10px;
+    }
+
+
+    .patient-chat-message-list {
+
+        gap: 8px;
+    }
+
+
+    .patient-message-avatar {
+
+        width: 30px;
+        height: 30px;
+
+        min-width: 30px;
+        max-width: 30px;
+
+        flex-basis: 30px;
+
+        font-size: 0.62rem;
+    }
+
+
+    .patient-message-avatar i {
+
+        font-size: 0.62rem;
+    }
+
+
+    .patient-message-content {
+
+        max-width: 78%;
+    }
+
+
+    .patient-message-meta {
+
+        font-size: 0.60rem;
+
+        gap: 5px;
+
+        margin-bottom: 3px;
+    }
+
+
+    .patient-message-meta strong {
+
+        font-size: 0.61rem;
+    }
+
+
+    .patient-message-time {
+
+        font-size: 0.52rem;
+    }
+
+
+    .patient-message-bubble {
+
+        padding: 7px 10px;
+
+        font-size: 0.65rem;
+
+        line-height: 1.4;
+
+        border-radius: 9px;
+    }
+
+
+    .patient-chat-input-row {
+
+        gap: 6px;
+
+        margin-top: 8px;
+    }
+
+
+    .patient-chat-input-row input {
+
+        height: 40px;
+
+        font-size: 0.65rem;
+
+        padding: 0 9px;
+    }
+
+
+    .patient-chat-send {
+
+        height: 40px;
+
+        min-width: 65px;
+
+        padding: 0 11px;
+
+        font-size: 0.65rem;
+    }
+
+}
+
+
+/* ============================================================
+   VERY SMALL MOBILE
+   ============================================================ */
+
+@media (max-width: 380px) {
+
+    .patient-chat-heading h2 {
+
+        font-size: 0.80rem;
+    }
+
+
+    .patient-chat-heading p {
+
+        font-size: 0.56rem;
+    }
+
+
+    .patient-chat-back {
+
+        padding: 5px 8px;
+
+        font-size: 0.57rem;
+    }
+
+
+    .patient-chat-messages {
+
+        height: 335px;
+    }
+
+
+    .patient-message-content {
+
+        max-width: 75%;
+    }
+
+
+    .patient-message-bubble {
+
+        font-size: 0.63rem;
+
+        padding: 7px 9px;
+    }
+
+
+    .patient-chat-send {
+
+        min-width: 58px;
+
+        padding: 0 9px;
+    }
+
+}
+
+</style>
+
+</body>
+</html>

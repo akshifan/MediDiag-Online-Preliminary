@@ -14,25 +14,22 @@ async function setupDatabase() {
       throw new Error('Schema file not found: ' + schemaPath);
     }
 
-    const sql = fs.readFileSync(schemaPath, 'utf8');
-    
-    // Split by semicolon and execute each statement
-    const statements = sql.split(';').filter(stmt => stmt.trim().length > 0);
-    
-    for (let i = 0; i < statements.length; i++) {
-      const statement = statements[i].trim();
-      if (statement.length > 0) {
-        try {
-          await client.query(statement);
-          console.log(`✅ Executed statement ${i + 1}/${statements.length}`);
-        } catch (error) {
-          // Ignore "relation already exists" errors during setup
-          if (!error.message.includes('already exists')) {
-            console.error(`❌ Error in statement ${i + 1}:`, error.message);
-            throw error;
-          }
-        }
+        const sql = fs.readFileSync(schemaPath, 'utf8');
+
+    try {
+      await client.query(sql);
+      console.log('✅ Schema executed (all statements)');
+    } catch (error) {
+      const msg = String(error.message || '');
+      const benign =
+        msg.includes('already exists') ||
+        msg.includes('duplicate key value') ||
+        msg.includes('multiple primary keys');
+      if (!benign) {
+        console.error('❌ Schema error:', msg);
+        throw error;
       }
+      console.log('ℹ️  Some objects already existed — continuing.');
     }
     
     console.log('🎉 Database setup completed successfully');

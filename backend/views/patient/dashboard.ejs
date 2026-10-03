@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,8 +9,9 @@
     <link rel="stylesheet" href="/main/main.css">
     <link rel="stylesheet" href="/navbar/navbar.css">
     <link rel="stylesheet" href="/patient/dashboard.css">
-    
+    <link rel="stylesheet" href="/footer/footer.css">    
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/portal/portal-fixes.css">
 </head>
 <body>
     <%- include('../headers/launchheader') %>
@@ -27,11 +30,8 @@
         <div class="dashboard-grid">
             <aside class="sidebar">
                 <div class="sidebar-header">
-                    <div class="user-avatar-large">
-                        <%= patient.full_name ? patient.full_name.charAt(0).toUpperCase() : 'P' %>
-                    </div>
+                
                     <h3><%= patient.full_name %></h3>
-                    <p>Patient ID: <%= patient.id %></p>
                 </div>
                 <nav class="sidebar-nav">
                     <ul>
@@ -53,6 +53,7 @@
                                 My Appointments
                             </a>
                         </li>
+                        <li><a href="/patient/chats"><i class="fas fa-comments"></i> Chats</a></li>
                         <li>
                             <a href="/patient/profile">
                                 <i class="fas fa-user"></i>
@@ -72,15 +73,15 @@
             <main class="dashboard-content">
                 <!-- Welcome Section -->
                 <section class="welcome-section animate-fade-in-up">
-                    <h1>Welcome back, <%= patient.full_name %>! <span class="welcome-emoji">👋</span></h1>
+                    <h1>Welcome back, <%= patient.full_name %>!</h1>
                     <p>Your health journey starts here. We're here to support you every step of the way.</p>
                     <div class="health-stats">
-                        <div class="stat-card">
+                                                <div class="stat-card">
                             <div class="stat-icon">
                                 <i class="fas fa-calendar-check"></i>
                             </div>
                             <div class="stat-info">
-                                <span class="stat-number"><%= appointments.length %></span>
+                                <span class="stat-number"><%= (appointments && appointments.length) || 0 %></span>
                                 <span class="stat-label">Total Appointments</span>
                             </div>
                         </div>
@@ -89,51 +90,14 @@
                                 <i class="fas fa-user-md"></i>
                             </div>
                             <div class="stat-info">
-                                <span class="stat-number"><%= new Set(appointments.map(a => a.doctor_id)).size %></span>
+                                <span class="stat-number"><%= (appointments && appointments.length) ? new Set(appointments.map(a => a.doctor_id)).size : 0 %></span>
                                 <span class="stat-label">Doctors Consulted</span>
                             </div>
                         </div>
                     </div>
                 </section>
 
-                <!-- Quick Actions -->
-                <section class="quick-actions-section animate-on-scroll">
-                    <h2 class="section-title">Quick Actions</h2>
-                    <div class="quick-actions">
-                        <a href="/patient/doctors" class="quick-action-card">
-                            <div class="quick-action-icon">
-                                <i class="fas fa-user-md"></i>
-                            </div>
-                            <h3>Find Doctors</h3>
-                            <p>Book appointments with specialists</p>
-                            <span class="action-arrow">
-                                <i class="fas fa-arrow-right"></i>
-                            </span>
-                        </a>
-                        
-                        <a href="/patient/appointments" class="quick-action-card">
-                            <div class="quick-action-icon">
-                                <i class="fas fa-calendar-alt"></i>
-                            </div>
-                            <h3>My Appointments</h3>
-                            <p>View and manage your bookings</p>
-                            <span class="action-arrow">
-                                <i class="fas fa-arrow-right"></i>
-                            </span>
-                        </a>
-                        
-                        <a href="#diagnosis-tool" class="quick-action-card">
-                            <div class="quick-action-icon">
-                                <i class="fas fa-search"></i>
-                            </div>
-                            <h3>Symptom Checker</h3>
-                            <p>Get preliminary analysis</p>
-                            <span class="action-arrow">
-                                <i class="fas fa-arrow-right"></i>
-                            </span>
-                        </a>
-                    </div>
-                </section>
+            
 
                 <!-- Symptom Checker -->
                 <section id="diagnosis-tool" class="diagnosis-section animate-on-scroll">
@@ -165,16 +129,18 @@
                     </div>
                 </section>
 
-                <!-- Recent Appointments -->
+                                <!-- Recent Appointments -->
                 <section class="recent-appointments animate-on-scroll">
                     <div class="section-header">
                         <h2><i class="fas fa-history"></i> Recent Appointments</h2>
-                        <a href="/patient/appointments" class="view-all">View All</a>
+                        <a href="/patient/appointments" class="view-all">
+                            View All <i class="fas fa-arrow-right"></i>
+                        </a>
                     </div>
-                    
-                    <div class="appointment-list">
-                        <% if (appointments.length > 0) { %>
-                            <% appointments.slice(0, 3).forEach(appointment => { %>
+
+                    <% if (appointments && appointments.length > 0) { %>
+                        <div class="appointment-scroll-grid">
+                            <% appointments.slice(0, 8).forEach(appointment => { %>
                                 <div class="appointment-item">
                                     <div class="appointment-info">
                                         <div class="doctor-avatar-small">
@@ -194,15 +160,15 @@
                                     </div>
                                 </div>
                             <% }); %>
-                        <% } else { %>
-                            <div class="empty-state">
-                                <i class="fas fa-calendar-plus"></i>
-                                <h4>No Appointments Yet</h4>
-                                <p>Book your first appointment with a healthcare professional</p>
-                                <a href="/patient/doctors" class="btn btn-primary">Find Doctors</a>
-                            </div>
-                        <% } %>
-                    </div>
+                        </div>
+                    <% } else { %>
+                        <div class="empty-state">
+                            <i class="fas fa-calendar-plus"></i>
+                            <h4>No Appointments Yet</h4>
+                            <p>Book your first appointment with a healthcare professional</p>
+                            <a href="/patient/doctors" class="btn btn-primary">Find Doctors</a>
+                        </div>
+                    <% } %>
                 </section>
 
                 <!-- AI Chat -->
@@ -297,6 +263,8 @@
         </div>
     </div>
 
+    <%- include('../main/footer') %>
+
     <!-- Scripts -->
     <script src="/navbar/navbar.js"></script>
     <script src="/socket.io/socket.io.js"></script>
@@ -331,6 +299,21 @@
             };
         }
 
+        //         // Join patient-specific socket room so server-emitted messages reach us
+        try {
+            if (window.CURRENT_USER && window.CURRENT_USER.id && typeof io === 'function') {
+                const socket = io();
+                socket.on('connect', () => {
+                    socket.emit('join-patient', window.CURRENT_USER.id);
+                });
+                socket.on('chat-message', (m) => {
+                    if (!m || !m.text) return;
+                    const sender = m.sender === 'patient' ? 'user' : 'ai';
+                    addMessage(sender, m.text);
+                });
+            }
+        } catch (e) { /* ignore */ }
+
         // Symptom Checker Functionality
         document.getElementById("diagnose-btn").addEventListener("click", async () => {
             const symptoms = document.getElementById("symptoms").value.trim();
@@ -355,7 +338,7 @@
             `;
 
             try {
-                const response = await fetch("http://localhost:5000/analyze", {
+                    const response = await fetch("/api/diagnose", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ symptoms })
@@ -476,11 +459,13 @@
             sendBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
 
             try {
-                const res = await fetch("http://localhost:5000/chat", {
+                                const res = await fetch("/api/chat", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ message: text })
-                });
+                });                if (!res.ok) {
+                    throw new Error('Chat service returned ' + res.status);
+                }
 
                 const data = await res.json();
                 
@@ -491,7 +476,7 @@
                 
             } catch (err) {
                 setTimeout(() => {
-                    addMessage("ai", "⚠️ I'm experiencing connection issues right now. Please check your internet connection and try again, or contact our support team for immediate assistance.");
+                    addMessage("ai", "âš ï¸ I'm experiencing connection issues right now. Please check your internet connection and try again, or contact our support team for immediate assistance.");
                 }, 500);
             } finally {
                 // Re-enable send button

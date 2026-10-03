@@ -1,190 +1,369 @@
-/* FAQs Page - Same Styling as Homepage */
+/* ==========================================================================
+   MediDiag — FAQ Page
+   Crystal Mint Theme
+   Responsive layout matches About + Features pages
+   ========================================================================== */
+
 .faqs-hero {
-  background: 
-    linear-gradient(135deg, var(--bg-darker) 0%, var(--bg-light) 50%, var(--bg-darker) 100%),
-    url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%233b82f6' fill-opacity='0.1' fill-rule='evenodd'/%3E%3C/svg%3E");
+  background:
+    radial-gradient(
+      circle at 15% 20%,
+      rgba(167, 243, 208, 0.55) 0%,
+      transparent 45%
+    ),
+    radial-gradient(
+      circle at 85% 15%,
+      rgba(110, 231, 183, 0.40) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      circle at 50% 100%,
+      rgba(236, 253, 245, 0.90) 0%,
+      transparent 60%
+    ),
+    linear-gradient(
+      135deg,
+      #F0FDF8 0%,
+      #ECFDF5 50%,
+      #F6FFFB 100%
+    );
+
   min-height: 40vh;
+
   display: flex;
   align-items: center;
   justify-content: center;
+
   text-align: center;
   color: var(--text-lighter);
+
   position: relative;
   overflow: hidden;
+
   padding: 140px 0 80px;
 }
 
 .faqs-hero::before {
   content: '';
+
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: 
-    radial-gradient(circle at 20% 80%, rgba(59, 130, 246, 0.15) 0%, transparent 50%),
-    radial-gradient(circle at 80% 20%, rgba(16, 185, 129, 0.1) 0%, transparent 50%),
-    radial-gradient(circle at 40% 40%, rgba(20, 184, 166, 0.08) 0%, transparent 50%);
+  inset: 0;
+
+  background:
+    radial-gradient(
+      circle at 20% 80%,
+      rgba(16, 185, 129, 0.10) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      circle at 80% 20%,
+      rgba(52, 211, 153, 0.10) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      circle at 40% 40%,
+      rgba(110, 231, 183, 0.10) 0%,
+      transparent 50%
+    );
+
   animation: backgroundShift 8s ease-in-out infinite;
+
   z-index: 1;
 }
 
-.faqs-hero-content {
+.faqs-hero-container {
   position: relative;
   z-index: 2;
+
   max-width: 800px;
+
   padding: 0 20px;
 }
 
 .faqs-hero h1 {
   font-size: 3.5rem;
   font-weight: 800;
+
   margin-bottom: 1.5rem;
-  background: linear-gradient(135deg, var(--text-lighter) 0%, var(--medical-teal) 100%);
+
+  background:
+    linear-gradient(
+      135deg,
+      #064E3B 0%,
+      #059669 45%,
+      #34D399 100%
+    );
+
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+
   animation: fadeInUp 1s ease-out 0.2s both;
 }
 
 .faqs-hero p {
   font-size: 1.25rem;
+
   margin-bottom: 2rem;
-  color: var(--text-light);
+
+  color: var(--text-dark);
+
   opacity: 0;
+
   animation: fadeIn 1s ease-out 0.8s both;
 }
 
+
+/* ==========================================================================
+   FAQ CONTENT
+   ========================================================================== */
+
 .faqs-content {
   padding: 100px 0;
+
   background: var(--bg-darker);
+
   position: relative;
 }
 
 .faqs-content::before {
   content: '';
+
   position: absolute;
+
   top: 0;
   left: 0;
   right: 0;
+
   height: 1px;
-  background: linear-gradient(90deg, transparent, var(--medical-blue), transparent);
+
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      var(--primary-color),
+      transparent
+    );
 }
+
+
+/* ==========================================================================
+   FAQ CATEGORY BUTTONS
+   ========================================================================== */
 
 .faq-categories {
   display: flex;
+
   gap: 16px;
+
   margin-bottom: 60px;
+
   flex-wrap: wrap;
+
   justify-content: center;
 }
 
 .category-btn {
   padding: 16px 32px;
-  background: var(--bg-lighter);
+
+  background: rgba(255, 255, 255, 0.85);
+
   color: var(--text-light);
-  border: 1px solid rgba(59, 130, 246, 0.1);
+
+  border: 1px solid rgba(167, 243, 208, 0.55);
+
   border-radius: 12px;
+
   cursor: pointer;
+
   transition: all 0.3s ease;
+
   font-weight: 600;
+
+  font-size: 1rem;
 }
 
 .category-btn.active,
 .category-btn:hover {
   background: var(--gradient-medical);
-  color: var(--text-lighter);
+
+  color: #FFFFFF;
+
   transform: translateY(-2px);
+
   box-shadow: var(--shadow-medical);
+
+  border-color: transparent;
 }
 
+
+/* ==========================================================================
+   FAQ LIST
+   ========================================================================== */
+
 .faq-list {
+  width: 100%;
+
   max-width: 800px;
+
   margin: 0 auto;
 }
 
 .faq-item {
-  background: var(--bg-lighter);
-  border-radius: 20px;
-  margin-bottom: 20px;
-  border: 1px solid rgba(59, 130, 246, 0.1);
-  overflow: hidden;
-  transition: all 0.3s ease;
-}
+  background: rgba(255, 255, 255, 0.85);
 
-.faq-item:hover {
-  border-color: rgba(59, 130, 246, 0.3);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+
+  border-radius: 20px;
+
+  margin-bottom: 20px;
+
+  border: 1px solid rgba(167, 243, 208, 0.55);
+
+  overflow: hidden;
+
+  transition: all 0.3s ease;
+
   box-shadow: var(--shadow);
 }
 
+.faq-item:hover {
+  border-color: var(--primary-color);
+
+  box-shadow: var(--shadow-medical);
+}
+
+
+/* ==========================================================================
+   FAQ QUESTION
+   ========================================================================== */
+
 .faq-question {
   padding: 30px;
+
   cursor: pointer;
+
   display: flex;
+
   justify-content: space-between;
+
   align-items: center;
+
+  gap: 20px;
+
   font-weight: 600;
+
   color: var(--text-lighter);
+
   transition: all 0.3s ease;
+
   font-size: 1.1rem;
 }
 
 .faq-question:hover {
-  background: rgba(59, 130, 246, 0.05);
+  background: rgba(236, 253, 245, 0.85);
 }
+
+
+/* ==========================================================================
+   FAQ ANSWER
+   ========================================================================== */
 
 .faq-answer {
   padding: 0 30px;
+
   max-height: 0;
+
   overflow: hidden;
-  transition: all 0.3s ease;
+
+  transition:
+    max-height 0.3s ease,
+    padding 0.3s ease;
 }
 
 .faq-answer.active {
   padding: 0 30px 30px;
+
   max-height: 500px;
 }
 
 .faq-answer p {
   color: var(--text-dark);
+
   line-height: 1.7;
+
+  font-size: 1rem;
+
+  margin: 0;
 }
 
+
+/* ==========================================================================
+   FAQ ICON
+   ========================================================================== */
+
 .faq-icon {
+  flex-shrink: 0;
+
   transition: transform 0.3s ease;
-  color: var(--medical-teal);
+
+  color: var(--primary-dark);
 }
 
 .faq-icon.active {
   transform: rotate(180deg);
 }
 
+
+/* ==========================================================================
+   SUPPORT CTA
+   ========================================================================== */
+
 .support-cta {
-  background: var(--bg-lighter);
+  background: rgba(255, 255, 255, 0.82);
+
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+
   padding: 50px 40px;
+
   border-radius: 20px;
-  border: 1px solid rgba(59, 130, 246, 0.1);
+
+  border: 1px solid rgba(167, 243, 208, 0.55);
+
   text-align: center;
+
   margin-top: 60px;
+
+  box-shadow: var(--shadow-medical);
 }
 
 .support-cta h3 {
   color: var(--text-lighter);
+
   margin-bottom: 16px;
+
   font-size: 1.5rem;
 }
 
 .support-cta p {
   color: var(--text-dark);
+
   margin-bottom: 24px;
 }
 
-/* Animations */
+
+/* ==========================================================================
+   ANIMATIONS
+   ========================================================================== */
+
 @keyframes fadeInUp {
   from {
     opacity: 0;
     transform: translateY(50px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -192,36 +371,413 @@
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
-/* Responsive */
+@keyframes backgroundShift {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 0.8;
+    transform: scale(1.02);
+  }
+}
+
+
+/* ==========================================================================
+   MEDICAL BACKGROUND
+   ========================================================================== */
+
+.medical-background {
+  position: fixed;
+
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+
+  pointer-events: none;
+
+  z-index: 0;
+
+  opacity: 0.06;
+}
+
+.medical-icon {
+  position: absolute;
+
+  font-size: 2rem;
+
+  opacity: 0.10;
+
+  animation: floatMedical 8s ease-in-out infinite;
+}
+
+@keyframes floatMedical {
+  0%,
+  100% {
+    transform: translateY(0) rotate(0);
+  }
+
+  50% {
+    transform: translateY(-20px) rotate(5deg);
+  }
+}
+
+
+/* ==========================================================================
+   TABLET
+   ========================================================================== */
+
 @media (max-width: 768px) {
+
+  .faqs-hero {
+    min-height: 35vh;
+
+    padding: 120px 20px 60px;
+  }
+
+  .faqs-hero-container {
+    max-width: 650px;
+
+    padding: 0 15px;
+  }
+
   .faqs-hero h1 {
     font-size: 2.5rem;
+
+    margin-bottom: 1rem;
   }
-  
+
   .faqs-hero p {
     font-size: 1.125rem;
   }
-  
-  .faq-categories {
-    flex-direction: column;
-    align-items: center;
+
+  .faqs-content {
+    padding: 70px 20px;
   }
-  
+
+  /*
+     IMPORTANT:
+     Keep FAQ categories compact instead of
+     making each button huge/full width.
+  */
+
+  .faq-categories {
+    display: grid;
+
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+    gap: 14px;
+
+    margin-bottom: 50px;
+
+    width: 100%;
+  }
+
   .category-btn {
     width: 100%;
-    max-width: 300px;
+
+    max-width: none;
+
+    padding: 14px 16px;
+
+    font-size: 0.95rem;
+
+    min-height: 48px;
   }
-  
+
+  .faq-list {
+    max-width: 100%;
+  }
+
+  .faq-item {
+    border-radius: 18px;
+
+    margin-bottom: 16px;
+  }
+
   .faq-question {
     padding: 20px;
+
     font-size: 1rem;
+
+    gap: 14px;
   }
-  
+
+  .faq-answer {
+    padding: 0 20px;
+  }
+
   .faq-answer.active {
     padding: 0 20px 20px;
+  }
+
+  .faq-answer p {
+    font-size: 0.95rem;
+
+    line-height: 1.6;
+  }
+
+  .support-cta {
+    margin-top: 45px;
+
+    padding: 40px 25px;
+  }
+
+  .support-cta h3 {
+    font-size: 1.3rem;
+  }
+}
+
+
+/* ==========================================================================
+   MOBILE — SAME COMPACT STYLE AS ABOUT + FEATURES
+   ========================================================================== */
+
+@media (max-width: 480px) {
+
+  .faqs-hero {
+    min-height: 30vh;
+
+    padding: 105px 16px 50px;
+  }
+
+  .faqs-hero-container {
+    width: 100%;
+
+    padding: 0 10px;
+  }
+
+  .faqs-hero h1 {
+    font-size: 2rem;
+
+    margin-bottom: 0.8rem;
+  }
+
+  .faqs-hero p {
+    font-size: 1rem;
+
+    line-height: 1.5;
+
+    margin-bottom: 1rem;
+  }
+
+  .faqs-content {
+    padding: 55px 15px;
+  }
+
+  /*
+     2 × 2 category layout
+     exactly like the compact mobile
+     layout used across the other pages.
+  */
+
+  .faq-categories {
+    grid-template-columns: repeat(2, 1fr);
+
+    gap: 12px;
+
+    margin-bottom: 40px;
+  }
+
+  .category-btn {
+    padding: 13px 10px;
+
+    min-height: 46px;
+
+    border-radius: 12px;
+
+    font-size: 0.88rem;
+
+    line-height: 1.2;
+  }
+
+  .faq-list {
+    width: 100%;
+  }
+
+  .faq-item {
+    border-radius: 18px;
+
+    margin-bottom: 14px;
+  }
+
+  .faq-question {
+    padding: 17px 18px;
+
+    font-size: 0.92rem;
+
+    line-height: 1.45;
+
+    gap: 10px;
+  }
+
+  .faq-answer {
+    padding: 0 18px;
+  }
+
+  .faq-answer.active {
+    padding: 0 18px 18px;
+  }
+
+  .faq-answer p {
+    font-size: 0.88rem;
+
+    line-height: 1.6;
+  }
+
+  .faq-icon {
+    font-size: 0.9rem;
+
+    flex-shrink: 0;
+  }
+
+  .support-cta {
+    padding: 32px 20px;
+
+    margin-top: 40px;
+
+    border-radius: 18px;
+  }
+
+  .support-cta h3 {
+    font-size: 1.2rem;
+  }
+
+  .support-cta p {
+    font-size: 0.9rem;
+
+    line-height: 1.5;
+  }
+}
+
+
+/* ==========================================================================
+   SMALL MOBILE
+   ========================================================================== */
+
+@media (max-width: 360px) {
+
+  .faqs-hero {
+    padding: 95px 12px 45px;
+  }
+
+  .faqs-hero h1 {
+    font-size: 1.7rem;
+  }
+
+  .faqs-hero p {
+    font-size: 0.92rem;
+  }
+
+  .faqs-content {
+    padding: 45px 12px;
+  }
+
+  .faq-categories {
+    gap: 10px;
+
+    margin-bottom: 32px;
+  }
+
+  .category-btn {
+    padding: 12px 8px;
+
+    min-height: 44px;
+
+    font-size: 0.82rem;
+
+    border-radius: 10px;
+  }
+
+  .faq-question {
+    padding: 15px 16px;
+
+    font-size: 0.88rem;
+  }
+
+  .faq-answer {
+    padding: 0 16px;
+  }
+
+  .faq-answer.active {
+    padding: 0 16px 16px;
+  }
+
+  .faq-answer p {
+    font-size: 0.84rem;
+  }
+
+  .support-cta {
+    padding: 28px 18px;
+  }
+
+  .support-cta h3 {
+    font-size: 1.1rem;
+  }
+}
+
+
+/* ==========================================================================
+   VERY SMALL DEVICES
+   ========================================================================== */
+
+@media (max-width: 320px) {
+
+  .faqs-hero {
+    padding: 85px 10px 40px;
+  }
+
+  .faqs-hero h1 {
+    font-size: 1.5rem;
+  }
+
+  .faqs-hero p {
+    font-size: 0.85rem;
+  }
+
+  .faqs-content {
+    padding: 40px 10px;
+  }
+
+  .faq-categories {
+    gap: 8px;
+  }
+
+  .category-btn {
+    padding: 11px 6px;
+
+    font-size: 0.78rem;
+
+    min-height: 42px;
+  }
+
+  .faq-question {
+    padding: 14px;
+
+    font-size: 0.84rem;
+  }
+
+  .faq-answer {
+    padding: 0 14px;
+  }
+
+  .faq-answer.active {
+    padding: 0 14px 14px;
+  }
+
+  .faq-answer p {
+    font-size: 0.8rem;
   }
 }

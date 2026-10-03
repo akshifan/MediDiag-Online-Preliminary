@@ -2,14 +2,12 @@
 class ScrollToTop {
     constructor() {
         this.scrollButton = document.getElementById('scroll-to-top');
+        if (!this.scrollButton) return; // page has no footer/scroll button
         this.init();
     }
 
     init() {
-        // Show/hide scroll button based on scroll position
         window.addEventListener('scroll', () => this.toggleScrollButton());
-        
-        // Scroll to top when button is clicked
         this.scrollButton.addEventListener('click', () => this.scrollToTop());
     }
 

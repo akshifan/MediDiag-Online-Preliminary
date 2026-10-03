@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,7 +9,9 @@
     <link rel="stylesheet" href="/main/main.css">
     <link rel="stylesheet" href="/patient/appointments.css">
     <link rel="stylesheet" href="/navbar/navbar.css">
+        <link rel="stylesheet" href="/footer/footer.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/portal/portal-fixes.css">
 </head>
 <body>
     <%- include('../headers/launchheader') %>
@@ -26,11 +30,8 @@
         <div class="dashboard-grid">
             <aside class="sidebar">
                 <div class="sidebar-header">
-                    <div class="user-avatar-large">
-                        <%= patient.full_name ? patient.full_name.charAt(0).toUpperCase() : 'P' %>
-                    </div>
+                    
                     <h3><%= patient.full_name %></h3>
-                    <p>Patient ID: <%= patient.id %></p>
                 </div>
                 <nav class="sidebar-nav">
                     <ul>
@@ -52,6 +53,7 @@
                                 My Appointments
                             </a>
                         </li>
+                        <li><a href="/patient/chats"><i class="fas fa-comments"></i> Chats</a></li>
                         <li>
                             <a href="/patient/profile" class="active">
                                 <i class="fas fa-user"></i>
@@ -68,15 +70,21 @@
                 </nav>
             </aside>
 
-            <main class="dashboard-content">
-                <h1><i class="fas fa-user"></i> My Profile</h1>
-                
+            <main class="dashboard-content">  
+                <section class="chat-page-header profile-page-header">
+    <h1>
+        <i class="fas fa-user-circle"></i>
+        Personal Information
+    </h1>
+
+    <p>
+        Update your personal details and contact information
+    </p>
+</section>            
                 <div class="profile-section">
+                    
                     <div class="card">
-                        <div class="section-header">
-                            <h2><i class="fas fa-user-circle"></i> Personal Information</h2>
-                            <p>Update your personal details and contact information</p>
-                        </div>
+                        
                         <form id="profile-form">
                             <div class="form-row">
                                 <div class="form-group">
@@ -93,14 +101,25 @@
                             <div class="form-row">
                                 <div class="form-group">
                                     <label class="form-label">Date of Birth</label>
-                                    <input type="date" name="date_of_birth" class="form-control" value="<%= patient.date_of_birth %>">
-                                    
-                                    <% 
-                                        const dob = new Date(patient.date_of_birth);
-                                        const formattedDOB = dob.toDateString(); 
-                                    %>
-
-                                    <p>Actual DOB: <strong><%= formattedDOB %></strong></p>
+<input
+    type="date"
+    name="date_of_birth"
+    class="form-control"
+    value="<%
+        if (patient.date_of_birth) {
+            if (patient.date_of_birth instanceof Date) {
+                const d = patient.date_of_birth;
+                const yyyy = d.getUTCFullYear();
+                const mm = String(d.getUTCMonth() + 1).padStart(2, '0');
+                const dd = String(d.getUTCDate()).padStart(2, '0');
+                %><%= `${yyyy}-${mm}-${dd}` %><%
+            } else {
+                const dob = String(patient.date_of_birth).trim();
+                %><%= dob.substring(0, 10) %><%
+            }
+        }
+    %>"
+>
                                 </div>
                                 <div class="form-group">
                                     <label class="form-label">Gender</label>
@@ -137,18 +156,85 @@
                     </div>
                 </div>
 
-                <!-- <div class="security-section" style="margin-top: 40px;">
-                    <div class="card">
-                        <div class="section-header">
-                            <h2><i class="fas fa-shield-alt"></i> Security</h2>
-                            <p>Manage your account security settings</p>
-                        </div>
-                        <button class="btn btn-outline" onclick="changePassword()">
-                            <i class="fas fa-key"></i>
-                            Change Password
-                        </button>
-                    </div>
-                </div> -->
+                <div class="security-section">
+    <div class="card">
+
+        <div class="section-header">
+            <h2>
+                <i class="fas fa-shield-alt"></i>
+                Update Password
+            </h2>
+
+            <p>
+                Change your account password securely.
+            </p>
+        </div>
+
+        <form id="change-password-form">
+
+            <div class="form-group">
+                <label class="form-label">
+                    Current Password
+                </label>
+
+                <input
+                    type="password"
+                    name="currentPassword"
+                    class="form-control"
+                    required
+                    autocomplete="current-password"
+                >
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">
+                    New Password
+                </label>
+
+                <input
+                    type="password"
+                    name="newPassword"
+                    class="form-control"
+                    minlength="6"
+                    required
+                    autocomplete="new-password"
+                >
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">
+                    Confirm New Password
+                </label>
+
+                <input
+                    type="password"
+                    name="confirmPassword"
+                    class="form-control"
+                    minlength="6"
+                    required
+                    autocomplete="new-password"
+                >
+            </div>
+
+            <div
+                id="password-message"
+                class="password-form-message"
+                style="display:none;"
+            ></div>
+
+            <button
+                type="submit"
+                class="btn btn-outline"
+                id="change-password-btn"
+            >
+                <i class="fas fa-key"></i>
+                Update Password
+            </button>
+
+        </form>
+
+    </div>
+</div>
             </main>
         </div>
     </div>
@@ -161,23 +247,24 @@
         }
 
         .section-header {
-            margin-bottom: 25px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid var(--border-color);
-        }
+    margin: 0 !important;
+    padding: 15px 15px 15px !important;
+    border: 0 !important;
+}
 
         .section-header h2 {
             color: var(--text-lighter);
-            font-size: 1.5rem;
+            font-size: 1.40rem;
             margin-bottom: 8px;
             display: flex;
             align-items: center;
             gap: 10px;
+            font-weight: 700;
         }
 
         .section-header p {
             color: var(--text-dark);
-            font-size: 0.95rem;
+            font-size: 0.8rem;
         }
 
         .form-row {
@@ -207,23 +294,44 @@
             gap: 8px;
         }
 
+        
+
         @media (max-width: 768px) {
             .form-row {
                 grid-template-columns: 1fr;
             }
         }
+        input[type="date"].form-control {
+    width: 100%;
+    min-height: 48px;
+    padding: 0 14px;
+    border: 1px solid #b7eee0;
+    border-radius: 12px;
+    background: #ffffff;
+    color: #334155;
+    font-family: inherit;
+    font-size: 0.9rem;
+    box-sizing: border-box;
+}
+
+input[type="date"].form-control:focus {
+    border-color: #10b981;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.12);
+}
+.form-group {
+    position: relative;
+}
+
+input[type="date"].form-control {
+    position: relative;
+    width: 100%;
+    box-sizing: border-box;
+}
     </style>
 <script src="/navbar/navbar.js"></script>
     <script>
-        function changePassword() {
-            const newPassword = prompt('Enter new password:');
-            if (newPassword && newPassword.length >= 6) {
-                // In a real app, you'd make an API call here
-                alert('Password change request sent. You will receive an email with instructions.');
-            } else if (newPassword) {
-                alert('Password must be at least 6 characters long.');
-            }
-        }
+        
 
     document.getElementById('profile-form').addEventListener('submit', async function(e) {
     e.preventDefault();
@@ -234,10 +342,7 @@
     submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Updating...';
     submitBtn.disabled = true;
 
-    // Get the original DOB from the server-side variable
-    const previousDOB = '<%= patient.date_of_birth %>';
-    
-    // Prepare form data
+        // Prepare form data
     const formData = {
         full_name: form.full_name.value,
         gender: form.gender.value,
@@ -245,36 +350,21 @@
         address: form.address.value,
         emergency_contact: form.emergency_contact.value
     };
-    
-    // Handle DOB - use input value if valid, otherwise use previous DOB
-    const dobInputValue = form.date_of_birth.value;
-    if (dobInputValue && dobInputValue.trim() !== '') {
-        formData.date_of_birth = dobInputValue;
-        console.log('Using new DOB:', dobInputValue);
-    } else {
-        // Parse the previous DOB string to extract just the date part
-        // The previousDOB might be in format: "Fri Dec 19 2025 00:00:00 GMT+0530 (India Standard Time)"
-        const dateMatch = previousDOB.match(/(\w+\s+\w+\s+\d+\s+\d+)/);
-        if (dateMatch) {
-            const dateStr = dateMatch[1];
-            const dateObj = new Date(dateStr);
-            if (!isNaN(dateObj.getTime())) {
-                // Format as yyyy-MM-dd
-                const year = dateObj.getFullYear();
-                const month = String(dateObj.getMonth() + 1).padStart(2, '0');
-                const day = String(dateObj.getDate()).padStart(2, '0');
-                formData.date_of_birth = `${year}-${month}-${day}`;
-                console.log('No DOB provided, using formatted previous value:', formData.date_of_birth);
-            } else {
-                formData.date_of_birth = previousDOB;
-                console.log('No DOB provided, using raw previous value:', previousDOB);
-            }
-        } else {
-            formData.date_of_birth = previousDOB;
-            console.log('No DOB provided, using previous value as-is:', previousDOB);
-        }
+
+    // Preserve Date of Birth exactly as selected.
+// input[type="date"] always returns YYYY-MM-DD.
+const dobInputValue = form.date_of_birth.value.trim();
+
+if (dobInputValue) {
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(dobInputValue)) {
+        alert('Please enter a valid Date of Birth.');
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalText;
+        return;
     }
 
+    formData.date_of_birth = dobInputValue;
+}
     try {
         const res = await fetch('/patient/profile', {
             method: 'POST',
@@ -298,6 +388,109 @@
         submitBtn.disabled = false;
     }
 });
+
+document
+    .getElementById('change-password-form')
+    .addEventListener('submit', async function (e) {
+
+        e.preventDefault();
+
+        const form = e.target;
+        const button =
+            document.getElementById('change-password-btn');
+
+        const message =
+            document.getElementById('password-message');
+
+        const currentPassword =
+            form.currentPassword.value;
+
+        const newPassword =
+            form.newPassword.value;
+
+        const confirmPassword =
+            form.confirmPassword.value;
+
+        message.style.display = 'none';
+
+        if (newPassword.length < 6) {
+            message.textContent =
+                'New password must be at least 6 characters long.';
+            message.className =
+                'password-form-message error';
+            message.style.display = 'block';
+            return;
+        }
+
+        if (newPassword !== confirmPassword) {
+            message.textContent =
+                'New passwords do not match.';
+            message.className =
+                'password-form-message error';
+            message.style.display = 'block';
+            return;
+        }
+
+        const originalText = button.innerHTML;
+
+        button.disabled = true;
+        button.innerHTML =
+            '<i class="fas fa-spinner fa-spin"></i> Updating...';
+
+        try {
+
+            const response = await fetch(
+                '/auth/change-password',
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        currentPassword,
+                        newPassword,
+                        confirmPassword
+                    })
+                }
+            );
+
+            const result =
+                await response.json();
+
+            if (!response.ok || !result.success) {
+                throw new Error(
+                    result.error ||
+                    'Unable to update password.'
+                );
+            }
+
+            message.textContent =
+                'Password updated successfully.';
+            message.className =
+                'password-form-message success';
+            message.style.display = 'block';
+
+            form.reset();
+
+        } catch (error) {
+
+            message.textContent =
+                error.message ||
+                'Unable to update password.';
+
+            message.className =
+                'password-form-message error';
+
+            message.style.display = 'block';
+
+        } finally {
+
+            button.disabled = false;
+            button.innerHTML = originalText;
+        }
+    });
     </script>
+        <%- include('../main/footer') %>
+
 </body>
 </html>

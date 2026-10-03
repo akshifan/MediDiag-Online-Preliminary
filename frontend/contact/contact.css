@@ -1,160 +1,338 @@
-/* Contact Page - Same Styling as Homepage */
+/* ==========================================================================
+   MediDiag — contact/contact.css
+   Crystal Mint Theme
+   Responsive layout matching About + Features + FAQ pages
+   ========================================================================== */
+
+
+/* ==========================================================================
+   CONTACT HERO
+   ========================================================================== */
+
 .contact-hero {
-  background: 
-    linear-gradient(135deg, var(--bg-darker) 0%, var(--bg-light) 50%, var(--bg-darker) 100%),
-    url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%233b82f6' fill-opacity='0.1' fill-rule='evenodd'/%3E%3C/svg%3E");
+  background:
+    radial-gradient(
+      circle at 15% 20%,
+      rgba(167, 243, 208, 0.55) 0%,
+      transparent 45%
+    ),
+    radial-gradient(
+      circle at 85% 15%,
+      rgba(110, 231, 183, 0.40) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      circle at 50% 100%,
+      rgba(236, 253, 245, 0.90) 0%,
+      transparent 60%
+    ),
+    linear-gradient(
+      135deg,
+      #F0FDF8 0%,
+      #ECFDF5 50%,
+      #F6FFFB 100%
+    );
+
   min-height: 40vh;
+
   display: flex;
   align-items: center;
   justify-content: center;
+
   text-align: center;
+
   color: var(--text-lighter);
+
   position: relative;
   overflow: hidden;
+
   padding: 140px 0 80px;
 }
 
 .contact-hero::before {
   content: '';
+
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: 
-    radial-gradient(circle at 20% 80%, rgba(59, 130, 246, 0.15) 0%, transparent 50%),
-    radial-gradient(circle at 80% 20%, rgba(16, 185, 129, 0.1) 0%, transparent 50%),
-    radial-gradient(circle at 40% 40%, rgba(20, 184, 166, 0.08) 0%, transparent 50%);
+
+  inset: 0;
+
+  background:
+    radial-gradient(
+      circle at 20% 80%,
+      rgba(16, 185, 129, 0.10) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      circle at 80% 20%,
+      rgba(52, 211, 153, 0.10) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      circle at 40% 40%,
+      rgba(110, 231, 183, 0.10) 0%,
+      transparent 50%
+    );
+
   animation: backgroundShift 8s ease-in-out infinite;
+
   z-index: 1;
 }
 
-.contact-hero-content {
+.contact-hero-container {
   position: relative;
+
   z-index: 2;
+
   max-width: 800px;
+
   padding: 0 20px;
 }
 
 .contact-hero h1 {
   font-size: 3.5rem;
+
   font-weight: 800;
+
   margin-bottom: 1.5rem;
-  background: linear-gradient(135deg, var(--text-lighter) 0%, var(--medical-teal) 100%);
+
+  background:
+    linear-gradient(
+      135deg,
+      #064E3B 0%,
+      #059669 45%,
+      #34D399 100%
+    );
+
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+
   background-clip: text;
+
   animation: fadeInUp 1s ease-out 0.2s both;
 }
 
 .contact-hero p {
   font-size: 1.25rem;
+
   margin-bottom: 2rem;
-  color: var(--text-light);
+
+  color: var(--text-dark);
+
   opacity: 0;
+
   animation: fadeIn 1s ease-out 0.8s both;
 }
 
+
+/* ==========================================================================
+   CONTACT CONTENT
+   ========================================================================== */
+
 .contact-content {
   padding: 100px 0;
+
   background: var(--bg-darker);
+
   position: relative;
 }
 
 .contact-content::before {
   content: '';
+
   position: absolute;
+
   top: 0;
   left: 0;
   right: 0;
+
   height: 1px;
-  background: linear-gradient(90deg, transparent, var(--medical-blue), transparent);
+
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      var(--primary-color),
+      transparent
+    );
 }
+
+
+/* ==========================================================================
+   CONTACT GRID
+   ========================================================================== */
 
 .contact-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+
+  grid-template-columns:
+    repeat(
+      auto-fit,
+      minmax(400px, 1fr)
+    );
+
   gap: 60px;
+
   margin-bottom: 60px;
 }
 
+
+/* ==========================================================================
+   CONTACT INFO
+   ========================================================================== */
+
 .contact-info {
-  background: var(--bg-lighter);
+  background: rgba(255, 255, 255, 0.82);
+
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+
   padding: 50px 40px;
+
   border-radius: 20px;
-  border: 1px solid rgba(59, 130, 246, 0.1);
+
+  border: 1px solid rgba(167, 243, 208, 0.55);
+
+  box-shadow: var(--shadow-medical);
 }
 
 .contact-info h2 {
   color: var(--text-lighter);
+
   margin-bottom: 40px;
+
   font-size: 2rem;
+
   text-align: center;
 }
 
+
+/* ==========================================================================
+   CONTACT METHODS
+   ========================================================================== */
+
 .contact-method {
   display: flex;
+
   align-items: flex-start;
+
   margin-bottom: 30px;
+
+
   padding: 25px;
+
   border-radius: 16px;
+
   transition: all 0.3s ease;
-  border: 1px solid rgba(59, 130, 246, 0.1);
+
+  border: 1px solid rgba(59, 193, 130, 0.4);
 }
 
 .contact-method:hover {
-  background: rgba(59, 130, 246, 0.05);
-  border-color: rgba(59, 130, 246, 0.3);
+  background: rgba(236, 253, 245, 0.85);
+
+  border-color: var(--primary-color);
+
   transform: translateY(-2px);
+
+  box-shadow: var(--shadow);
 }
+
+
+/* ==========================================================================
+   CONTACT ICON
+   ========================================================================== */
 
 .contact-icon {
   width: 60px;
+
   height: 60px;
+
   background: var(--gradient-medical);
-  color: var(--text-lighter);
+
+  color: #FFFFFF;
+
   border-radius: 50%;
+
   display: flex;
+
   align-items: center;
+
   justify-content: center;
+
   margin-right: 20px;
+
   font-size: 1.5rem;
+
   flex-shrink: 0;
+
+  box-shadow: var(--shadow-medical);
 }
+
+
+/* ==========================================================================
+   CONTACT METHOD TEXT
+   ========================================================================== */
 
 .contact-method h3 {
   color: var(--text-lighter);
+
   margin-bottom: 8px;
+
   font-size: 1.2rem;
 }
 
 .contact-method p {
   color: var(--text-light);
+
   margin-bottom: 4px;
 }
 
 .contact-method small {
   color: var(--text-dark);
+
   font-size: 0.9rem;
 }
 
+
+/* ==========================================================================
+   CONTACT FORM
+   ========================================================================== */
+
 .contact-form {
-  background: var(--bg-lighter);
+  background: rgba(255, 255, 255, 0.82);
+
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+
   padding: 50px 40px;
+
   border-radius: 20px;
-  border: 1px solid rgba(59, 130, 246, 0.1);
+
+  border: 1px solid rgba(167, 243, 208, 0.55);
+
+  box-shadow: var(--shadow-medical);
 }
 
 .contact-form h2 {
   color: var(--text-lighter);
+
   margin-bottom: 40px;
+
   font-size: 2rem;
+
   text-align: center;
 }
 
+
+/* ==========================================================================
+   FORM
+   ========================================================================== */
+
 .form-row {
   display: grid;
+
   grid-template-columns: 1fr 1fr;
+
   gap: 20px;
 }
 
@@ -164,83 +342,479 @@
 
 .form-label {
   display: block;
+
   margin-bottom: 8px;
+
   font-weight: 600;
+
   color: var(--text-lighter);
 }
 
 .form-control {
   width: 100%;
+
   padding: 16px;
-  background: var(--bg-dark);
-  border: 2px solid rgba(59, 130, 246, 0.2);
+
+  background: rgba(255, 255, 255, 0.92);
+
+  border: 2px solid var(--border-color);
+
   border-radius: 12px;
+
   font-size: 16px;
+
   color: var(--text-light);
+
   transition: all 0.3s ease;
+}
+
+.form-control::placeholder {
+  color: var(--text-muted);
 }
 
 .form-control:focus {
   outline: none;
-  border-color: var(--medical-blue);
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-  background: var(--bg-darker);
+
+  border-color: var(--primary-color);
+
+  box-shadow:
+    0 0 0 4px rgba(16, 185, 129, 0.15);
+
+  background: #FFFFFF;
 }
 
 .contact-form .btn {
   width: 100%;
+
   padding: 16px;
+
   font-size: 1.1rem;
 }
 
-/* Animations */
+
+/* ==========================================================================
+   ANIMATIONS
+   ========================================================================== */
+
 @keyframes fadeInUp {
   from {
     opacity: 0;
+
     transform: translateY(50px);
   }
+
   to {
     opacity: 1;
+
     transform: translateY(0);
   }
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
-/* Responsive */
+@keyframes backgroundShift {
+  0%,
+  100% {
+    opacity: 1;
+
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 0.8;
+
+    transform: scale(1.02);
+  }
+}
+
+
+/* ==========================================================================
+   TABLET
+   ========================================================================== */
+
 @media (max-width: 768px) {
+
+  .contact-hero {
+    min-height: 35vh;
+
+    padding: 120px 20px 60px;
+  }
+
+  .contact-hero-container {
+    max-width: 650px;
+
+    padding: 0 15px;
+  }
+
   .contact-hero h1 {
     font-size: 2.5rem;
+
+    margin-bottom: 1rem;
   }
-  
+
   .contact-hero p {
     font-size: 1.125rem;
   }
-  
+
+  .contact-content {
+    padding: 70px 20px;
+  }
+
   .contact-grid {
     grid-template-columns: 1fr;
+
     gap: 40px;
   }
-  
+
   .form-row {
     grid-template-columns: 1fr;
   }
-  
+
   .contact-info,
   .contact-form {
     padding: 40px 30px;
   }
-  
+
+  /*
+     IMPORTANT:
+     Keep contact methods horizontal.
+     Do NOT change to flex-direction: column.
+  */
+
   .contact-method {
-    flex-direction: column;
-    text-align: center;
+    padding: 20px;
+
+    align-items: center;
+
+    margin-bottom: 20px;
   }
-  
+
   .contact-icon {
-    margin-right: 0;
-    margin-bottom: 15px;
+    width: 54px;
+
+    height: 54px;
+
+    margin-right: 16px;
+
+    font-size: 1.3rem;
+  }
+
+  .contact-method h3 {
+    font-size: 1.1rem;
+  }
+
+  .contact-method p {
+    font-size: 0.95rem;
+  }
+
+  .contact-method small {
+    font-size: 0.85rem;
+  }
+}
+
+
+/* ==========================================================================
+   MOBILE
+   ========================================================================== */
+
+@media (max-width: 480px) {
+
+  .contact-hero {
+    min-height: 30vh;
+
+    padding: 105px 16px 50px;
+  }
+
+  .contact-hero-container {
+    width: 100%;
+
+    padding: 0 10px;
+  }
+
+  .contact-hero h1 {
+    font-size: 2rem;
+
+    margin-bottom: 0.8rem;
+  }
+
+  .contact-hero p {
+    font-size: 1rem;
+
+    line-height: 1.5;
+
+    margin-bottom: 1rem;
+  }
+
+  .contact-content {
+    padding: 55px 15px;
+  }
+
+  .contact-grid {
+    grid-template-columns: 1fr;
+
+    gap: 30px;
+
+    margin-bottom: 30px;
+  }
+
+  /*
+     Compact outer cards
+  */
+
+  .contact-info,
+  .contact-form {
+    padding: 28px 18px;
+    border-radius: 18px;
+  }
+
+  .contact-info h2,
+  .contact-form h2 {
+    font-size: 1.6rem;
+
+    margin-bottom: 25px;
+  }
+
+  /*
+     Contact cards stay horizontal.
+     This prevents the huge vertical blocks
+     shown in your screenshot.
+  */
+
+  .contact-method {
+    display: flex;
+
+    flex-direction: row;
+
+    align-items: center;
+
+    text-align: left;
+
+    padding: 18px;
+
+    margin-bottom: 14px;
+
+    border-radius: 15px;
+
+    gap: 0;
+  }
+
+  .contact-icon {
+    width: 52px;
+
+    height: 52px;
+
+    margin-right: 14px;
+
+    margin-bottom: 0;
+
+    font-size: 1.2rem;
+  }
+
+  .contact-method h3 {
+    font-size: 1rem;
+
+    margin-bottom: 5px;
+  }
+
+  .contact-method p {
+    font-size: 0.88rem;
+
+    margin-bottom: 3px;
+
+    line-height: 1.4;
+  }
+
+  .contact-method small {
+    font-size: 0.78rem;
+
+    line-height: 1.4;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+
+    gap: 0;
+  }
+
+  .form-group {
+    margin-bottom: 18px;
+  }
+
+  .form-label {
+    font-size: 0.9rem;
+
+    margin-bottom: 6px;
+  }
+
+  .form-control {
+    padding: 13px;
+
+    font-size: 14px;
+
+    border-radius: 10px;
+  }
+
+  .contact-form .btn {
+    padding: 14px;
+
+    font-size: 0.95rem;
+  }
+}
+
+
+/* ==========================================================================
+   SMALL MOBILE
+   ========================================================================== */
+
+@media (max-width: 360px) {
+
+  .contact-hero {
+    padding: 95px 12px 45px;
+  }
+
+  .contact-hero h1 {
+    font-size: 1.7rem;
+  }
+
+  .contact-hero p {
+    font-size: 0.92rem;
+  }
+
+  .contact-content {
+    padding: 45px 12px;
+  }
+
+  .contact-info,
+  .contact-form {
+    padding: 24px 15px;
+
+    border-radius: 16px;
+  }
+
+  .contact-info h2,
+  .contact-form h2 {
+    font-size: 1.4rem;
+
+    margin-bottom: 22px;
+  }
+
+  .contact-method {
+    padding: 15px;
+
+    margin-bottom: 12px;
+
+    border-radius: 13px;
+  }
+
+  .contact-icon {
+    width: 46px;
+
+    height: 46px;
+
+    margin-right: 12px;
+
+    font-size: 1.05rem;
+  }
+
+  .contact-method h3 {
+    font-size: 0.92rem;
+  }
+
+  .contact-method p {
+    font-size: 0.82rem;
+  }
+
+  .contact-method small {
+    font-size: 0.72rem;
+  }
+
+  .form-control {
+    padding: 12px;
+
+    font-size: 14px;
+  }
+
+  .contact-form .btn {
+    padding: 13px;
+
+    font-size: 0.9rem;
+  }
+}
+
+
+/* ==========================================================================
+   VERY SMALL DEVICES
+   ========================================================================== */
+
+@media (max-width: 320px) {
+
+  .contact-hero {
+    padding: 85px 10px 40px;
+  }
+
+  .contact-hero h1 {
+    font-size: 1.5rem;
+  }
+
+  .contact-hero p {
+    font-size: 0.85rem;
+  }
+
+  .contact-content {
+    padding: 40px 10px;
+  }
+
+  .contact-info,
+  .contact-form {
+    padding: 20px 12px;
+
+    border-radius: 15px;
+  }
+
+  .contact-info h2,
+  .contact-form h2 {
+    font-size: 1.25rem;
+  }
+
+  .contact-method {
+    padding: 13px;
+
+    border-radius: 12px;
+  }
+
+  .contact-icon {
+    width: 42px;
+
+    height: 42px;
+
+    margin-right: 10px;
+
+    font-size: 0.95rem;
+  }
+
+  .contact-method h3 {
+    font-size: 0.88rem;
+  }
+
+  .contact-method p {
+    font-size: 0.76rem;
+  }
+
+  .contact-method small {
+    font-size: 0.68rem;
+  }
+
+  .form-control {
+    padding: 11px;
+
+    font-size: 13px;
   }
 }

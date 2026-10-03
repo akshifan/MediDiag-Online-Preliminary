@@ -25,7 +25,7 @@
         <div class="container">
             <div class="contact-grid">
                 <div class="contact-info animate-on-scroll">
-                    <h2>Get In Touch</h2>
+                    <h2 style="padding-top: 18px;">Get In Touch</h2>
                     
                     <div class="contact-method">
                         <div class="contact-icon">✉️</div>
@@ -64,12 +64,17 @@
 
                 <div class="contact-form animate-on-scroll">
                     <h2>Send us a Message</h2>
-                    <% if (typeof success !== 'undefined') { %>
-                        <div class="alert alert-success"><%= success %></div>
-                    <% } %>
-                    <% if (typeof error !== 'undefined') { %>
-                        <div class="alert alert-error"><%= error %></div>
-                    <% } %>
+                    <% if (success) { %>
+    <div class="alert alert-success" id="contact-success">
+        <%= success %>
+    </div>
+<% } %>
+
+<% if (error) { %>
+    <div class="alert alert-error" id="contact-error">
+        <%= error %>
+    </div>
+<% } %>
                     <form action="/contact" method="POST">
                         <div class="form-row">
                             <div class="form-group">
@@ -105,5 +110,23 @@
     <script src="/navbar/navbar.js"></script>
     <script src="/homepage/launchpage.js"></script>
     <script src="/scrollbutton/scrollbutton.js"></script>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const successMessage = document.getElementById('contact-success');
+
+        if (successMessage) {
+            setTimeout(() => {
+                successMessage.style.opacity = '0';
+                successMessage.style.transform = 'translateY(-8px)';
+
+                setTimeout(() => {
+                    successMessage.remove();
+                }, 400);
+            }, 3000);
+        }
+    });
+</script>
+
 </body>
 </html>

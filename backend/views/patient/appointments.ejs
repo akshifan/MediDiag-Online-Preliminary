@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,11 +9,13 @@
     <link rel="stylesheet" href="/main/main.css">
     <link rel="stylesheet" href="/patient/appointments.css">
     <link rel="stylesheet" href="/navbar/navbar.css">
+    <link rel="stylesheet" href="/footer/footer.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/portal/portal-fixes.css">
 </head>
 <body>
     <%- include('../headers/launchheader') %>
-    
+
     <!-- Medical Background Elements -->
     <div class="medical-background">
         <i class="fas fa-heart medical-icon heart"></i>
@@ -26,11 +30,9 @@
         <div class="dashboard-grid">
             <aside class="sidebar">
                 <div class="sidebar-header">
-                    <div class="user-avatar-large">
-                        <%= patient.full_name ? patient.full_name.charAt(0).toUpperCase() : 'P' %>
-                    </div>
+                    
                     <h3><%= patient.full_name %></h3>
-                    <p>Patient ID: <%= patient.id %></p>
+            
                 </div>
                 <nav class="sidebar-nav">
                     <ul>
@@ -53,6 +55,12 @@
                             </a>
                         </li>
                         <li>
+                            <a href="/patient/chats">
+                                <i class="fas fa-comments"></i>
+                                Chats
+                            </a>
+                        </li>
+                        <li>
                             <a href="/patient/profile">
                                 <i class="fas fa-user"></i>
                                 Profile
@@ -69,12 +77,15 @@
             </aside>
 
             <main class="dashboard-content">
-                <h1><i class="fas fa-calendar-check"></i> My Appointments</h1>
-                
-                <div class="appointments-list">
-                    <% if (appointments.length > 0) { %>
-                        <% appointments.forEach(appointment => { %>
-                            <div class="card appointment-card">
+                <section class="appointments-title-section">
+                    <h1><i class="fas fa-calendar-check"></i> My Appointments</h1>
+                    <p>View and manage your appointment history.</p>
+                </section>
+
+                <% if (appointments && appointments.length > 0) { %>
+                    <div class="appointments-grid" id="appointmentsGrid">
+                        <% appointments.forEach((appointment, index) => { %>
+                            <div class="card appointment-card" data-idx="<%= index %>" data-appointment-id="<%= appointment.id %>">
                                 <div class="appointment-header">
                                     <div>
                                         <h3>Dr. <%= appointment.doctor_name %></h3>
@@ -84,9 +95,9 @@
                                         <%= appointment.status %>
                                     </div>
                                 </div>
-                                
+
                                 <div class="appointment-details">
-                                    <p><strong>Date & Time:</strong> <%= new Date(appointment.appointment_date).toLocaleString() %></p>
+                                    <p><strong>Date &amp; Time:</strong> <%= new Date(appointment.appointment_date).toLocaleString() %></p>
                                     <p><strong>Symptoms:</strong> <%= appointment.symptoms %></p>
                                     <% if (appointment.preliminary_diagnosis) { %>
                                         <p><strong>Preliminary Diagnosis:</strong> <%= appointment.preliminary_diagnosis %></p>
@@ -101,373 +112,228 @@
                                         </div>
                                     <% } %>
                                 </div>
-                                
-                                <% if (appointment.status === 'scheduled' || appointment.status === 'rescheduled') { %>
-                                    <div class="appointment-actions">
+
+                                <div class="appointment-actions">
+                                    <% if (appointment.status === 'scheduled' || appointment.status === 'rescheduled') { %>
                                         <button class="btn btn-outline cancel-btn" data-appointment-id="<%= appointment.id %>">
                                             <i class="fas fa-times"></i>
-                                            Cancel Appointment
+                                            Cancel
                                         </button>
                                         <button class="btn btn-primary reschedule-btn" data-appointment-id="<%= appointment.id %>">
                                             <i class="fas fa-calendar-alt"></i>
                                             Reschedule
                                         </button>
-                                    </div>
-                                <% } %>
+                                    <% } %>
+                                </div>
                             </div>
                         <% }); %>
-                    <% } else { %>
-                        <div class="card empty-appointments">
-                            <div class="empty-state">
-                                <i class="fas fa-calendar-plus"></i>
-                                <h3>No Appointments Yet</h3>
-                                <p>You haven't booked any appointments yet.</p>
-                                <a href="/patient/doctors" class="btn btn-primary">
-                                    <i class="fas fa-user-md"></i>
-                                    Find Doctors
-                                </a>
-                            </div>
+                    </div>
+
+                    <div class="portal-pagination appointments-pagination" id="appointmentsPagination" aria-label="Appointment history pagination">
+                        <button type="button" class="btn btn-outline" id="appointmentsPrev" disabled>
+                            <i class="fas fa-chevron-left"></i> Previous
+                        </button>
+                        <span class="page-info" id="appointmentsPageInfo">Page 1 of 1</span>
+                        <button type="button" class="btn btn-primary" id="appointmentsNext" disabled>
+                            Next <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+                <% } else { %>
+                    <div class="card empty-appointments">
+                        <div class="empty-state">
+                            <i class="fas fa-calendar-plus"></i>
+                            <h3>No Appointments Yet</h3>
+                            <p>You haven't booked any appointments yet.</p>
+                            <a href="/patient/doctors" class="btn btn-primary">
+                                <i class="fas fa-user-md"></i>
+                                Find Doctors
+                            </a>
                         </div>
-                    <% } %>
-                </div>
+                    </div>
+                <% } %>
             </main>
         </div>
     </div>
 
-    <style>
-        
-.modal-overlay {
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    background: rgba(0,0,0,0.6);
-    display: flex; justify-content: center; align-items: center;
-    z-index: 9999;
-}
-
-.modal-card {
-    background: var(--bg-dark);
-    padding: 25px;
-    border-radius: 10px;
-    width: 90%;
-    max-width: 400px;
-    border: 1px solid var(--border-color);
-}
-.modal-card h3 { margin-bottom: 15px; color: var(--text-lighter); }
-.modal-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 15px; }
-        .appointments-list {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        .appointment-card {
-            background: var(--bg-dark);
-            border: 1px solid var(--border-color);
-            transition: all 0.3s ease;
-        }
-
-        .appointment-card:hover {
-            border-color: rgba(59, 130, 246, 0.3);
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-medical);
-        }
-
-        .appointment-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .appointment-header h3 {
-            color: var(--text-lighter);
-            margin-bottom: 5px;
-            font-size: 1.3rem;
-        }
-
-        .specialization {
-            color: var(--medical-blue);
-            font-weight: 600;
-            font-size: 0.95rem;
-        }
-
-        .appointment-status {
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            text-transform: capitalize;
-        }
-
-        .status-scheduled {
-            background: rgba(59, 130, 246, 0.2);
-            color: var(--medical-blue);
-        }
-
-        .status-completed {
-            background: rgba(16, 185, 129, 0.2);
-            color: var(--medical-green);
-        }
-
-        .status-cancelled {
-            background: rgba(239, 68, 68, 0.2);
-            color: #ef4444;
-        }
-
-        .appointment-details {
-            margin-bottom: 20px;
-        }
-
-        .appointment-details p {
-            margin-bottom: 10px;
-            color: var(--text-light);
-            line-height: 1.5;
-        }
-
-        .appointment-details strong {
-            color: var(--text-lighter);
-        }
-
-        .prescription {
-            margin-top: 15px;
-            padding: 15px;
-            background: var(--bg-darker);
-            border-radius: 8px;
-            border-left: 4px solid var(--medical-green);
-        }
-
-        .prescription pre {
-            white-space: pre-wrap;
-            word-wrap: break-word;
-            color: var(--text-light);
-            margin-top: 8px;
-            font-family: inherit;
-        }
-
-        .appointment-actions {
-            display: flex;
-            gap: 12px;
-            justify-content: flex-end;
-            padding-top: 15px;
-            border-top: 1px solid var(--border-color);
-        }
-
-        .appointment-actions .btn {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 0.9rem;
-            padding: 10px 20px;
-        }
-
-        .empty-appointments {
-            text-align: center;
-            padding: 60px 40px;
-        }
-
-        .empty-state i {
-            font-size: 4rem;
-            margin-bottom: 20px;
-            opacity: 0.5;
-            color: var(--medical-blue);
-        }
-
-        .empty-state h3 {
-            color: var(--text-lighter);
-            margin-bottom: 10px;
-            font-size: 1.5rem;
-        }
-
-        .empty-state p {
-            color: var(--text-dark);
-            margin-bottom: 25px;
-            font-size: 1rem;
-        }
-
-        @media (max-width: 768px) {
-            .appointment-header {
-                flex-direction: column;
-                gap: 15px;
-                align-items: flex-start;
-            }
-
-            .appointment-actions {
-                flex-direction: column;
-            }
-
-            .appointment-actions .btn {
-                justify-content: center;
-            }
-        }
-    </style>
-<script src="/navbar/navbar.js"></script>
-<!-- RESCHEDULE MODAL -->
-<div id="rescheduleModal" class="modal-overlay" style="display: none;">
-    <div class="modal-card">
-        <h3>Reschedule Appointment</h3>
-
-        <input type="datetime-local" id="newDateTime" class="form-control" required>
-
-        <div class="modal-actions">
-            <button class="btn btn-primary" id="confirmReschedule">Confirm</button>
-            <button class="btn btn-outline" id="cancelReschedule">Cancel</button>
+    <!-- RESCHEDULE MODAL -->
+    <div id="rescheduleModal" class="modal-overlay" style="display: none;">
+        <div class="modal-card">
+            <h3>Reschedule Appointment</h3>
+            <input type="datetime-local" id="newDateTime" class="form-control" required>
+            <div class="modal-actions">
+                <button class="btn btn-primary" id="confirmReschedule">Confirm</button>
+                <button class="btn btn-outline" id="cancelReschedule">Cancel</button>
+            </div>
         </div>
     </div>
-</div>
 
-<script>
-// Run after DOM is ready
-document.addEventListener('DOMContentLoaded', function () {
+    <%- include('../main/footer') %>
 
-    /* =========================================================
-       CANCEL APPOINTMENT
-    ========================================================= */
-    document.querySelectorAll('.cancel-btn').forEach(function (btn) {
-        btn.addEventListener('click', async function () {
-            const appointmentId = this.getAttribute('data-appointment-id');
+    <script src="/navbar/navbar.js"></script>
 
-            if (!confirm('Are you sure you want to cancel this appointment?'))
-                return;
+    <script>
+    /* =========================================================================
+       1. PAGINATE APPOINTMENT HISTORY — 8 per page (2 x 4 grid)
+       ========================================================================= */
+    document.addEventListener('DOMContentLoaded', function () {
+        var grid = document.getElementById('appointmentsGrid');
+        var pagination = document.getElementById('appointmentsPagination');
+        if (!grid || !pagination) return;
 
-            const originalText = this.innerHTML;
-            this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Cancelling...';
-            this.disabled = true;
+        var cards = Array.prototype.slice.call(grid.querySelectorAll('.appointment-card'));
+        var prev = document.getElementById('appointmentsPrev');
+        var next = document.getElementById('appointmentsNext');
+        var info = document.getElementById('appointmentsPageInfo');
+        var pageSize = 8;
+        var page = 1;
+        var totalPages = Math.max(1, Math.ceil(cards.length / pageSize));
 
-            try {
-                const res = await fetch('/patient/cancel-appointment', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ appointment_id: appointmentId })
-                });
+        function renderPage() {
+            var start = (page - 1) * pageSize;
+            var end = start + pageSize;
 
-                const json = await res.json();
+            cards.forEach(function (card, index) {
+                card.style.display = index >= start && index < end ? '' : 'none';
+            });
 
-                if (res.ok && json.success) {
-                    const card = this.closest('.appointment-card');
-                    if (card) card.remove();
+            if (info) info.textContent = 'Page ' + page + ' of ' + totalPages;
+            if (prev) prev.disabled = page <= 1;
+            if (next) next.disabled = page >= totalPages;
+        }
 
-                    // If no remaining appointments → show empty state
-                    if (!document.querySelector('.appointment-card')) {
-                        document.querySelector('.appointments-list').innerHTML = `
-                            <div class="card empty-appointments">
-                                <div class="empty-state">
-                                    <i class="fas fa-calendar-plus"></i>
-                                    <h3>No Appointments Yet</h3>
-                                    <p>You haven't booked any appointments yet.</p>
-                                    <a href="/patient/doctors" class="btn btn-primary">
-                                        <i class="fas fa-user-md"></i>
-                                        Find Doctors
-                                    </a>
-                                </div>
-                            </div>`;
+        prev.addEventListener('click', function () {
+            if (page > 1) { page--; renderPage(); }
+        });
+
+        next.addEventListener('click', function () {
+            if (page < totalPages) { page++; renderPage(); }
+        });
+
+        renderPage();
+    });
+
+    /* =========================================================================
+       2. CANCEL APPOINTMENT
+       ========================================================================= */
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('.cancel-btn').forEach(function (btn) {
+            btn.addEventListener('click', async function () {
+                var appointmentId = this.getAttribute('data-appointment-id');
+                if (!confirm('Are you sure you want to cancel this appointment?')) return;
+
+                var originalText = this.innerHTML;
+                this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Cancelling...';
+                this.disabled = true;
+
+                try {
+                    var res = await fetch('/patient/cancel-appointment', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ appointment_id: appointmentId })
+                    });
+                    var json = await res.json();
+
+                    if (res.ok && json.success) {
+                        var card = this.closest('.appointment-card');
+                        if (card) card.remove();
+
+                        if (!document.querySelector('.appointment-card')) {
+                            var grid = document.getElementById('appointmentsGrid');
+                            if (grid) {
+                                grid.outerHTML = [
+                                    '<div class="card empty-appointments">',
+                                    '  <div class="empty-state">',
+                                    '    <i class="fas fa-calendar-plus"></i>',
+                                    '    <h3>No Appointments Yet</h3>',
+                                    '    <p>You haven\'t booked any appointments yet.</p>',
+                                    '    <a href="/patient/doctors" class="btn btn-primary">',
+                                    '      <i class="fas fa-user-md"></i> Find Doctors',
+                                    '    </a>',
+                                    '  </div>',
+                                    '</div>'
+                                ].join('');
+                            }
+                        }
+                    } else {
+                        alert('Failed to cancel appointment: ' + (json.error || 'Unknown error'));
+                        this.innerHTML = originalText;
+                        this.disabled = false;
                     }
-
-                } else {
-                    alert('Failed to cancel appointment.');
+                } catch (err) {
+                    console.error('Cancel error:', err);
+                    alert('Server error occurred.');
                     this.innerHTML = originalText;
                     this.disabled = false;
                 }
-        location.reload();
-
-            } catch (err) {
-                console.error('Cancel error:', err);
-                alert('Server error occurred.');
-                this.innerHTML = originalText;
-                this.disabled = false;
-            }
-        });
-
-    });
-
-
-    /* =========================================================
-       OPEN RESCHEDULE MODAL
-    ========================================================= */
-    document.querySelectorAll('.reschedule-btn').forEach(function (btn) {
-        btn.addEventListener('click', function () {
-
-            const appointmentId = this.getAttribute('data-appointment-id');
-
-            const modal = document.getElementById("rescheduleModal");
-
-            // Store appointment ID inside modal
-            modal.dataset.id = appointmentId;
-
-            // Show modal
-            modal.style.display = "flex";
-        });
-    });
-
-}); // END DOMContentLoaded
-
-
-
-/* =========================================================
-   MODAL BUTTON HANDLERS (OUTSIDE DOMContentLoaded)
-========================================================= */
-
-// Close modal
-document.getElementById("cancelReschedule").onclick = function () {
-    document.getElementById("rescheduleModal").style.display = "none";
-};
-
-
-// Confirm reschedule
-document.getElementById("confirmReschedule").onclick = async function () {
-
-    const modal = document.getElementById("rescheduleModal");
-    const apptId = modal.dataset.id;
-    const newDate = document.getElementById("newDateTime").value;
-
-    if (!newDate) {
-        alert("Please select a date and time.");
-        return;
-    }
-
-    try {
-        const res = await fetch('/patient/reschedule-appointment', {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                appointment_id: apptId,
-                new_date: newDate
-            })
-        });
-
-        const json = await res.json();
-
-        if (json.success) {
-            alert("Appointment rescheduled!");
-
-            // Update UI dynamically
-            const allCards = document.querySelectorAll(".appointment-card");
-
-            allCards.forEach(card => {
-                const btn = card.querySelector(".reschedule-btn");
-                if (btn && btn.getAttribute("data-appointment-id") === apptId) {
-
-                    const dtElement = card.querySelector(".appointment-details p");
-                    dtElement.innerHTML =
-                        `<strong>Date & Time:</strong> ${new Date(newDate).toLocaleString()}`;
-                }
             });
+        });
+    });
 
-        } else {
-            alert("Rescheduling failed.");
-        }
+    /* =========================================================================
+       3. RESCHEDULE MODAL
+       ========================================================================= */
+    document.addEventListener('DOMContentLoaded', function () {
+        var modal = document.getElementById('rescheduleModal');
+        var cancelModalBtn = document.getElementById('cancelReschedule');
+        var confirmBtn = document.getElementById('confirmReschedule');
+        if (!modal || !cancelModalBtn || !confirmBtn) return;
 
-    } catch (error) {
-        console.error("Reschedule error:", error);
-        alert("Server error occurred.");
-    }
+        document.querySelectorAll('.reschedule-btn').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                var appointmentId = this.getAttribute('data-appointment-id');
+                modal.dataset.id = appointmentId;
+                modal.style.display = 'flex';
+            });
+        });
 
-    // Close modal after update
-    modal.style.display = "none";
-};
-</script>
+        cancelModalBtn.addEventListener('click', function () {
+            modal.style.display = 'none';
+            modal.dataset.id = '';
+            document.getElementById('newDateTime').value = '';
+        });
 
+        confirmBtn.addEventListener('click', async function () {
+            var apptId = modal.dataset.id;
+            var newDate = document.getElementById('newDateTime').value;
+
+            if (!newDate) {
+                alert('Please select a date and time.');
+                return;
+            }
+
+            try {
+                var res = await fetch('/patient/reschedule-appointment', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        appointment_id: apptId,
+                        new_date: newDate
+                    })
+                });
+                var json = await res.json();
+
+                if (json.success) {
+                    alert('Appointment rescheduled!');
+                    var card = document.querySelector('.appointment-card[data-appointment-id="' + apptId + '"]');
+                    if (card) {
+                        var dtEl = card.querySelector('.appointment-details p');
+                        if (dtEl) {
+                            dtEl.innerHTML = '<strong>Date &amp; Time:</strong> ' + new Date(newDate).toLocaleString();
+                        }
+                    }
+                } else {
+                    alert('Rescheduling failed: ' + (json.error || 'Unknown error'));
+                }
+            } catch (error) {
+                console.error('Reschedule error:', error);
+                alert('Server error occurred.');
+            }
+
+            modal.style.display = 'none';
+            modal.dataset.id = '';
+            document.getElementById('newDateTime').value = '';
+        });
+    });
+    </script>
 </body>
 </html>

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dr. <%= doctor.full_name %> - MediDiag</title>
+    <link rel="stylesheet" href="/main/main.css">
+    <link rel="stylesheet" href="/navbar/navbar.css">
+    <link rel="stylesheet" href="/patient/dashboard.css">
+    <link rel="stylesheet" href="/patient/doctor-detail.css">
+    <link rel="stylesheet" href="/footer/footer.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/portal/portal-fixes.css">
+</head>
+<body>
+    <%- include('../headers/launchheader') %>
+
+    <div class="container patient-dashboard doctor-detail-page">
+        <div class="dashboard-grid">
+            <aside class="sidebar">
+                <nav class="sidebar-nav">
+                    <ul>
+                        <li><a href="/patient/dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                        <li><a href="/patient/doctors" class="active"><i class="fas fa-user-md"></i> Find Doctors</a></li>
+                        <li><a href="/patient/appointments"><i class="fas fa-calendar-check"></i> My Appointments</a></li>
+                        <li><a href="/patient/chats"><i class="fas fa-comments"></i> Chats</a></li>
+                        <li><a href="/patient/profile"><i class="fas fa-user"></i> Profile</a></li>
+                        <li><a href="/auth/logout"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+                    </ul>
+                </nav>
+            </aside>
+
+            <main class="dashboard-content">
+                <div class="section-header">
+                    <div>
+                        <a href="/patient/doctors" class="view-all doctor-detail-back"><i class="fas fa-arrow-left"></i> Back to Find Doctors</a>
+                        <h1 class="doctor-detail-heading">Dr. <%= doctor.full_name %></h1>
+                        <p class="doctor-detail-subtitle"><%= doctor.specialization || 'General Medicine' %></p>
+                    </div>
+                </div>
+
+                <div class="doctor-detail-grid">
+                    <section class="card doctor-detail-card">
+                        <div class="doctor-header">
+                            <div class="doctor-avatar doctor-detail-avatar">
+                                <%= (doctor.full_name || 'Doctor').split(' ').map(n => n[0]).join('').toUpperCase() %>
+                            </div>
+                            <div class="doctor-info">
+                                <h2>Dr. <%= doctor.full_name %></h2>
+                                <p class="doctor-specialty"><%= doctor.specialization || 'General Medicine' %></p>
+                                <p class="doctor-experience"><i class="fas fa-briefcase"></i> <%= doctor.experience_years || 0 %>+ years experience</p>
+                            </div>
+                        </div>
+
+                        <div class="doctor-details doctor-detail-list">
+                            <div class="detail-item"><span class="detail-icon"><i class="fas fa-hospital"></i></span><span class="detail-value"><strong>Hospital:</strong> <%= doctor.hospital_affiliation || 'Multiple Hospitals' %></span></div>
+                            <div class="detail-item"><span class="detail-icon"><i class="fas fa-id-card"></i></span><span class="detail-value"><strong>License:</strong> <%= doctor.license_number || 'Verified professional' %></span></div>
+                            <div class="detail-item"><span class="detail-icon"><i class="fas fa-phone"></i></span><span class="detail-value"><strong>Phone:</strong> <%= doctor.phone || 'Contact through MediDiag' %></span></div>
+                            <div class="detail-item"><span class="detail-icon"><i class="fas fa-envelope"></i></span><span class="detail-value"><strong>Email:</strong> <%= doctor.email || 'Available through MediDiag' %></span></div>
+                            <div class="detail-item"><span class="detail-icon"><i class="fas fa-rupee-sign"></i></span><span class="detail-value"><strong>Consultation fee:</strong> <%= doctor.consultation_fee ? `₹${doctor.consultation_fee}` : 'Contact' %></span></div>
+                        </div>
+
+                        <a href="/patient/chat/doctor/<%= doctor.id %>" class="btn btn-outline doctor-detail-message">
+                            <i class="fas fa-comments"></i> Message Doctor
+                        </a>
+                    </section>
+
+                    <section class="card doctor-booking-card">
+                        <h2><i class="fas fa-calendar-check"></i> Book Appointment</h2>
+                        <p>Select a date and tell the doctor what you need help with.</p>
+
+                        <% if (doctor.is_available) { %>
+                            <div class="availability-badge doctor-detail-availability"><i class="fas fa-check-circle"></i> Available</div>
+                        <% } else { %>
+                            <div class="availability-badge unavailable doctor-detail-availability"><i class="fas fa-times-circle"></i> Not Available</div>
+                        <% } %>
+
+                        <form id="detail-booking-form">
+                            <input type="hidden" name="doctor_id" value="<%= doctor.id %>">
+                            <div class="form-group">
+                                <label class="form-label" for="appointment_date">Appointment Date &amp; Time</label>
+                                <input class="form-control" id="appointment_date" name="appointment_date" type="datetime-local" required <%= doctor.is_available ? '' : 'disabled' %>>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="symptoms">Symptoms / Reason for visit</label>
+                                <textarea class="form-control" id="symptoms" name="symptoms" rows="5" placeholder="Describe your symptoms or reason for the appointment..." required <%= doctor.is_available ? '' : 'disabled' %>></textarea>
+                            </div>
+                            <div id="booking-result" role="status" aria-live="polite"></div>
+                            <button class="btn btn-primary" type="submit" style="width:100%;" <%= doctor.is_available ? '' : 'disabled' %>>
+                                <i class="fas fa-calendar-plus"></i> Confirm Booking
+                            </button>
+                        </form>
+                    </section>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <%- include('../main/footer') %>
+    <script src="/navbar/navbar.js"></script>
+    <script>
+    (function () {
+        var form = document.getElementById('detail-booking-form');
+        if (!form) return;
+        var dateInput = document.getElementById('appointment_date');
+        var result = document.getElementById('booking-result');
+        var now = new Date();
+        var local = new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString().slice(0,16);
+        if (dateInput && !dateInput.disabled) dateInput.min = local;
+
+        form.addEventListener('submit', function (event) {
+            event.preventDefault();
+            var button = form.querySelector('button[type="submit"]');
+            var payload = {
+                doctor_id: form.elements.doctor_id.value,
+                appointment_date: form.elements.appointment_date.value,
+                symptoms: form.elements.symptoms.value.trim()
+            };
+            if (!payload.appointment_date || !payload.symptoms) return;
+            button.disabled = true;
+            result.textContent = 'Booking appointment...';
+
+            fetch('/patient/book-appointment', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            })
+            .then(function (response) {
+                return response.json().then(function (body) { return { ok: response.ok, body: body }; });
+            })
+            .then(function (response) {
+                if (!response.ok || !response.body.success) throw new Error(response.body.error || 'Booking failed');
+                result.innerHTML = '<div class="alert alert-success">Appointment booked successfully. <a href="/patient/appointments">View My Appointments</a></div>';
+                form.reset();
+                if (dateInput) dateInput.min = local;
+            })
+            .catch(function (error) {
+                var message = String(error.message || 'Booking failed').replace(/[<>&]/g, '');
+                result.innerHTML = '<div class="alert alert-error">' + message + '</div>';
+            })
+            .finally(function () { button.disabled = false; });
+        });
+    })();
+    </script>
+</body>
+</html>

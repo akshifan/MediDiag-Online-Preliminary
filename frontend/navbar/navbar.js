@@ -1,3 +1,9 @@
+
+/* ==========================================================================
+   MediDiag â€” navbar.js
+   Right-side drawer, backdrop click to close, ESC to close.
+   ========================================================================== */
+
 class Navbar {
   constructor() {
     this.navbar = document.querySelector('.navbar');
@@ -6,14 +12,21 @@ class Navbar {
     this.userMenu = document.querySelector('.user-menu');
     this.userTrigger = document.querySelector('.user-trigger');
     this.userDropdown = document.querySelector('.user-dropdown');
+    this.mobileMenuClose = document.querySelector('.mobile-menu-close');
     this.init();
   }
 
-  init() {
-    // Scroll effect
-    window.addEventListener('scroll', () => this.handleScroll());
-    
-    // Mobile menu
+      init() {
+    // Safety: clear any stale scroll-lock class or inline styles
+    document.body.classList.remove('nav-open');
+    document.body.style.overflow = '';
+    document.body.style.position = '';
+    document.body.style.width = '';
+    document.body.style.height = '';
+    document.documentElement.style.overflow = '';
+
+    window.addEventListener('scroll', () => this.handleScroll(), { passive: true });
+
     if (this.mobileMenuBtn) {
       this.mobileMenuBtn.addEventListener('click', (e) => {
         e.stopPropagation();
@@ -21,71 +34,84 @@ class Navbar {
       });
     }
 
-    // User dropdown
-    if (this.userTrigger) {
-      this.userTrigger.addEventListener('click', (e) => {
+    if (this.mobileMenuClose) {
+      this.mobileMenuClose.addEventListener('click', (e) => {
+        e.preventDefault();
         e.stopPropagation();
-        this.toggleUserDropdown();
+        this.closeMobileMenu();
       });
     }
 
-    // Close menus when clicking outside
+    if (this.userTrigger) {
+      this.userTrigger.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (window.innerWidth > 768) this.toggleUserDropdown();
+      });
+    }
+
     document.addEventListener('click', (e) => this.handleClickOutside(e));
-    
-    // Close mobile menu when clicking on links
-    this.navbarNav?.addEventListener('click', (e) => {
-      if (e.target.tagName === 'A') {
-        this.closeMobileMenu();
-      }
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') this.closeMobileMenu();
     });
 
-    // Set active nav link
+    if (this.navbarNav) {
+      this.navbarNav.addEventListener('click', (e) => {
+        if (e.target.tagName === 'A') this.closeMobileMenu();
+      });
+
+      // Click the ::after pseudo (top-right X) â€” treat as close
+      this.navbarNav.addEventListener('click', (e) => {
+        const rect = this.navbarNav.getBoundingClientRect();
+        const topRightX = rect.right - 20;
+        const topRightY = rect.top + 20;
+        if (
+          Math.abs(e.clientX - topRightX) < 30 &&
+          Math.abs(e.clientY - topRightY) < 30
+        ) {
+          this.closeMobileMenu();
+        }
+      });
+    }
+
     this.setActiveNavLink();
-    
-    // Initialize user avatar
     this.initUserAvatar();
-    
-    // Add resize listener
-    window.addEventListener('resize', () => this.handleResize());
-    
-    // Hide signup button on initialization
-    this.hideSignupButton();
+
+    window.addEventListener('resize', () => this.handleResize(), { passive: true });
   }
 
   handleScroll() {
-    if (window.scrollY > 100) {
-      this.navbar?.classList.add('scrolled');
-    } else {
-      this.navbar?.classList.remove('scrolled');
-    }
+    if (window.scrollY > 100) this.navbar?.classList.add('scrolled');
+    else this.navbar?.classList.remove('scrolled');
   }
 
-  toggleMobileMenu() {
-    this.navbarNav?.classList.toggle('active');
-    this.mobileMenuBtn?.classList.toggle('active');
-    
-    // Animate hamburger icon
-    if (this.mobileMenuBtn?.classList.contains('active')) {
-      this.mobileMenuBtn.innerHTML = '✕';
-    } else {
-      this.mobileMenuBtn.innerHTML = '☰';
+    toggleMobileMenu() {
+    const isOpen = this.navbarNav?.classList.toggle('active');
+    this.mobileMenuBtn?.classList.toggle('active', isOpen);
+    document.body.classList.toggle('nav-open', isOpen);
+    if (this.mobileMenuBtn) {
+      this.mobileMenuBtn.innerHTML = isOpen ? '<span aria-hidden="true">&times;</span>' : '<span aria-hidden="true">&#9776;</span>';
+      this.mobileMenuBtn.setAttribute('aria-expanded', String(!!isOpen));
     }
   }
 
   closeMobileMenu() {
     this.navbarNav?.classList.remove('active');
     this.mobileMenuBtn?.classList.remove('active');
-    this.mobileMenuBtn.innerHTML = '☰';
+    document.body.classList.remove('nav-open');
+    // Always clear any inline scroll locks
+    document.body.style.overflow = '';
+    document.body.style.position = '';
+    document.body.style.width = '';
+    document.body.style.height = '';
+    document.documentElement.style.overflow = '';
+    if (this.mobileMenuBtn) this.mobileMenuBtn.innerHTML = '<span aria-hidden="true">&#9776;</span>';
+      this.mobileMenuBtn.setAttribute('aria-expanded', 'false');
   }
 
   toggleUserDropdown() {
     this.userDropdown?.classList.toggle('active');
-    
-    // Close other dropdowns
-    document.querySelectorAll('.user-dropdown').forEach(dropdown => {
-      if (dropdown !== this.userDropdown) {
-        dropdown.classList.remove('active');
-      }
+    document.querySelectorAll('.user-dropdown').forEach((d) => {
+      if (d !== this.userDropdown) d.classList.remove('active');
     });
   }
 
@@ -94,157 +120,49 @@ class Navbar {
   }
 
   handleClickOutside(e) {
-    if (!e.target.closest('.navbar-nav') && !e.target.closest('.mobile-menu-btn')) {
+    // Close drawer if click is outside it and outside the toggle button
+    if (
+      this.navbarNav?.classList.contains('active') &&
+      !e.target.closest('.navbar-nav') &&
+      !e.target.closest('.mobile-menu-btn')
+    ) {
       this.closeMobileMenu();
     }
-    
+
     if (!e.target.closest('.user-menu')) {
       this.closeUserDropdown();
     }
   }
 
   setActiveNavLink() {
-    const currentPath = window.location.pathname;
-    const navLinks = document.querySelectorAll('.navbar-nav a');
-    
-    navLinks.forEach(link => {
-      const linkPath = link.getAttribute('href');
-      if (currentPath === linkPath || 
-          (currentPath.startsWith(linkPath) && linkPath !== '/')) {
-        link.classList.add('active');
-      } else {
-        link.classList.remove('active');
-      }
+    const path = window.location.pathname;
+    const PUBLIC = ['/', '/about', '/features', '/faqs', '/contact'];
+    const links = document.querySelectorAll('.navbar-nav a');
+    links.forEach((link) => {
+      const href = link.getAttribute('href');
+      const isPublic = PUBLIC.includes(href);
+      if (isPublic && path === href) link.classList.add('active');
+      else if (!isPublic && href && path.startsWith(href)) link.classList.add('active');
+      else link.classList.remove('active');
     });
   }
 
   initUserAvatar() {
-    const userAvatar = document.querySelector('.user-avatar');
-    if (userAvatar && !userAvatar.textContent.trim()) {
-      // Generate initials from user data or use default
-      const userName = this.getUserName();
-      userAvatar.textContent = userName ? userName.charAt(0).toUpperCase() : 'U';
+    const avatar = document.querySelector('.user-avatar');
+    if (avatar && !avatar.textContent.trim()) {
+      const name =
+        avatar.getAttribute('data-name') ||
+        localStorage.getItem('userName') ||
+        'U';
+      avatar.textContent = name.charAt(0).toUpperCase();
     }
-  }
-
-  getUserName() {
-    // This would typically come from your auth system
-    // For demo purposes, we'll check localStorage or use a default
-    return localStorage.getItem('userName') || 'User';
   }
 
   handleResize() {
-    if (window.innerWidth > 768) {
-      this.closeMobileMenu();
-    }
-  }
-
-  // Method to hide signup button and only show login button
-  hideSignupButton() {
-    const signupButtons = document.querySelectorAll('.btn-signup');
-    const loginButtons = document.querySelectorAll('.btn-login');
-    
-    // Hide all signup buttons
-    signupButtons.forEach(button => {
-      button.style.display = 'none';
-    });
-    
-    // Ensure login buttons are visible and have the primary style
-    loginButtons.forEach(button => {
-      button.style.display = 'flex';
-      button.classList.add('btn-login');
-      button.classList.remove('btn-signup');
-    });
-  }
-
-  // Method to update user info (can be called after login)
-  updateUserInfo(userData) {
-    const userNameElement = document.querySelector('.user-trigger span');
-    const userAvatar = document.querySelector('.user-avatar');
-    
-    if (userNameElement && userData.name) {
-      userNameElement.textContent = userData.name;
-    }
-    
-    if (userAvatar && userData.name) {
-      userAvatar.textContent = userData.name.charAt(0).toUpperCase();
-    }
-    
-    if (userData.name) {
-      localStorage.setItem('userName', userData.name);
-    }
-  }
-
-  // Method to show/hide auth buttons based on login status
-  updateAuthState(isLoggedIn) {
-    const authButtons = document.querySelector('.auth-buttons');
-    const userMenu = document.querySelector('.user-menu');
-    
-    if (authButtons && userMenu) {
-      if (isLoggedIn) {
-        authButtons.style.display = 'none';
-        userMenu.style.display = 'block';
-      } else {
-        authButtons.style.display = 'flex';
-        userMenu.style.display = 'none';
-        // Ensure only login button is visible
-        this.hideSignupButton();
-      }
-    }
+    if (window.innerWidth > 768) this.closeMobileMenu();
   }
 }
 
-// Add CSS for animations
-const navbarStyles = `
-  .mobile-menu-btn {
-    transition: all 0.3s ease;
-  }
-  
-  .navbar-nav {
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-  
-  .user-dropdown {
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-  
-  @keyframes slideDown {
-    from {
-      opacity: 0;
-      transform: translateY(-10px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-  
-  .user-dropdown.active {
-    animation: slideDown 0.3s ease;
-  }
-  
-  /* Ensure signup buttons are hidden */
-  .btn-signup {
-    display: none !important;
-  }
-`;
-
-// Inject styles
-const styleSheet = document.createElement('style');
-styleSheet.textContent = navbarStyles;
-document.head.appendChild(styleSheet);
-
-// Initialize navbar when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
   window.navbar = new Navbar();
-  
-  // Example: Update auth state based on login status
-  // This would typically come from your auth system
-  const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
-  window.navbar.updateAuthState(isLoggedIn);
 });
-
-// Export for use in other modules
-if (typeof module !== 'undefined' && module.exports) {
-  module.exports = Navbar;
-}

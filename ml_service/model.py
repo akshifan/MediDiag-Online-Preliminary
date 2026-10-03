@@ -15,12 +15,15 @@ from sklearn.preprocessing import LabelEncoder
 from sklearn.model_selection import train_test_split
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-import openai
+from openai import OpenAI
 
-openai.api_key = os.getenv("OPENAI_API_KEY")
+client = OpenAI(
+    api_key=os.getenv("GEMINI_API_KEY"),
+    base_url="https://generativelanguage.googleapis.com/v1beta/openai/"
+)
 
-if not openai.api_key:
-    print("[ml_service] WARNING: OPENAI_API_KEY not set")
+if not client.api_key:
+    print("[ml_service] WARNING: GEMINI_API_KEY not set")
 else:
     print("[ml_service] OPENAI_API_KEY loaded")
 
@@ -523,24 +526,43 @@ if not ml_model.load_model():
     print(f"[ML Model] Training completed with accuracy: {accuracy:.2%}")
 
 # -------------------------
-# OpenAI Chat Functions (separate from diagnosis)
+# Gemini Chat Functions (separate from diagnosis)
 # -------------------------
-def chat_with_openai(message):
-    """Use OpenAI for chat support only"""
-    try:
-        response = openai.ChatCompletion.create(
-            model="gpt-4o-mini",
-            messages=[
-                {"role": "system", "content": "You are a helpful medical assistant for a hospital support team. Provide general health information and support. DO NOT diagnose symptoms - refer to symptom checker."},
-                {"role": "user", "content": message}
-            ],
-            temperature=0.7,
-            max_tokens=500
-        )
-        return response.choices[0].message.content.strip()
-    except Exception as e:
-        print(f"[OpenAI Chat Error]: {e}")
-        return "I'm here to help! For medical diagnosis, please use our symptom checker feature."
+def chat_with_gemini(message):
+    models = [
+        "gemini-3.6-flash",
+        "gemini-3.5-flash-lite"
+    ]
+
+    for model_name in models:
+        try:
+            response = client.chat.completions.create(
+                model=model_name,
+                messages=[
+                    {
+                        "role": "system",
+                        "content": (
+                            "You are a helpful medical assistant for a hospital "
+                            "support team. Provide general health information "
+                            "and support. DO NOT diagnose symptoms - refer to "
+                            "the symptom checker."
+                        )
+                    },
+                    {
+                        "role": "user",
+                        "content": message
+                    }
+                ],
+                temperature=0.7,
+                max_tokens=500
+            )
+
+            return response.choices[0].message.content.strip()
+
+        except Exception as e:
+            print(f"[Gemini Chat Error - {model_name}]: {e}")
+
+    return "The AI assistant is temporarily unavailable. Please try again."
 
 # -------------------------
 # Routes (ML Model Only - No Fallback)
@@ -612,13 +634,18 @@ def chat_route():
     if not user_message:
         return jsonify({"reply": "Please enter a message."})
     
-    # Use OpenAI for chat support
+    # Use Gemini for chat support
     try:
-        reply = chat_with_openai(user_message)
+        reply = chat_with_gemini(user_message)
         return jsonify({"reply": reply})
     except Exception as e:
-        print(f"[Chat Error]: {e}")
+        print(f"[GeminiChat Error]: {e}")
         return jsonify({"reply": "I'm here to help! For medical diagnosis, please use our symptom checker feature."})
+
+@app.route('/diagnose', methods=['POST'])
+def diagnose_alias():
+    """Backward-compatible alias for /analyze."""
+    return analyze_route()
 
 @app.route('/model_info', methods=['GET'])
 def model_info():
@@ -653,13 +680,14 @@ def retrain_route():
 # -------------------------
 if __name__ == '__main__':
     port = int(os.environ.get('ML_PORT', 5000))
-    print(f"[ml_service] Starting on 0.0.0.0:{port}")
+    debug = os.environ.get('ML_DEBUG', 'false').lower() == 'true'
+    print(f"[ml_service] Starting on 0.0.0.0:{port}  debug={debug}")
     print(f"[ml_service] Model Type: ML-Only (No Fallback)")
     print(f"[ml_service] ML Model Status: {'TRAINED' if ml_model.trained else 'NOT TRAINED'}")
-    
+
     if ml_model.trained:
         print(f"[ml_service] Diseases recognized: {len(ml_model.label_encoder.classes_)}")
         for disease in ml_model.label_encoder.classes_:
             print(f"  - {disease}")
-    
-    app.run(host='0.0.0.0', port=port, debug=True)
+
+    app.run(host='0.0.0.0', port=port, debug=debug)

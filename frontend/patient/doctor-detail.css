@@ -1,0 +1,271 @@
+/*
+ * MediDiag Patient — Doctor Detail Page
+ * Dedicated styles so the doctor profile never inherits the compact
+ * Find Doctors card layout.
+ */
+
+.doctor-detail-page {
+  width: min(1200px, calc(100% - 32px));
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+.doctor-detail-page .dashboard-content {
+  min-width: 0;
+  width: 100%;
+}
+
+.doctor-detail-page .section-header {
+  width: 100%;
+  margin: 0 0 14px;
+}
+
+.doctor-detail-page .doctor-detail-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.doctor-detail-page .doctor-detail-heading {
+  margin: 0;
+  color: var(--text-lighter);
+  font-size: clamp(1.35rem, 1.15rem + 0.8vw, 1.9rem);
+  line-height: 1.2;
+}
+
+.doctor-detail-page .doctor-detail-subtitle {
+  margin: 4px 0 0;
+  color: var(--medical-teal);
+  font-weight: 700;
+}
+
+.doctor-detail-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  align-items: stretch;
+  gap: 14px;
+  width: 100%;
+  min-width: 0;
+}
+
+.doctor-detail-card,
+.doctor-booking-card {
+  min-width: 0;
+  width: 100%;
+  padding: 18px !important;
+  border: 1px solid var(--border-strong);
+  border-radius: 16px;
+  background: var(--gradient-glass);
+  box-shadow: var(--shadow);
+  box-sizing: border-box;
+}
+
+.doctor-detail-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.doctor-detail-card .doctor-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.doctor-detail-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--gradient-medical);
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  font-weight: 700;
+  flex-shrink: 0;
+  box-shadow: var(--shadow-medical);
+}
+
+.doctor-detail-card .doctor-info {
+  min-width: 0;
+}
+
+.doctor-detail-card .doctor-info h2 {
+  margin: 0 0 3px;
+  color: var(--text-lighter);
+  font-size: 1.25rem;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+}
+
+.doctor-detail-card .doctor-specialty {
+  margin: 0 0 4px;
+  color: var(--medical-teal);
+  font-weight: 700;
+}
+
+.doctor-detail-card .doctor-experience {
+  margin: 0;
+  color: var(--text-light);
+  font-size: .82rem;
+}
+
+.doctor-detail-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin: 14px 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+}
+
+.doctor-detail-list .detail-item {
+  display: grid;
+  grid-template-columns: 20px minmax(0, 1fr);
+  align-items: start;
+  gap: 7px;
+  width: 100%;
+  min-width: 0;
+  margin: 0;
+  padding: 9px 0;
+  border-bottom: 1px solid var(--border-color);
+  color: var(--text-light);
+  font-size: .82rem;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+
+.doctor-detail-list .detail-item:last-child {
+  border-bottom: 0;
+}
+
+.doctor-detail-list .detail-icon {
+  width: 20px;
+  color: var(--primary-color);
+  text-align: center;
+  padding-top: 1px;
+}
+
+.doctor-detail-list .detail-value {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.doctor-detail-message {
+  width: 100%;
+  margin-top: auto;
+}
+
+.doctor-booking-card h2 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 5px;
+  color: var(--text-lighter);
+  font-size: 1.15rem;
+  line-height: 1.25;
+}
+
+.doctor-booking-card > p {
+  margin: 0 0 12px;
+  color: var(--text-light);
+  font-size: .84rem;
+}
+
+.doctor-detail-availability {
+  margin-bottom: 14px;
+}
+
+.doctor-booking-card .form-group {
+  margin-bottom: 13px;
+}
+
+.doctor-booking-card .form-label {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--text-lighter);
+  font-size: .8rem;
+  font-weight: 700;
+}
+
+.doctor-booking-card .form-control {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.doctor-booking-card textarea.form-control {
+  min-height: 125px;
+  resize: vertical;
+}
+
+#booking-result {
+  margin-bottom: 10px;
+  min-height: 0;
+}
+
+.doctor-detail-page .view-all {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Keep the two-column detail layout on normal desktop widths. */
+@media (max-width: 768px) {
+  .doctor-detail-page {
+    width: 100%;
+    max-width: 100vw;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+  }
+
+  .doctor-detail-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 10px;
+  }
+
+  .doctor-detail-card,
+  .doctor-booking-card {
+    padding: 14px !important;
+  }
+
+  .doctor-detail-avatar {
+     width: 38px; height: 38px; font-size: 0.88rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .doctor-detail-page {
+    padding-left: 8px !important;
+    padding-right: 8px !important;
+  }
+
+  .doctor-detail-card,
+  .doctor-booking-card {
+    padding: 12px !important;
+    border-radius: 14px;
+  }
+
+  .doctor-detail-card .doctor-header {
+    gap: 9px;
+  }
+
+  .doctor-detail-card .doctor-info h2 {
+    font-size: 1.05rem;
+  }
+
+  .doctor-detail-list .detail-item {
+    font-size: .76rem;
+  }
+
+  .doctor-booking-card h2 {
+    font-size: 1rem;
+  }
+}

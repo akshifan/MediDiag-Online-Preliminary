@@ -7,12 +7,332 @@
     <link rel="stylesheet" href="/main/main.css">
     <link rel="stylesheet" href="/navbar/navbar.css">
     <link rel="stylesheet" href="/patient/doctors.css">
+    <link rel="stylesheet" href="/footer/footer.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/portal/portal-fixes.css">
+    <style>
+        /* Find Doctors page-only behavior. The shared portal navbar remains untouched. */
+        .doctor-view-booking {
+            width: 100%;
+            text-align: center;
+        }
+
+        .doctor-grid .doctor-rating,
+        .doctor-grid .stars,
+        .doctor-grid .rating,
+        .doctor-grid .doctor-reviews {
+            display: none !important;
+        }
+
+        .doctor-pagination {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin: 18px auto 8px;
+            flex-wrap: wrap;
+            width: 100%;
+        }
+
+        .doctor-pagination button {
+            min-width: 88px;
+        }
+
+        .doctor-pagination .doctor-page-info {
+            min-width: 100px;
+            text-align: center;
+            font-weight: 700;
+            font-size: .78rem;
+        }
+
+        .doctor-pagination button:disabled {
+            opacity: .45;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .doctor-empty-filter {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 24px 12px;
+        }
+
+        /* Patient specialization dropdown
+   Matches doctor portal category dropdown */
+
+.patient-specialization-dropdown {
+    position: relative;
+    width: 100%;
+}
+
+.patient-specialization-dropdown
+.category-dropdown-trigger {
+    width: 100%;
+    min-height: 48px;
+    padding: 0 14px;
+    border: 1px solid #b7eee0;
+    border-radius: 12px;
+    background: #ffffff;
+    color: #334155;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    box-sizing: border-box;
+    text-align: left;
+}
+
+.patient-specialization-dropdown
+.category-dropdown-trigger:hover {
+    border-color: #10b981;
+}
+
+.patient-specialization-dropdown
+.category-dropdown-trigger i {
+    color: #0f766e;
+    transition: transform 0.2s ease;
+}
+
+.patient-specialization-dropdown.open
+.category-dropdown-trigger i {
+    transform: rotate(180deg);
+}
+
+.patient-specialization-dropdown
+.category-dropdown-menu {
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0;
+    right: 0;
+    z-index: 1000;
+
+    display: none;
+
+    max-height: 280px;
+    overflow-y: auto;
+
+    background: #ffffff;
+    border: 1px solid #b7eee0;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.10);
+
+    padding: 6px;
+}
+
+.patient-specialization-dropdown.open
+.category-dropdown-menu {
+    display: block;
+}
+
+.patient-specialization-dropdown
+.category-dropdown-menu button {
+    width: 100%;
+    border: 0;
+    background: transparent;
+    color: #334155;
+
+    padding: 10px 12px;
+    border-radius: 8px;
+
+    text-align: left;
+    font-size: 0.88rem;
+
+    cursor: pointer;
+}
+
+.patient-specialization-dropdown
+.category-dropdown-menu button:hover {
+    background: #d1fae5;
+    color: #065f46;
+}
+
+.patient-specialization-dropdown
+.category-dropdown-menu button.selected {
+    background: #d1fae5;
+    color: #065f46;
+    font-weight: 600;
+}
+
+/* =========================================================
+   AVAILABILITY DROPDOWN
+   Same styling as Specialization category dropdown
+   ========================================================= */
+
+.patient-availability-dropdown {
+    position: relative;
+    width: 100%;
+}
+
+/* Dropdown trigger */
+.patient-availability-dropdown .category-dropdown-trigger {
+    width: 100%;
+    min-height: 48px;
+    padding: 0 14px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+
+    background: #ffffff;
+    border: 1px solid #b7eee0;
+    border-radius: 12px;
+
+    color: #334155;
+    font-size: 0.9rem;
+    font-family: inherit;
+    text-align: left;
+
+    cursor: pointer;
+    box-sizing: border-box;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        background 0.2s ease;
+}
+
+/* Hover */
+.patient-availability-dropdown
+.category-dropdown-trigger:hover {
+    border-color: #10b981;
+    background: #f8fffd;
+}
+
+/* Focus/open */
+.patient-availability-dropdown.open
+.category-dropdown-trigger {
+    border-color: #10b981;
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.12);
+}
+
+/* Arrow */
+.patient-availability-dropdown
+.category-dropdown-trigger i {
+    color: #047857;
+    font-size: 0.75rem;
+    transition: transform 0.2s ease;
+}
+
+/* Rotate arrow when open */
+.patient-availability-dropdown.open
+.category-dropdown-trigger i {
+    transform: rotate(180deg);
+}
+
+
+/* =========================================================
+   DROPDOWN MENU
+   ========================================================= */
+
+.patient-availability-dropdown
+.category-dropdown-menu {
+    position: absolute;
+
+    top: calc(100% + 6px);
+    left: 0;
+    right: 0;
+
+    display: none;
+
+    background: #ffffff;
+    border: 1px solid #b7eee0;
+    border-radius: 12px;
+
+    padding: 6px;
+
+    max-height: 180px;
+    overflow-y: auto;
+
+    box-shadow:
+        0 10px 25px rgba(0, 0, 0, 0.10);
+
+    z-index: 1000;
+}
+
+/* Show menu */
+.patient-availability-dropdown.open
+.category-dropdown-menu {
+    display: block;
+}
+
+
+/* =========================================================
+   OPTIONS
+   ========================================================= */
+
+.patient-availability-dropdown
+.category-dropdown-menu button {
+    width: 100%;
+
+    display: block;
+
+    border: none;
+    outline: none;
+
+    background: transparent;
+
+    color: #334155;
+
+    padding: 10px 12px;
+
+    border-radius: 8px;
+
+    font-family: inherit;
+    font-size: 0.88rem;
+
+    text-align: left;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        color 0.2s ease;
+}
+
+/* Hover */
+.patient-availability-dropdown
+.category-dropdown-menu button:hover {
+    background: #d1fae5;
+    color: #065f46;
+}
+
+/* Selected */
+.patient-availability-dropdown
+.category-dropdown-menu button.selected {
+    background: #d1fae5;
+    color: #065f46;
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   SCROLLBAR
+   ========================================================= */
+
+.patient-availability-dropdown
+.category-dropdown-menu::-webkit-scrollbar {
+    width: 6px;
+}
+
+.patient-availability-dropdown
+.category-dropdown-menu::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.patient-availability-dropdown
+.category-dropdown-menu::-webkit-scrollbar-thumb {
+    background: #a7e8d7;
+    border-radius: 10px;
+}
+
+    </style>
 </head>
 <body>
     <%- include('../headers/launchheader') %>
-    
-    <!-- Medical Background Elements -->
+
     <div class="medical-background">
         <i class="fas fa-heart medical-icon heart"></i>
         <i class="fas fa-stethoscope medical-icon stethoscope"></i>
@@ -26,121 +346,226 @@
         <div class="dashboard-grid">
             <aside class="sidebar">
                 <div class="sidebar-header">
-                    <div class="user-avatar-large">
-                        <%= patient.full_name ? patient.full_name.charAt(0).toUpperCase() : 'P' %>
-                    </div>
+                    
                     <h3><%= patient.full_name %></h3>
-                    <p>Patient ID: <%= patient.id %></p>
                 </div>
+
                 <nav class="sidebar-nav">
                     <ul>
-                        <li>
-                            <a href="/patient/dashboard">
-                                <i class="fas fa-tachometer-alt"></i>
-                                Dashboard
-                            </a>
-                        </li>
-                        <li>
-                            <a href="/patient/doctors" class="active">
-                                <i class="fas fa-user-md"></i>
-                                Find Doctors
-                            </a>
-                        </li>
-                        <li>
-                            <a href="/patient/appointments">
-                                <i class="fas fa-calendar-check"></i>
-                                My Appointments
-                            </a>
-                        </li>
-                        <li>
-                            <a href="/patient/profile">
-                                <i class="fas fa-user"></i>
-                                Profile
-                            </a>
-                        </li>
-                        <li>
-                            <a href="/auth/logout">
-                                <i class="fas fa-sign-out-alt"></i>
-                                Logout
-                            </a>
-                        </li>
+                        <li><a href="/patient/dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                        <li><a href="/patient/doctors" class="active"><i class="fas fa-user-md"></i> Find Doctors</a></li>
+                        <li><a href="/patient/appointments"><i class="fas fa-calendar-check"></i> My Appointments</a></li>
+                        <li><a href="/patient/chats"><i class="fas fa-comments"></i> Chats</a></li>
+                        <li><a href="/patient/profile"><i class="fas fa-user"></i> Profile</a></li>
+                        <li><a href="/auth/logout"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
                     </ul>
                 </nav>
             </aside>
 
             <main class="dashboard-content">
                 <section class="welcome-section">
-                    <h1>Find Doctors <i class="fas fa-user-md"></i></h1>
-                    <p>Book appointments with verified healthcare professionals</p>
+                    <h1> <i class="fas fa-user-md"></i>Find Doctors</h1>
+                    <p>Choose a doctor to view the full profile, message them, and book an appointment.</p>
                 </section>
 
-                <!-- Search & Filters -->
                 <section class="search-filters">
                     <div class="filter-row">
                         <div class="form-group">
-                            <label class="form-label">Search Doctors</label>
-                            <input type="text" id="search-input" class="form-control" placeholder="Search by name, specialization...">
+                            <label class="form-label" for="search-input">Search Doctors</label>
+                            <input type="text" id="search-input" class="form-control" placeholder="Search by name or specialization...">
                         </div>
+
                         <div class="form-group">
-                            <label class="form-label">Specialization</label>
-                            <select id="specialization-filter" class="form-control">
-                                <option value="">All Specializations</option>
-                                <option value="Cardiology">Cardiology</option>
-                                <option value="Dermatology">Dermatology</option>
-                                <option value="Pediatrics">Pediatrics</option>
-                                <option value="Neurology">Neurology</option>
-                                <option value="Gynecology">Gynecology</option>
-                                <option value="Internal Medicine">Internal Medicine</option>
-                                <option value="Orthopedics">Orthopedics</option>
-                                <option value="ENT">ENT</option>
-                                <option value="Psychiatry">Psychiatry</option>
-                                <option value="Infectious Specialist">Infectious Specialist</option>
-                                <option value="Dentistry">Dentistry</option>
-                                <option value="Hepatology">Hepatology</option>
-                                <option value="Ophthalmology">Ophthalmology</option>
-                                <option value="Endocrinology">Endocrinology</option>
-                                <option value="Oncology">Oncology</option>
-                                <option value="Pulmonology">Pulmonology</option>
-                                <option value="Pathology">Pathology</option>
-                                <option value="General Surgery">General Surgery</option>
-                                <option value="Urology">Urology</option>
-                                <option value="Neurosurgery">Neurosurgery</option>
-                            </select>
-                        </div>
+    <label class="form-label" for="specialization-filter">
+        Specialization
+    </label>
+
+    <div class="custom-category-dropdown patient-specialization-dropdown"
+         id="patientSpecializationDropdown">
+
+        <button
+            type="button"
+            class="category-dropdown-trigger"
+            id="patientSpecializationTrigger"
+        >
+            <span id="patientSpecializationSelected">
+                All Specializations
+            </span>
+
+            <i class="fas fa-chevron-down"></i>
+        </button>
+
+        <div
+            class="category-dropdown-menu"
+            id="patientSpecializationMenu"
+        >
+            <button type="button" data-value="">
+                All Specializations
+            </button>
+
+            <button type="button" data-value="Cardiology">
+                Cardiology
+            </button>
+
+            <button type="button" data-value="Dermatology">
+                Dermatology
+            </button>
+
+            <button type="button" data-value="Pediatrics">
+                Pediatrics
+            </button>
+
+            <button type="button" data-value="Neurology">
+                Neurology
+            </button>
+
+            <button type="button" data-value="Gynecology">
+                Gynecology
+            </button>
+
+            <button type="button" data-value="Internal Medicine">
+                Internal Medicine
+            </button>
+
+            <button type="button" data-value="Orthopedics">
+                Orthopedics
+            </button>
+
+            <button type="button" data-value="ENT">
+                ENT
+            </button>
+
+            <button type="button" data-value="Psychiatry">
+                Psychiatry
+            </button>
+
+            <button type="button" data-value="Infectious Specialist">
+                Infectious Specialist
+            </button>
+
+            <button type="button" data-value="Dentistry">
+                Dentistry
+            </button>
+
+            <button type="button" data-value="Hepatology">
+                Hepatology
+            </button>
+
+            <button type="button" data-value="Ophthalmology">
+                Ophthalmology
+            </button>
+
+            <button type="button" data-value="Endocrinology">
+                Endocrinology
+            </button>
+
+            <button type="button" data-value="Oncology">
+                Oncology
+            </button>
+
+            <button type="button" data-value="Pulmonology">
+                Pulmonology
+            </button>
+
+            <button type="button" data-value="Pathology">
+                Pathology
+            </button>
+
+            <button type="button" data-value="General Surgery">
+                General Surgery
+            </button>
+
+            <button type="button" data-value="Urology">
+                Urology
+            </button>
+
+            <button type="button" data-value="Neurosurgery">
+                Neurosurgery
+            </button>
+        </div>
+
+        <!-- Keep this hidden field for the selected value -->
+        <input
+            type="hidden"
+            id="specialization-filter"
+            value=""
+        >
+    </div>
+</div>
+
                         <div class="form-group">
-                            <label class="form-label">Availability</label>
-                            <select id="availability-filter" class="form-control">
-                                <option value="all">All Doctors</option>
-                                <option value="available">Available Now</option>
-                            </select>
-                        </div>
-                        <button class="btn btn-primary" onclick="applyFilters()">
-                            <i class="fas fa-search"></i>
-                            Search
-                        </button>
+    <label class="form-label" for="availability-filter">
+        Availability
+    </label>
+
+    <div class="custom-category-dropdown patient-availability-dropdown"
+         id="patientAvailabilityDropdown">
+
+        <button
+            type="button"
+            class="category-dropdown-trigger"
+            id="patientAvailabilityTrigger"
+        >
+            <span id="patientAvailabilitySelected">
+                All Doctors
+            </span>
+
+            <i class="fas fa-chevron-down"></i>
+        </button>
+
+        <div
+            class="category-dropdown-menu"
+            id="patientAvailabilityMenu"
+        >
+            <button
+                type="button"
+                data-value="all"
+                class="selected"
+            >
+                All Doctors
+            </button>
+
+            <button
+                type="button"
+                data-value="available"
+            >
+                Available Now
+            </button>
+        </div>
+
+        <input
+            type="hidden"
+            id="availability-filter"
+            value="all"
+        >
+    </div>
+</div>
+
                     </div>
                 </section>
 
-                <!-- Doctors Grid -->
-                <div class="doctor-grid">
-                    <% if (doctors.length > 0) { %>
-                        <% doctors.forEach(doctor => { %>
-                            <div class="doctor-card" data-specialization="<%= doctor.specialization %>">
+                <div class="doctor-grid" id="doctorGrid">
+                    <% if (doctors && doctors.length > 0) { %>
+                        <% doctors.forEach((doctor, idx) => { %>
+                            <article
+                                class="doctor-card"
+                                data-doctor-index="<%= idx %>"
+                                data-name="<%= doctor.full_name || '' %>"
+                                data-specialization="<%= doctor.specialization || '' %>"
+                                data-available="<%= doctor.is_available ? 'true' : 'false' %>"
+                            >
                                 <div class="doctor-header">
                                     <div class="doctor-avatar">
-                                        <%= doctor.full_name.split(' ').map(n => n[0]).join('').toUpperCase() %>
+                                        <%= (doctor.full_name || 'Doctor').split(' ').map(n => n[0]).join('').toUpperCase() %>
                                     </div>
+
                                     <div class="doctor-info">
                                         <h3>Dr. <%= doctor.full_name %></h3>
-                                        <p class="doctor-specialty"><%= doctor.specialization %></p>
+                                        <p class="doctor-specialty"><%= doctor.specialization || 'General Medicine' %></p>
                                         <p class="doctor-experience">
                                             <i class="fas fa-briefcase"></i>
-                                            <%= doctor.experience_years %>+ years experience
+                                            <%= doctor.experience_years || 0 %>+ years experience
                                         </p>
-                                        <div class="doctor-rating">
-                                            <span class="stars">★★★★★</span>
-                                            <span>(<%= doctor.review_count || 0 %> reviews)</span>
-                                        </div>
                                     </div>
                                 </div>
 
@@ -149,445 +574,419 @@
                                         <span class="detail-icon"><i class="fas fa-hospital"></i></span>
                                         <span><%= doctor.hospital_affiliation || 'Multiple Hospitals' %></span>
                                     </div>
+
                                     <div class="detail-item">
                                         <span class="detail-icon"><i class="fas fa-rupee-sign"></i></span>
-                                        <span>₹<%= doctor.consultation_fee %> consultation fee</span>
+                                        <span>₹<%= doctor.consultation_fee || 'Contact' %> consultation fee</span>
                                     </div>
+
                                     <div class="detail-item">
                                         <span class="detail-icon"><i class="fas fa-phone"></i></span>
-                                        <span><%= doctor.phone %></span>
+                                        <span><%= doctor.phone || 'Contact on profile' %></span>
                                     </div>
                                 </div>
 
                                 <div class="doctor-actions">
-                                    <% if (doctor.is_available) { %>
-                                        <span class="availability-badge">
-                                            <i class="fas fa-check-circle"></i>
-                                            Available
-                                        </span>
-                                        <button class="btn btn-primary book-appointment" data-doctor-id="<%= doctor.id %>" data-doctor-name="<%= doctor.full_name %>">
-                                            <i class="fas fa-calendar-plus"></i>
-                                            Book Appointment
-                                        </button>
-                                    <% } else { %>
-                                        <span class="availability-badge unavailable">
-                                            <i class="fas fa-times-circle"></i>
-                                            Not Available
-                                        </span>
-                                        <button class="btn btn-outline" disabled>
-                                            <i class="fas fa-calendar-times"></i>
-                                            Not Available
-                                        </button>
-                                    <% } %>
+                                    <span class="availability-badge">
+                                        <i class="fas fa-check-circle"></i> Available
+                                    </span>
+
+                                    <!-- ONLY this control navigates to the doctor detail page. -->
+                                    <a
+                                        href="/patient/doctors/<%= doctor.id %>"
+                                        class="btn btn-primary doctor-view-booking"
+                                        aria-label="View Dr. <%= doctor.full_name %> for booking"
+                                    >
+                                        <i class="fas fa-calendar-check"></i> View for Booking
+                                    </a>
                                 </div>
-                            </div>
+                            </article>
                         <% }); %>
-                    <% } else { %>
-                        <div class="no-doctors">
-                            <i class="fas fa-user-md"></i>
-                            <h3>No Doctors Found</h3>
-                            <p>Try adjusting your search filters or check back later.</p>
-                            <button class="btn btn-primary" onclick="clearFilters()">
-                                <i class="fas fa-redo"></i>
-                                Clear Filters
-                            </button>
-                        </div>
                     <% } %>
+
+                    <div id="doctorEmpty" class="no-doctors doctor-empty-filter" style="display:none;">
+                        <i class="fas fa-user-md"></i>
+                        <h3>No Doctors Found</h3>
+                        <p>Try adjusting your search filters.</p>
+                        <button type="button" class="btn btn-outline" id="clear-doctor-filters">
+                            <i class="fas fa-redo"></i> Clear Filters
+                        </button>
+                    </div>
                 </div>
+
+                <!-- Always render pagination when doctors exist; disable controls on a single page. -->
+                <div id="doctorPagination" class="doctor-pagination" style="display:none;">
+                    <button type="button" id="doctorPrevious" class="btn btn-outline">
+                        <i class="fas fa-chevron-left"></i> Previous
+                    </button>
+
+                    <span id="doctorPageInfo" class="doctor-page-info">Page 1 of 1</span>
+
+                    <button type="button" id="doctorNext" class="btn btn-primary">
+                        Next <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+
+                <div id="doctorResultsInfo" class="doctor-results-info" aria-live="polite"></div>
             </main>
         </div>
     </div>
 
-    <!-- Booking Modal -->
-    <div class="booking-modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2><i class="fas fa-calendar-plus"></i> Book Appointment</h2>
-                <button class="close-modal">&times;</button>
-            </div>
-            
-            <form id="booking-form">
-                <input type="hidden" id="doctor_id" name="doctor_id">
-                
-                <div class="form-group">
-                    <label class="form-label">Doctor</label>
-                    <p id="modal-doctor-name" class="form-control" style="background: var(--bg-dark); padding: 12px; border-radius: 10px; margin: 0;"></p>
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label">Appointment Date & Time</label>
-                    <input type="datetime-local" id="appointment_date" name="appointment_date" class="form-control" required>
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label">Describe Your Symptoms</label>
-                    <textarea id="symptoms" name="symptoms" class="form-control" rows="4" placeholder="Please describe your symptoms from the list below and click 'Add Selected to Description'" readonly required></textarea>
-                     <div id="symptoms-error" class="error-message" style="display: none; color: #ff4757; font-size: 14px; margin-top: 5px;">
-        <i class="fas fa-exclamation-circle"></i> Please add at least one symptom before booking.
-    </div>
-                    <div class="symptom-helper">
-                        <small>Select common symptoms to add quickly:</small>
-                        <div class="symptom-list">
-    <% const COMMON_SYMPTOMS = ['fever','cough','sore throat','sneezing','runny nose','congestion','headache','nausea','vomiting','diarrhea','fatigue','body aches','painful urination','shortness of breath','chest pain','dizziness']; %>
-    <% COMMON_SYMPTOMS.forEach(s => { %>
-        <label class="symptom-label">
-            <input type="checkbox" class="symptom-checkbox" value="<%= s %>" />
-            <span class="symptom-text"><%= s %></span>
-        </label>
-    <% }) %>
-</div>
-                        <div style="margin-top: 10px; display: flex; gap: 10px;">
-                            <button type="button" id="add-symptoms-btn" class="btn btn-outline">
-                                <i class="fas fa-plus"></i>
-                                Add Selected to Description
-                            </button>
-                            <button type="button" id="clear-symptoms-btn" class="btn btn-link">
-                                <i class="fas fa-times"></i>
-                                Clear Selections
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label">Get Preliminary Analysis</label>
-                    <button type="button" id="diagnose-btn" class="btn btn-outline" style="width: 100%; margin-bottom: 16px;">
-                        <i class="fas fa-robot"></i>
-                        Analyze Symptoms
-                    </button>
-                    <div id="diagnosis-result" class="diagnosis-result" style="display: none;"></div>
-                </div>
-
-                <button type="submit" class="btn btn-primary" style="width: 100%;">
-                    <i class="fas fa-calendar-check"></i>
-                    Book Appointment
-                </button>
-            </form>
-        </div>
-    </div>
-
+    <%- include('../main/footer') %>
     <script src="/navbar/navbar.js"></script>
-    
+
     <script>
-        // Filter functionality
+    (function () {
+        'use strict';
+
+        var PAGE_SIZE = 8;
+        var currentPage = 1;
+
+        var grid = document.getElementById('doctorGrid');
+        var searchInput = document.getElementById('search-input');
+        var specialization = document.getElementById('specialization-filter');
+        var availability = document.getElementById('availability-filter');
+        var searchButton = document.getElementById('search-doctors-btn');
+        var clearButton = document.getElementById('clear-doctor-filters');
+        var empty = document.getElementById('doctorEmpty');
+        var pagination = document.getElementById('doctorPagination');
+        var previous = document.getElementById('doctorPrevious');
+        var next = document.getElementById('doctorNext');
+        var pageInfo = document.getElementById('doctorPageInfo');
+        var resultsInfo = document.getElementById('doctorResultsInfo');
+
+        if (!grid) return;
+
+        function getCards() {
+            return Array.prototype.slice.call(
+                grid.querySelectorAll('.doctor-card')
+            );
+        }
+
+        function matches(card) {
+            var term = (searchInput.value || '').trim().toLowerCase();
+            var selectedSpecialization = specialization.value || '';
+            var selectedAvailability = availability.value || 'all';
+
+            var name = (card.dataset.name || '').toLowerCase();
+            var cardSpecialization = card.dataset.specialization || '';
+            var isAvailable = card.dataset.available === 'true';
+
+            if (
+                term &&
+                name.indexOf(term) === -1 &&
+                cardSpecialization.toLowerCase().indexOf(term) === -1
+            ) {
+                return false;
+            }
+
+            if (
+                selectedSpecialization &&
+                cardSpecialization !== selectedSpecialization
+            ) {
+                return false;
+            }
+
+            if (selectedAvailability === 'available' && !isAvailable) {
+                return false;
+            }
+
+            return true;
+        }
+
+        function render() {
+            var allCards = getCards();
+            var filtered = allCards.filter(matches);
+            var totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+
+            if (currentPage > totalPages) currentPage = totalPages;
+            if (currentPage < 1) currentPage = 1;
+
+            var start = (currentPage - 1) * PAGE_SIZE;
+            var visibleCards = filtered.slice(start, start + PAGE_SIZE);
+
+            allCards.forEach(function (card) {
+                card.style.display = 'none';
+            });
+
+            visibleCards.forEach(function (card) {
+                card.style.display = '';
+            });
+
+            if (empty) {
+                empty.style.display = filtered.length === 0 ? 'block' : 'none';
+            }
+
+            var hasResults = filtered.length > 0;
+
+            if (pagination) {
+                pagination.style.display = hasResults ? 'flex' : 'none';
+            }
+
+            if (pageInfo) {
+                pageInfo.textContent = 'Page ' + currentPage + ' of ' + totalPages;
+            }
+
+            if (previous) {
+                previous.disabled = !hasResults || currentPage <= 1;
+            }
+
+            if (next) {
+                next.disabled = !hasResults || currentPage >= totalPages;
+            }
+
+            if (resultsInfo) {
+                if (!hasResults) {
+                    resultsInfo.textContent = '';
+                } else {
+                    var from = start + 1;
+                    var to = Math.min(start + PAGE_SIZE, filtered.length);
+                    resultsInfo.textContent =
+                        'Showing ' + from + '–' + to + ' of ' + filtered.length + ' doctors';
+                }
+            }
+        }
+
         function applyFilters() {
-            const searchTerm = document.getElementById('search-input').value.toLowerCase();
-            const specialization = document.getElementById('specialization-filter').value;
-            const availability = document.getElementById('availability-filter').value;
-            
-            const doctorCards = document.querySelectorAll('.doctor-card');
-            let visibleCount = 0;
-            
-            doctorCards.forEach(card => {
-                const doctorName = card.querySelector('h3').textContent.toLowerCase();
-                const doctorSpecialization = card.dataset.specialization;
-                const isAvailable = card.querySelector('.availability-badge').textContent.includes('Available');
-                
-                let show = true;
-                
-                if (searchTerm && !doctorName.includes(searchTerm)) {
-                    show = false;
-                }
-                
-                if (specialization && doctorSpecialization !== specialization) {
-                    show = false;
-                }
-                
-                if (availability === 'available' && !isAvailable) {
-                    show = false;
-                }
-                
-                card.style.display = show ? 'block' : 'none';
-                if (show) visibleCount++;
-            });
-
-            // Show no doctors message if none visible
-            const noDoctorsElement = document.querySelector('.no-doctors');
-            if (noDoctorsElement) {
-                noDoctorsElement.style.display = visibleCount === 0 ? 'block' : 'none';
-            }
+            currentPage = 1;
+            render();
         }
 
-        function clearFilters() {
-            document.getElementById('search-input').value = '';
-            document.getElementById('specialization-filter').value = '';
-            document.getElementById('availability-filter').value = 'all';
-            applyFilters();
+        if (searchButton) {
+            searchButton.addEventListener('click', applyFilters);
         }
 
-        // Initialize search functionality
-        document.getElementById('search-input').addEventListener('input', applyFilters);
-        document.getElementById('specialization-filter').addEventListener('change', applyFilters);
-        document.getElementById('availability-filter').addEventListener('change', applyFilters);
+        if (searchInput) {
+            searchInput.addEventListener('input', applyFilters);
+        }
 
-        // Modal functionality
-        const bookButtons = document.querySelectorAll('.book-appointment');
-        const bookingModal = document.querySelector('.booking-modal');
-        const closeModal = document.querySelector('.close-modal');
+        const specializationDropdown =
+    document.getElementById('patientSpecializationDropdown');
 
-        bookButtons.forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                const doctorId = e.target.dataset.doctorId;
-                const doctorName = e.target.dataset.doctorName;
-                
-                document.getElementById('modal-doctor-name').textContent = 'Dr. ' + doctorName;
-                document.getElementById('doctor_id').value = doctorId;
-                
-                // Set minimum date to today
-                const today = new Date();
-                const minDate = today.toISOString().split('T')[0];
-                const minTime = today.toTimeString().split(' ')[0].substring(0, 5);
-                document.getElementById('appointment_date').min = minDate + 'T' + minTime;
-                
-                // Clear previous form data
-                document.getElementById('symptoms').value = '';
-                document.getElementById('diagnosis-result').style.display = 'none';
-                document.querySelectorAll('.symptom-checkbox').forEach(cb => cb.checked = false);
-                
-                bookingModal.classList.add('active');
+const specializationTrigger =
+    document.getElementById('patientSpecializationTrigger');
+
+const specializationMenu =
+    document.getElementById('patientSpecializationMenu');
+
+const specializationSelected =
+    document.getElementById('patientSpecializationSelected');
+
+if (
+    specializationDropdown &&
+    specializationTrigger &&
+    specializationMenu &&
+    specializationSelected &&
+    specialization
+) {
+    specializationTrigger.addEventListener('click', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        specializationDropdown.classList.toggle('open');
+    });
+
+    specializationMenu
+        .querySelectorAll('button[data-value]')
+        .forEach(function (option) {
+
+            option.addEventListener('click', function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+
+                const value = this.dataset.value || '';
+                const text = this.textContent.trim();
+
+                // Update hidden filter value
+                specialization.value = value;
+
+                // Update visible text
+                specializationSelected.textContent = text;
+
+                // Selected styling
+                specializationMenu
+                    .querySelectorAll('button[data-value]')
+                    .forEach(function (btn) {
+                        btn.classList.remove('selected');
+                    });
+
+                this.classList.add('selected');
+
+                // Close dropdown
+                specializationDropdown.classList.remove('open');
+
+                // Apply doctor filtering
+                applyFilters();
             });
         });
 
-        closeModal.addEventListener('click', () => {
-            bookingModal.classList.remove('active');
-        });
-
-        bookingModal.addEventListener('click', (e) => {
-            if (e.target === bookingModal) {
-                bookingModal.classList.remove('active');
-            }
-        });
-
-        // Symptom helper functionality
-
-        document.getElementById('add-symptoms-btn').addEventListener('click', function() {
-    const symptomsTextarea = document.getElementById('symptoms');
-    const selectedSymptoms = Array.from(document.querySelectorAll('.symptom-checkbox:checked'))
-        .map(cb => cb.value);
-    
-    if (selectedSymptoms.length === 0) {
-        alert('Please select at least one symptom before adding to description.');
-        return;
-    }
-    
-    // Get current text and clean it
-    let currentText = symptomsTextarea.value.trim();
-    
-    // If textarea is empty, start with "Symptoms: "
-    if (!currentText) {
-        currentText = "Symptoms: ";
-    }
-    
-    // Extract existing symptoms to avoid duplicates
-    let existingSymptoms = [];
-    if (currentText.toLowerCase().startsWith('symptoms:')) {
-        const afterPrefix = currentText.substring(9).trim();
-        if (afterPrefix) {
-            existingSymptoms = afterPrefix.split(',').map(s => s.trim().toLowerCase());
+    document.addEventListener('click', function (e) {
+        if (!specializationDropdown.contains(e.target)) {
+            specializationDropdown.classList.remove('open');
         }
-    } else if (currentText) {
-        existingSymptoms = currentText.split(',').map(s => s.trim().toLowerCase());
-    }
-    
-    // Add only new symptoms (avoid duplicates)
-    const newSymptoms = selectedSymptoms.filter(symptom => 
-        !existingSymptoms.includes(symptom.toLowerCase())
+    });
+}
+
+
+        if (previous) {
+            previous.addEventListener('click', function () {
+                if (currentPage <= 1) return;
+
+                currentPage -= 1;
+                render();
+
+                if (grid) {
+                    grid.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        }
+
+        if (next) {
+            next.addEventListener('click', function () {
+                var filteredCount = getCards().filter(matches).length;
+                var totalPages = Math.ceil(filteredCount / PAGE_SIZE);
+
+                if (currentPage >= totalPages) return;
+
+                currentPage += 1;
+                render();
+
+                if (grid) {
+                    grid.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        }
+
+        if (clearButton) {
+    clearButton.addEventListener('click', function () {
+
+        searchInput.value = '';
+
+        specialization.value = '';
+        availability.value = 'all';
+
+        // Reset specialization display
+        const specializationSelected =
+            document.getElementById('patientSpecializationSelected');
+
+        if (specializationSelected) {
+            specializationSelected.textContent =
+                'All Specializations';
+        }
+
+        // Reset availability display
+        const availabilitySelected =
+            document.getElementById('patientAvailabilitySelected');
+
+        if (availabilitySelected) {
+            availabilitySelected.textContent =
+                'All Doctors';
+        }
+
+        // Reset selected buttons
+        document
+            .querySelectorAll(
+                '#patientSpecializationMenu button[data-value], ' +
+                '#patientAvailabilityMenu button[data-value]'
+            )
+            .forEach(function (btn) {
+                btn.classList.remove('selected');
+            });
+
+        const allSpecializations =
+            document.querySelector(
+                '#patientSpecializationMenu button[data-value=""]'
+            );
+
+        if (allSpecializations) {
+            allSpecializations.classList.add('selected');
+        }
+
+        const allDoctors =
+            document.querySelector(
+                '#patientAvailabilityMenu button[data-value="all"]'
+            );
+
+        if (allDoctors) {
+            allDoctors.classList.add('selected');
+        }
+
+        applyFilters();
+    });
+}
+
+const availabilityDropdown =
+    document.getElementById('patientAvailabilityDropdown');
+
+const availabilityTrigger =
+    document.getElementById('patientAvailabilityTrigger');
+
+const availabilityMenu =
+    document.getElementById('patientAvailabilityMenu');
+
+const availabilitySelected =
+    document.getElementById('patientAvailabilitySelected');
+
+if (
+    availabilityDropdown &&
+    availabilityTrigger &&
+    availabilityMenu &&
+    availabilitySelected &&
+    availability
+) {
+    availabilityTrigger.addEventListener('click', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        availabilityDropdown.classList.toggle('open');
+    });
+
+    availabilityMenu
+        .querySelectorAll('button[data-value]')
+        .forEach(function (option) {
+
+            option.addEventListener('click', function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+
+                const value = this.dataset.value;
+                const text = this.textContent.trim();
+
+                // Update hidden value used by filtering
+                availability.value = value;
+
+                // Update visible text
+                availabilitySelected.textContent = text;
+
+                // Update selected styling
+                availabilityMenu
+                    .querySelectorAll('button[data-value]')
+                    .forEach(function (btn) {
+                        btn.classList.remove('selected');
+                    });
+
+                this.classList.add('selected');
+
+                // Close dropdown
+                availabilityDropdown.classList.remove('open');
+
+                // Re-filter doctors
+                applyFilters();
+            });
+        }
     );
-    
-    if (newSymptoms.length === 0) {
-        alert('All selected symptoms are already in the description.');
-        return;
-    }
-    
-    // Build the updated text
-    let updatedText;
-    if (currentText.toLowerCase().startsWith('symptoms:')) {
-        if (currentText.length > 9) {
-            updatedText = currentText + ', ' + newSymptoms.join(', ');
-        } else {
-            updatedText = 'Symptoms: ' + newSymptoms.join(', ');
-        }
-    } else if (currentText) {
-        updatedText = 'Symptoms: ' + currentText + ', ' + newSymptoms.join(', ');
-    } else {
-        updatedText = 'Symptoms: ' + newSymptoms.join(', ');
-    }
-    
-    symptomsTextarea.value = updatedText;
-    // After updating symptoms textarea, remove any error styling
-symptomsTextarea.classList.remove('error');
-symptomsTextarea.style.border = '';
-symptomsTextarea.style.backgroundColor = '';
-    
-    // Uncheck the checkboxes after adding
-    document.querySelectorAll('.symptom-checkbox:checked').forEach(cb => cb.checked = false);
-});
+}
+
+        render();
+
         
-// Clear symptoms functionality
-document.getElementById('clear-symptoms-btn').addEventListener('click', function() {
-    // Clear all symptom checkboxes
-    document.querySelectorAll('.symptom-checkbox').forEach(cb => cb.checked = false);
-    
-    // Clear the symptoms textarea completely
-    document.getElementById('symptoms').value = '';
-    
-    // Also clear the diagnosis result if visible
-    const diagnosisResult = document.getElementById('diagnosis-result');
-    if (diagnosisResult.style.display === 'block') {
-        diagnosisResult.style.display = 'none';
-        diagnosisResult.innerHTML = '';
-    }
-});
-
-        // Diagnosis functionality
-        document.getElementById('diagnose-btn').addEventListener('click', async function() {
-            const symptoms = document.getElementById('symptoms').value.trim();
-            const diagnoseBtn = this;
-            const diagnosisResult = document.getElementById('diagnosis-result');
-            
-            if (!symptoms) {
-                alert('Please describe your symptoms first');
-                return;
-            }
-
-            diagnoseBtn.disabled = true;
-            diagnoseBtn.innerHTML = '<div class="loading-spinner"></div> Analyzing...';
-
-            try {
-                const response = await fetch('http://localhost:5000/analyze', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ symptoms })
-                });
-
-                const result = await response.json();
-                
-                const urgentBadge = result.needs_doctor ? 
-                    `<div class="alert alert-error" style="margin-top: 10px;">
-                        <i class="fas fa-exclamation-triangle"></i>
-                        <strong>Medical Attention Recommended</strong>
-                        <p>Based on your symptoms, we recommend consulting a doctor immediately.</p>
-                    </div>` : '';
-                
-                const confidence = (result.confidence || 0).toFixed(2);
-                const confidenceLevel = confidence > 0.7 ? 'high' : confidence > 0.4 ? 'medium' : 'low';
-
-                diagnosisResult.innerHTML = `
-                    <h4><i class="fas fa-diagnosis"></i> Preliminary Analysis</h4>
-                    <div class="confidence-badge confidence-${confidenceLevel}" style="margin: 10px 0;">
-                        ${(confidence * 100).toFixed(0)}% Confidence
-                    </div>
-                    <p><strong>Possible Condition:</strong> ${result.diagnosis || "No clear diagnosis identified"}</p>
-                    <p><strong>Identified Symptoms:</strong> ${Array.isArray(result.identified_symptoms) ? result.identified_symptoms.join(", ") : "Not specified"}</p>
-                    <p><strong>Recommendation:</strong> ${result.recommendation || "Consult with a healthcare professional for accurate diagnosis"}</p>
-                    ${urgentBadge}
-                `;
-                diagnosisResult.style.display = 'block';
-                
-            } catch (error) {
-                console.error('Diagnosis error:', error);
-                diagnosisResult.innerHTML = `
-                    <div class="alert alert-error">
-                        <i class="fas fa-exclamation-circle"></i>
-                        <strong>Service Unavailable</strong>
-                        <p>We're unable to connect to our diagnosis service at the moment. Please proceed with booking and discuss your symptoms with the doctor.</p>
-                    </div>
-                `;
-                diagnosisResult.style.display = 'block';
-            } finally {
-                diagnoseBtn.disabled = false;
-                diagnoseBtn.innerHTML = '<i class="fas fa-robot"></i> Analyze Symptoms';
-            }
-        });
-
-        // Form submission
-        // Form submission
-// Form submission
-document.getElementById('booking-form').addEventListener('submit', async function(e) {
-    e.preventDefault();
-    
-    // Simple but effective validation
-    const symptoms = document.getElementById('symptoms').value.trim();
-    
-    if (!symptoms || symptoms === '' || symptoms === 'Symptoms:' || symptoms.toLowerCase() === 'symptoms:') {
-        // Create and show error message
-        const errorDiv = document.createElement('div');
-        errorDiv.className = 'alert alert-error';
-        errorDiv.innerHTML = `
-            <i class="fas fa-exclamation-triangle"></i>
-            <strong>Please Add Symptoms</strong>
-            <p>You must add at least one symptom from the checklist before booking an appointment.</p>
-        `;
-        
-        // Insert after symptoms textarea
-        const symptomsTextarea = document.getElementById('symptoms');
-        symptomsTextarea.parentNode.insertBefore(errorDiv, symptomsTextarea.nextSibling);
-        
-        // Highlight textarea
-        symptomsTextarea.style.border = '2px solid #ff4757';
-        symptomsTextarea.style.backgroundColor = 'rgba(255, 71, 87, 0.1)';
-        
-        // Scroll to error
-        symptomsTextarea.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        
-        // Remove error after 5 seconds
-        setTimeout(() => {
-            if (errorDiv.parentNode) {
-                errorDiv.parentNode.removeChild(errorDiv);
-            }
-            symptomsTextarea.style.border = '';
-            symptomsTextarea.style.backgroundColor = '';
-        }, 5000);
-        
-        return;
-    }
-    
-    // Get form data and submit
-    const submitBtn = this.querySelector('button[type="submit"]');
-    const originalText = submitBtn.innerHTML;
-    
-    // Show loading state
-    submitBtn.disabled = true;
-    submitBtn.innerHTML = '<div class="loading-spinner"></div> Booking...';
-
-    // Get form data
-    const formData = new FormData(this);
-    const data = Object.fromEntries(formData);
-    
-    try {
-        const response = await fetch('/patient/book-appointment', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(data)
-        });
-
-        const result = await response.json();
-        
-        if (result.success) {
-            alert('Appointment booked successfully!');
-            bookingModal.classList.remove('active');
-            window.location.href = '/patient/appointments';
-        } else {
-            alert('Error: ' + result.error);
-            submitBtn.disabled = false;
-            submitBtn.innerHTML = originalText;
-        }
-    } catch (error) {
-        console.error('Booking error:', error);
-        alert('Error booking appointment. Please try again.');
-        submitBtn.disabled = false;
-        submitBtn.innerHTML = originalText;
-    }
-});        // Close modal with Escape key
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape' && bookingModal.classList.contains('active')) {
-                bookingModal.classList.remove('active');
-            }
-        });
+    })();
     </script>
 </body>
 </html>

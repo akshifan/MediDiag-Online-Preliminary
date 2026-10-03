@@ -1,8 +1,9 @@
+
 <header class="navbar">
     <div class="navbar-container">
         <a href="/" class="navbar-brand">MediDiag</a>
         
-        <button class="mobile-menu-btn" aria-label="Toggle menu">☰</button>
+        <button class="mobile-menu-btn" type="button" aria-label="Toggle menu" aria-expanded="false"><span aria-hidden="true">&#9776;</span></button>
         
         <nav class="navbar-nav">
             <a href="/">Home</a>
@@ -12,26 +13,30 @@
             <a href="/contact">Contact</a>
             
             <% if (user) { %>
-                <div class="user-menu">
-                    <a href="#">
-                        <% if (user.role === 'patient') { %>
-                            Patient Portal
-                        <% } else { %>
-                            Doctor Portal
-                        <% } %>
-                    </a>
-                    <div class="user-dropdown">
-                        <a href="/<%= user.role %>/dashboard">Dashboard</a>
-                        <a href="/<%= user.role %>/profile">Profile</a>
-                        <a href="/auth/logout">Logout</a>
-                    </div>
-                </div>
-            <% } else { %>
-                <div class="navbar-actions">
-                    <a href="/auth/login" class="btn btn-primary">Login</a>
-                    <a href="/auth/register" class="btn btn-outline">Sign Up</a>
-                </div>
-            <% } %>
+    <div class="user-menu user-menu-simple">
+        <a class="user-trigger"
+           href="/<%= user.role %>/dashboard"
+           aria-label="Profile">
+            <div class="user-avatar">
+                <%= (user.full_name || user.email || 'U').charAt(0).toUpperCase() %>
+            </div>
+            <span class="user-name-text">
+                <% if (user.role === 'patient') { %>Patient Portal<% } else { %>Doctor Portal<% } %>
+            </span>
+        </a>
+        <a href="/auth/logout" class="btn btn-outline btn-logout">
+            <i class="fas fa-sign-out-alt"></i> Logout
+        </a>
+    </div>
+<% } else { %>
+    <div class="navbar-actions">
+        <div class="auth-buttons">
+            <a href="/auth/login" class="btn btn-primary btn-login">Login</a>
+            <a href="/auth/register" class="btn btn-outline">Sign Up</a>
+        </div>
+    </div>
+<% } %>
+        <button class="mobile-menu-close" type="button" aria-label="Close menu"><span aria-hidden="true">&times;</span></button>
         </nav>
     </div>
 </header>

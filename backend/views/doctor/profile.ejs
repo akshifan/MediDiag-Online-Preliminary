@@ -7,29 +7,40 @@
     <link rel="stylesheet" href="/main/main.css">
     <link rel="stylesheet" href="/navbar/navbar.css">
     <link rel="stylesheet" href="/doctor/dashboard.css">
+        <link rel="stylesheet" href="/footer/footer.css">
+    <link rel="stylesheet" href="/portal/portal-fixes.css">
+    <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
     <%- include('../headers/preloginheader') %>
     
     <div class="container doctor-dashboard">
         <div class="dashboard-grid">
-            <aside class="sidebar">
+                        <aside class="sidebar">
                 <nav class="sidebar-nav">
                     <ul>
-                        <li><a href="/doctor/dashboard">Dashboard</a></li>
-                        <li><a href="/doctor/appointments">Appointments</a></li>
-                        <li><a href="/doctor/profile" class="active">Profile</a></li>
-                        <li><a href="/auth/logout">Logout</a></li>
+                        <li><a href="/doctor/dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                        <li><a href="/doctor/appointments"><i class="fas fa-calendar-check"></i> Appointments</a></li>
+                        <li><a href="/doctor/chats"><i class="fas fa-comments"></i> Patient Chats</a></li>
+                        <li><a href="/doctor/profile" class="active"><i class="fas fa-user"></i> Profile</a></li>
+                        <li><a href="/auth/logout"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
                     </ul>
                 </nav>
             </aside>
 
             <main class="dashboard-content">
-                <h1>Doctor Profile</h1>
-                
-                <div class="profile-section">
-                    <div class="card">
-                        <h2>Professional Information</h2>
+                <div class="profile-page-header">
+    <h1>
+        <i class="fas fa-user-md"></i>
+        <span>Doctor Profile</span>
+    </h1>
+    <p>Manage your professional information and account details.</p>
+</div>
+
+<div class="card">
+    <!-- profile fields directly here -->
                         <form id="profile-form">
                             <div class="form-row">
                                 <div class="form-group">
@@ -46,31 +57,111 @@
                             <div class="form-row">
                                 <div class="form-group">
                                     <label class="form-label">Specialization</label>
-                                    <select name="specialization" class="form-control" required>
-        <option value="">Select Specialization</option>
+                                    <div class="custom-category-dropdown" id="specializationDropdown">
 
-        <option value="Cardiology" <%= doctor && doctor.specialization === 'Cardiology' ? 'selected' : '' %>>Cardiology</option>
-        <option value="Dermatology" <%= doctor && doctor.specialization === 'Dermatology' ? 'selected' : '' %>>Dermatology</option>
-        <option value="Pediatrics" <%= doctor && doctor.specialization === 'Pediatrics' ? 'selected' : '' %>>Pediatrics</option>
-        <option value="Neurology" <%= doctor && doctor.specialization === 'Neurology' ? 'selected' : '' %>>Neurology</option>
-        <option value="Gynecology" <%= doctor && doctor.specialization === 'Gynecology' ? 'selected' : '' %>>Gynecology</option>
-        <option value="Internal Medicine" <%= doctor && doctor.specialization === 'Internal Medicine' ? 'selected' : '' %>>Internal Medicine</option>
-        <option value="Orthopedics" <%= doctor && doctor.specialization === 'Orthopedics' ? 'selected' : '' %>>Orthopedics</option>
-        <option value="ENT" <%= doctor && doctor.specialization === 'ENT' ? 'selected' : '' %>>ENT</option>
-        <option value="Psychiatry" <%= doctor && doctor.specialization === 'Psychiatry' ? 'selected' : '' %>>Psychiatry</option>
-        <option value="Infectious Specialist" <%= doctor && doctor.specialization === 'Infectious Specialist' ? 'selected' : '' %>>Infectious Specialist</option>
-        <option value="Dentistry" <%= doctor && doctor.specialization === 'Dentistry' ? 'selected' : '' %>>Dentistry</option>
-        <option value="Hepatology" <%= doctor && doctor.specialization === 'Hepatology' ? 'selected' : '' %>>Hepatology</option>
-        <option value="Ophthalmology" <%= doctor && doctor.specialization === 'Ophthalmology' ? 'selected' : '' %>>Ophthalmology</option>
-        <option value="Endocrinology" <%= doctor && doctor.specialization === 'Endocrinology' ? 'selected' : '' %>>Endocrinology</option>
-        <option value="Oncology" <%= doctor && doctor.specialization === 'Oncology' ? 'selected' : '' %>>Oncology</option>
-        <option value="Pulmonology" <%= doctor && doctor.specialization === 'Pulmonology' ? 'selected' : '' %>>Pulmonology</option>
-        <option value="Pathology" <%= doctor && doctor.specialization === 'Pathology' ? 'selected' : '' %>>Pathology</option>
-        <option value="General Surgery" <%= doctor && doctor.specialization === 'General Surgery' ? 'selected' : '' %>>General Surgery</option>
-        <option value="Urology" <%= doctor && doctor.specialization === 'Urology' ? 'selected' : '' %>>Urology</option>
-        <option value="Neurosurgery" <%= doctor && doctor.specialization === 'Neurosurgery' ? 'selected' : '' %>>Neurosurgery</option>
+    <button
+        type="button"
+        class="category-dropdown-trigger"
+        id="specializationTrigger"
+    >
+<span id="specializationSelected">
+    <%= (doctor && doctor.specialization) || 'Select Specialization' %>
+</span>        <i class="fas fa-chevron-down"></i>
+    </button>
 
-    </select>
+    <div class="category-dropdown-menu" id="specializationMenu">
+
+        <button type="button" data-value="">
+            Select Specialization
+        </button>
+
+        <button type="button" data-value="Cardiology">
+            Cardiology
+        </button>
+
+        <button type="button" data-value="Dermatology">
+            Dermatology
+        </button>
+
+        <button type="button" data-value="Pediatrics">
+            Pediatrics
+        </button>
+
+        <button type="button" data-value="Neurology">
+            Neurology
+        </button>
+
+        <button type="button" data-value="Gynecology">
+            Gynecology
+        </button>
+
+        <button type="button" data-value="Internal Medicine">
+            Internal Medicine
+        </button>
+
+        <button type="button" data-value="Orthopedics">
+            Orthopedics
+        </button>
+
+        <button type="button" data-value="ENT">
+            ENT
+        </button>
+
+        <button type="button" data-value="Psychiatry">
+            Psychiatry
+        </button>
+
+        <button type="button" data-value="Infectious Specialist">
+            Infectious Specialist
+        </button>
+
+        <button type="button" data-value="Dentistry">
+            Dentistry
+        </button>
+
+        <button type="button" data-value="Hepatology">
+            Hepatology
+        </button>
+
+        <button type="button" data-value="Ophthalmology">
+            Ophthalmology
+        </button>
+
+        <button type="button" data-value="Endocrinology">
+            Endocrinology
+        </button>
+
+        <button type="button" data-value="Oncology">
+            Oncology
+        </button>
+
+        <button type="button" data-value="Pulmonology">
+            Pulmonology
+        </button>
+
+        <button type="button" data-value="Pathology">
+            Pathology
+        </button>
+
+        <button type="button" data-value="General Surgery">
+            General Surgery
+        </button>
+
+        <button type="button" data-value="Urology">
+            Urology
+        </button>
+
+    </div>
+
+    <!-- Actual value submitted with the form -->
+    <input
+    type="hidden"
+    name="specialization"
+    id="specializationValue"
+    value="<%= (doctor && doctor.specialization) || '' %>"
+>
+
+</div>
                                 </div>
                                 <div class="form-group">
                                     <label class="form-label">License Number</label>
@@ -84,7 +175,7 @@
                                     <input type="number" name="experience_years" class="form-control" value="<%= (doctor && doctor.experience_years) || '' %>" min="0">
                                 </div>
                                 <div class="form-group">
-                                    <label class="form-label">Consultation Fee (₹)</label>
+                                    <label class="form-label">Consultation Fee</label>
                                     <input type="number" name="consultation_fee" class="form-control" value="<%= (doctor && doctor.consultation_fee) || '' %>" min="0" step="0.01">
                                 </div>
                             </div>
@@ -115,25 +206,91 @@
                     </div>
                 </div> --> 
 
-               <!--  <div class="security-section" style="margin-top: 40px;">
-                    <div class="card">
-                        <h2>Security</h2>
-                        <button class="btn btn-outline" onclick="changePassword()">Change Password</button>
-                    </div>
-                </div> -->
+               <div class="security-section">
+    <div class="card">
+
+        <div class="section-header">
+            <h2>
+                <i class="fas fa-shield-alt"></i>
+                Update Password
+            </h2>
+
+            <p>
+                Change your account password securely.
+            </p>
+        </div>
+
+        <form id="change-password-form">
+
+            <div class="form-group">
+                <label class="form-label">
+                    Current Password
+                </label>
+
+                <input
+                    type="password"
+                    name="currentPassword"
+                    class="form-control"
+                    required
+                    autocomplete="current-password"
+                >
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">
+                    New Password
+                </label>
+
+                <input
+                    type="password"
+                    name="newPassword"
+                    class="form-control"
+                    minlength="6"
+                    required
+                    autocomplete="new-password"
+                >
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">
+                    Confirm New Password
+                </label>
+
+                <input
+                    type="password"
+                    name="confirmPassword"
+                    class="form-control"
+                    minlength="6"
+                    required
+                    autocomplete="new-password"
+                >
+            </div>
+
+            <div
+                id="password-message"
+                class="password-form-message"
+                style="display:none;"
+            ></div>
+
+            <button
+                type="submit"
+                class="btn btn-outline"
+                id="change-password-btn"
+            >
+                <i class="fas fa-key"></i>
+                Update Password
+            </button>
+
+        </form>
+
+    </div>
+</div>
             </main>
         </div>
     </div>
 
     <script>
-        function changePassword() {
-            const newPassword = prompt('Enter new password:');
-            if (newPassword && newPassword.length >= 6) {
-                alert('Password change request sent. You will receive an email with instructions.');
-            } else if (newPassword) {
-                alert('Password must be at least 6 characters long.');
-            }
-        }
+        
 
         function editAvailability() {
             alert('Availability editing feature would open here.');
@@ -170,6 +327,173 @@
                 alert('Failed to update profile. Check console for details.');
             }
         });
+
+        document.addEventListener('DOMContentLoaded', function () {
+
+    const dropdown = document.getElementById('specializationDropdown');
+    const trigger = document.getElementById('specializationTrigger');
+    const menu = document.getElementById('specializationMenu');
+    const selectedText = document.getElementById('specializationSelected');
+    const hiddenInput = document.getElementById('specializationValue');
+
+    if (!dropdown || !trigger || !menu) return;
+
+    // Initialize dropdown from the doctor's saved specialization
+if (hiddenInput.value) {
+    const currentOption = menu.querySelector(
+        'button[data-value="' + CSS.escape(hiddenInput.value) + '"]'
+    );
+
+    if (currentOption) {
+        selectedText.textContent = currentOption.textContent.trim();
+        currentOption.classList.add('selected');
+    }
+}
+
+    trigger.addEventListener('click', function (e) {
+        e.preventDefault();
+
+        dropdown.classList.toggle('open');
+    });
+
+    menu.querySelectorAll('button').forEach(function (option) {
+
+        option.addEventListener('click', function () {
+
+            const value = this.dataset.value;
+            const text = this.textContent.trim();
+
+            selectedText.textContent = text;
+            hiddenInput.value = value;
+
+            menu.querySelectorAll('button').forEach(function (btn) {
+                btn.classList.remove('selected');
+            });
+
+            this.classList.add('selected');
+
+            dropdown.classList.remove('open');
+        });
+
+    });
+
+    document.addEventListener('click', function (e) {
+
+        if (!dropdown.contains(e.target)) {
+            dropdown.classList.remove('open');
+        }
+
+    });
+
+});
+
+document
+    .getElementById('change-password-form')
+    .addEventListener('submit', async function (e) {
+
+        e.preventDefault();
+
+        const form = e.target;
+
+        const button =
+            document.getElementById('change-password-btn');
+
+        const message =
+            document.getElementById('password-message');
+
+        const currentPassword =
+            form.currentPassword.value;
+
+        const newPassword =
+            form.newPassword.value;
+
+        const confirmPassword =
+            form.confirmPassword.value;
+
+        message.style.display = 'none';
+
+        if (newPassword.length < 6) {
+            message.textContent =
+                'New password must be at least 6 characters long.';
+            message.className =
+                'password-form-message error';
+            message.style.display = 'block';
+            return;
+        }
+
+        if (newPassword !== confirmPassword) {
+            message.textContent =
+                'New passwords do not match.';
+            message.className =
+                'password-form-message error';
+            message.style.display = 'block';
+            return;
+        }
+
+        const originalText = button.innerHTML;
+
+        button.disabled = true;
+
+        button.innerHTML =
+            '<i class="fas fa-spinner fa-spin"></i> Updating...';
+
+        try {
+
+            const response = await fetch(
+                '/auth/change-password',
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        currentPassword,
+                        newPassword,
+                        confirmPassword
+                    })
+                }
+            );
+
+            const result =
+                await response.json();
+
+            if (!response.ok || !result.success) {
+                throw new Error(
+                    result.error ||
+                    'Unable to update password.'
+                );
+            }
+
+            message.textContent =
+                'Password updated successfully.';
+
+            message.className =
+                'password-form-message success';
+
+            message.style.display = 'block';
+
+            form.reset();
+
+        } catch (error) {
+
+            message.textContent =
+                error.message ||
+                'Unable to update password.';
+
+            message.className =
+                'password-form-message error';
+
+            message.style.display = 'block';
+
+        } finally {
+
+            button.disabled = false;
+            button.innerHTML = originalText;
+        }
+    });
     </script>
+        <script src="/navbar/navbar.js"></script>
+            <%- include('../main/footer') %>
+
 </body>
 </html>

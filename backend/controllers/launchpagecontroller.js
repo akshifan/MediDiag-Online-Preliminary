@@ -1,5 +1,6 @@
 const path = require('path');
 const { pool } = require('../config/db');
+const { transporter } = require('../utils/mailer');
 
 exports.getHome = (req, res) => {
   if (req.session.user) {
@@ -40,41 +41,253 @@ exports.getFAQs = (req, res) => {
 exports.getContact = (req, res) => {
   res.render('launchpage/contact', { 
     title: 'Contact Us - MediDiag',
-    user: req.session.user 
+    user: req.session.user,
+    success: req.query.alert || null,
+    error: null
   });
 };
 
 // Handle contact form submissions
+// Handle contact form submissions
 exports.postContact = async (req, res) => {
-  try {
-    const { full_name, email, subject, message } = req.body;
+    try {
+        const {
+            full_name,
+            email,
+            subject,
+            message
+        } = req.body;
 
-    if (!full_name || !email || !subject || !message) {
-      return res.status(400).render('launchpage/contact', {
-        title: 'Contact Us - MediDiag',
-        user: req.session.user,
-        error: 'Please fill in all required fields.'
-      });
+        // Validate required fields
+        if (!full_name || !email || !subject || !message) {
+            return res.status(400).render('launchpage/contact', {
+                title: 'Contact Us - MediDiag',
+                user: req.session.user,
+                success: null,
+                error: 'Please fill in all fields.'
+            });
+        }
+
+        // Validate email format
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        if (!emailRegex.test(email)) {
+            return res.status(400).render('launchpage/contact', {
+                title: 'Contact Us - MediDiag',
+                user: req.session.user,
+                success: null,
+                error: 'Please enter a valid email address.'
+            });
+        }
+
+        // Check Brevo configuration
+        if (!process.env.BREVO_SMTP_USER) {
+            console.error('[CONTACT] BREVO_SMTP_USER is missing');
+
+            return res.status(500).render('launchpage/contact', {
+                title: 'Contact Us - MediDiag',
+                user: req.session.user,
+                success: null,
+                error: 'Email service is not configured.'
+            });
+        }
+
+        if (!process.env.BREVO_API_KEY) {
+            console.error('[CONTACT] BREVO_API_KEY is missing');
+
+            return res.status(500).render('launchpage/contact', {
+                title: 'Contact Us - MediDiag',
+                user: req.session.user,
+                success: null,
+                error: 'Email service is not configured.'
+            });
+        }
+
+        if (!process.env.EMAIL_FROM) {
+            console.error('[CONTACT] EMAIL_FROM is missing');
+
+            return res.status(500).render('launchpage/contact', {
+                title: 'Contact Us - MediDiag',
+                user: req.session.user,
+                success: null,
+                error: 'Email service is not configured.'
+            });
+        }
+
+        // Escape HTML to prevent HTML injection in email
+        const escapeHtml = (value) => {
+            return String(value)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        };
+
+        const safeName = escapeHtml(full_name);
+        const safeEmail = escapeHtml(email);
+        const safeSubject = escapeHtml(subject);
+        const safeMessage = escapeHtml(message);
+
+        // Send email through Brevo SMTP
+        await transporter.sendMail({
+            from: {
+                name: process.env.EMAIL_FROM_NAME || 'MediDiag',
+                address: process.env.EMAIL_FROM
+            },
+
+            // Receiving email
+            to: 'looserrr234@gmail.com',
+
+            // Reply button in Gmail will reply to form submitter
+            replyTo: email,
+
+            subject: `MediDiag Contact Form: ${subject}`,
+
+            text: `
+New message received from the MediDiag contact form.
+
+Name: ${full_name}
+Email: ${email}
+Subject: ${subject}
+
+Message:
+${message}
+            `.trim(),
+
+            html: `
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>MediDiag Contact Message</title>
+</head>
+
+<body style="
+    margin:0;
+    padding:30px;
+    background:#f0fdf8;
+    font-family:Arial,Helvetica,sans-serif;
+">
+
+    <div style="
+        max-width:650px;
+        margin:0 auto;
+        background:#ffffff;
+        border:1px solid #b7eee0;
+        border-radius:16px;
+        padding:30px;
+        box-shadow:0 10px 30px rgba(16,185,129,0.10);
+    ">
+
+        <h2 style="
+            margin-top:0;
+            color:#065f46;
+        ">
+            New MediDiag Contact Message
+        </h2>
+
+        <p style="
+            color:#64748b;
+            font-size:14px;
+        ">
+            Someone submitted a message through the MediDiag
+            contact form.
+        </p>
+
+        <hr style="
+            border:none;
+            border-top:1px solid #d1fae5;
+            margin:25px 0;
+        ">
+
+        <p>
+            <strong>Name:</strong><br>
+            ${safeName}
+        </p>
+
+        <p>
+            <strong>Email:</strong><br>
+            ${safeEmail}
+        </p>
+
+        <p>
+            <strong>Subject:</strong><br>
+            ${safeSubject}
+        </p>
+
+        <div style="
+            margin-top:25px;
+            padding:20px;
+            background:#ecfdf5;
+            border-radius:12px;
+            border:1px solid #d1fae5;
+        ">
+
+            <strong style="color:#065f46;">
+                Message
+            </strong>
+
+            <p style="
+                margin-bottom:0;
+                color:#334155;
+                line-height:1.7;
+                white-space:pre-wrap;
+            ">
+                ${safeMessage}
+            </p>
+
+        </div>
+
+        <hr style="
+            border:none;
+            border-top:1px solid #e2e8f0;
+            margin:25px 0;
+        ">
+
+        <p style="
+            margin:0;
+            color:#065f46;
+            font-weight:600;
+        ">
+            MediDiag Contact System
+        </p>
+
+    </div>
+
+</body>
+</html>
+            `
+        });
+
+        console.log(
+            `[CONTACT] Message successfully sent from ${email} to looserrr234@gmail.com`
+        );
+
+        // IMPORTANT:
+        // Render the correct launchpage contact view
+return res.status(200).render('launchpage/contact', {
+            title: 'Contact Us - MediDiag',
+            user: req.session.user,
+            success: 'Your message has been sent successfully!',
+            error: null
+        });
+    } catch (error) {
+
+        console.error(
+            '[CONTACT] Failed to send email:',
+            error
+        );
+
+        // IMPORTANT:
+        // Render the correct launchpage contact view
+        return res.status(500).render('launchpage/contact', {
+            title: 'Contact Us - MediDiag',
+            user: req.session.user,
+            success: null,
+            error: 'Unable to send your message right now. Please try again later.'
+        });
     }
-
-    // Save the contact message into notifications (user_id may be null for public contact)
-    const insertText = `INSERT INTO notifications (user_id, title, message, type, created_at)
-      VALUES ($1, $2, $3, $4, CURRENT_TIMESTAMP)`;
-    await pool.query(insertText, [null, subject, `From: ${full_name} <${email}>\n\n${message}`, 'contact']);
-
-    // Render the contact page with a success message
-    return res.render('launchpage/contact', {
-      title: 'Contact Us - MediDiag',
-      user: req.session.user,
-      success: 'Thanks — your message has been received. We will get back to you within 24 hours.'
-    });
-  } catch (err) {
-    console.error('Error handling contact form:', err);
-    return res.status(500).render('error', {
-      error: process.env.NODE_ENV === 'development' ? err.message : 'Unable to send message at this time.',
-      user: req.session.user
-    });
-  }
 };
 
 // Prelogin pages

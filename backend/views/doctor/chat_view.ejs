@@ -1,72 +1,989 @@
-<%- include('../headers/preloginheader') %>
-<main class="container">
-  <h2>Chat with Patient <%= patientId %></h2>
-
-  <div id="messages" style="border:1px solid #ddd;padding:10px;max-height:400px;overflow:auto;background:#fff;">
-    <% if (messages && messages.length) { %>
-      <% messages.forEach(m => { %>
-        <div class="msg <%= m.sender %>"><strong><%= m.sender %>:</strong> <%= m.text %> <small><%= new Date(m.timestamp).toLocaleString() %></small></div>
-      <% }) %>
-    <% } else { %>
-      <p>No messages yet.</p>
-    <% } %>
-  </div>
-
-  <form id="sendForm">
-    <textarea id="msgText" name="text" rows="3" style="width:100%" placeholder="Write a message to patient..."></textarea>
-    <button type="submit">Send</button>
-  </form>
-
-  <script id="PAGE_DATA" type="application/json"><%= JSON.stringify({ patientId: patientId, user: user }) %></script>
-  <script src="/socket.io/socket.io.js"></script>
-  <script src="/frontend/doctor/chat.js"></script>
-</main>
-<%- include('../main/footer') %>
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
-  <meta charset="utf-8" />
-  <title>Chat with <%= patientId %></title>
-  <link rel="stylesheet" href="/main/main.css">
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        Chat - MediDiag
+    </title>
+
+
+    <link
+        rel="stylesheet"
+        href="/main/main.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="/navbar/navbar.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="/doctor/dashboard.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="/footer/footer.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="/portal/portal-fixes.css"
+    >
+
+    <link
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+        rel="stylesheet"
+    >
+
 </head>
+
+
 <body>
-  <h1>Chat with Patient <%= patientId %></h1>
-  <div id="chat-messages">
-    <% (messages || []).forEach(m => { %>
-      <div class="message <%= m.sender %>">
-        <strong><%= m.sender %>:</strong> <%= m.text %> <small>(<%= m.timestamp %>)</small>
-      </div>
-    <% }); %>
-  </div>
 
-  <form id="doctor-send" method="post" action="/doctor/chats/<%= patientId %>/message">
-    <input type="text" name="text" id="doctor-text" placeholder="Type message..." />
-    <button type="submit">Send</button>
-  </form>
 
-  <script src="/socket.io/socket.io.js"></script>
-  <script>
-    const socket = io();
-    const patientId = '<%= patientId %>';
-    socket.on('connect', () => {
-      socket.emit('join-patient', patientId);
-    });
+    <%- include('../headers/preloginheader') %>
 
-    socket.on('chat-message', (m) => {
-      const el = document.createElement('div');
-      el.className = 'message ' + m.sender;
-      el.innerHTML = `<strong>${m.sender}:</strong> ${m.text} <small>(${m.timestamp})</small>`;
-      document.getElementById('chat-messages').appendChild(el);
-    });
 
-    document.getElementById('doctor-send').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const text = document.getElementById('doctor-text').value.trim();
-      if (!text) return;
-      const res = await fetch(`/doctor/chats/${patientId}/message`, { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ text }) });
-      const j = await res.json();
-      if (j.success) document.getElementById('doctor-text').value = '';
-    });
-  </script>
+    <div class="container doctor-dashboard">
+
+        <div class="dashboard-grid">
+
+
+            <!-- =========================================
+                 SIDEBAR
+                 ========================================= -->
+
+            <aside class="sidebar">
+
+                <nav class="sidebar-nav">
+
+                    <ul>
+
+                        <li>
+                            <a href="/doctor/dashboard">
+                                <i class="fas fa-tachometer-alt"></i>
+                                Dashboard
+                            </a>
+                        </li>
+
+
+                        <li>
+                            <a href="/doctor/appointments">
+                                <i class="fas fa-calendar-check"></i>
+                                Appointments
+                            </a>
+                        </li>
+
+
+                        <li>
+                            <a
+                                href="/doctor/chats"
+                                class="active"
+                            >
+                                <i class="fas fa-comments"></i>
+                                Patient Chats
+                            </a>
+                        </li>
+
+
+                        <li>
+                            <a href="/doctor/profile">
+                                <i class="fas fa-user"></i>
+                                Profile
+                            </a>
+                        </li>
+
+
+                        <li>
+                            <a href="/auth/logout">
+                                <i class="fas fa-sign-out-alt"></i>
+                                Logout
+                            </a>
+                        </li>
+
+                    </ul>
+
+                </nav>
+
+            </aside>
+
+
+            <!-- =========================================
+                 CHAT CONTENT
+                 ========================================= -->
+
+            <main class="dashboard-content">
+
+    <div class="doctor-chat-page">
+
+        <!-- CHAT HEADER -->
+        <div class="doctor-chat-header">
+
+            <div class="doctor-chat-header-top">
+
+                <div class="doctor-chat-title">
+                    <i class="fas fa-comments"></i>
+                    <span>Chat with <%= patient.full_name %></span>
+                </div>
+
+                <a href="/doctor/chats" class="doctor-chat-back">
+                    <i class="fas fa-arrow-left"></i>
+                    Back
+                </a>
+
+            </div>
+
+            <p class="doctor-chat-subtitle">
+                Continue your conversation with the patient.
+            </p>
+
+        </div>
+
+
+        <!-- CHAT MESSAGES -->
+        <div id="messages" class="doctor-chat-messages">
+
+            <% if (messages && messages.length) { %>
+
+                <% messages.forEach(m => {
+                    const isDoctor = m.sender_role === 'doctor';
+                    const senderName = isDoctor
+                        ? 'You'
+                        : (patient.full_name || 'Patient');
+
+                    const messageText = m.message || '';
+                    const messageTime = m.created_at;
+                %>
+
+                    <div class="doctor-chat-message <%= isDoctor ? 'doctor' : 'patient' %>">
+
+                        <% if (!isDoctor) { %>
+                            <div class="doctor-chat-avatar">
+                                <%= (patient.full_name || 'P')
+                                    .charAt(0)
+                                    .toUpperCase() %>
+                            </div>
+                        <% } %>
+
+
+                        <div class="doctor-chat-message-content">
+
+                            <div class="doctor-chat-message-meta">
+                                <strong><%= senderName %></strong>
+
+                                <span>
+                                    <%= new Date(messageTime).toLocaleTimeString([], {
+                                        hour: '2-digit',
+                                        minute: '2-digit'
+                                    }) %>
+                                </span>
+                            </div>
+
+                            <div class="doctor-chat-bubble">
+                                <%= messageText %>
+                            </div>
+
+                        </div>
+
+
+                        <% if (isDoctor) { %>
+                            <div class="doctor-chat-avatar">
+                                <i class="fas fa-user-md"></i>
+                            </div>
+                        <% } %>
+
+                    </div>
+
+                <% }) %>
+
+            <% } else { %>
+
+                <div class="doctor-chat-empty">
+                    <i class="fas fa-comments"></i>
+
+                    <p>No messages yet.</p>
+
+                    <small>
+                        You can send a message here.
+                        Your patient will see it in their chat.
+                    </small>
+                </div>
+
+            <% } %>
+
+        </div>
+
+
+        <!-- SEND MESSAGE -->
+        <form id="sendForm" class="doctor-chat-form">
+
+            <textarea
+                id="msgText"
+                name="text"
+                rows="1"
+                maxlength="2000"
+                placeholder="Type your message..."
+                required
+            ></textarea>
+
+            <button type="submit">
+
+                <i class="fas fa-paper-plane"></i>
+
+                <span>Send</span>
+
+            </button>
+
+        </form>
+
+    </div>
+
+</main>
+
+        </div>
+
+    </div>
+
+
+    <%- include('../main/footer') %>
+
+
+    <!-- =============================================
+         PAGE DATA
+         ============================================= -->
+
+    <script
+        id="PAGE_DATA"
+        type="application/json"
+    >
+        <%- JSON.stringify({
+    patientId: patientId,
+    doctorId: doctorId,
+    patientName: patient.full_name,
+    user: user
+}) %>
+    </script>
+
+
+    <script src="/socket.io/socket.io.js"></script>
+
+    <script src="/doctor/chat.js"></script>
+
+    <script src="/navbar/navbar.js"></script>
+
+
+    <!-- =============================================
+         CHAT PAGE STYLING
+         Scoped so other doctor pages aren't affected.
+         ============================================= -->
+
+    <style>
+
+/* =========================================================
+   DOCTOR CHAT PAGE
+   Scoped ONLY to doctor chat page
+   ========================================================= */
+
+.doctor-dashboard .doctor-chat-page {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+
+/* =========================================================
+   CHAT HEADER
+   ========================================================= */
+
+.doctor-dashboard .doctor-chat-header {
+    width: 100%;
+    margin: 0 0 10px;
+    padding: 12px 14px;
+
+    background: #f8fffc;
+
+    border: 1px solid rgba(16, 185, 129, 0.22);
+    border-radius: 15px;
+
+    box-shadow:
+        0 3px 12px rgba(6, 95, 70, 0.05);
+
+    box-sizing: border-box;
+}
+
+
+.doctor-dashboard .doctor-chat-header-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 8px;
+}
+
+
+.doctor-dashboard .doctor-chat-title {
+    display: flex;
+    align-items: center;
+
+    min-width: 0;
+
+    gap: 7px;
+
+    margin: 0;
+
+    color: #065f46;
+
+    font-size: 0.95rem;
+    font-weight: 800;
+
+    line-height: 1.25;
+}
+
+
+.doctor-dashboard .doctor-chat-title i {
+    color: #047857;
+
+    flex: 0 0 auto;
+}
+
+
+.doctor-dashboard .doctor-chat-title span {
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+
+    white-space: nowrap;
+}
+
+
+/* Back button */
+
+.doctor-dashboard .doctor-chat-back {
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 4px;
+
+    flex: 0 0 auto;
+
+    padding: 6px 10px;
+
+    color: #059669;
+
+    background: rgba(16, 185, 129, 0.09);
+
+    border-radius: 999px;
+
+    font-size: 0.80rem;
+    font-weight: 800;
+
+    text-decoration: none;
+
+    white-space: nowrap;
+
+    transition:
+        background 0.2s ease,
+        transform 0.2s ease;
+}
+
+
+.doctor-dashboard .doctor-chat-back:hover {
+    background: rgba(16, 185, 129, 0.16);
+
+    transform: translateY(-1px);
+}
+
+
+/* Subtitle */
+
+.doctor-dashboard .doctor-chat-subtitle {
+    margin: 4px 0 0;
+
+    color: #475569;
+
+    font-size: 0.70rem;
+
+    line-height: 1.35;
+}
+
+
+/* =========================================================
+   MESSAGE AREA
+   ========================================================= */
+
+.doctor-dashboard .doctor-chat-messages {
+    width: 100%;
+
+    height: 385px;
+    max-height: 385px;
+
+    padding: 10px;
+
+    background: #effcf7;
+
+    border: 1px solid rgba(16, 185, 129, 0.22);
+
+    border-radius: 13px;
+
+    box-sizing: border-box;
+
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 10px;
+
+    scroll-behavior: smooth;
+}
+
+
+/* Scrollbar */
+
+.doctor-dashboard .doctor-chat-messages::-webkit-scrollbar {
+    width: 4px;
+}
+
+.doctor-dashboard .doctor-chat-messages::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.doctor-dashboard .doctor-chat-messages::-webkit-scrollbar-thumb {
+    background: rgba(16, 185, 129, 0.25);
+
+    border-radius: 10px;
+}
+
+
+/* =========================================================
+   MESSAGE ROW
+   ========================================================= */
+
+.doctor-dashboard .doctor-chat-message {
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: 8px;
+
+    width: 100%;
+
+    box-sizing: border-box;
+}
+
+
+/* Patient = LEFT */
+
+.doctor-dashboard .doctor-chat-message.patient {
+    justify-content: flex-start;
+}
+
+
+/* Doctor = RIGHT */
+
+.doctor-dashboard .doctor-chat-message.doctor {
+    justify-content: flex-end;
+}
+
+
+/* =========================================================
+   AVATAR
+   ========================================================= */
+
+.doctor-dashboard .doctor-chat-avatar {
+    width: 34px;
+    height: 34px;
+
+    min-width: 34px;
+
+    flex: 0 0 34px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    margin-top: 2px;
+
+    border-radius: 50%;
+
+    background: linear-gradient(
+        135deg,
+        #059669,
+        #34d399
+    );
+
+    color: #ffffff;
+
+    font-size: 0.68rem;
+    font-weight: 800;
+
+    box-shadow:
+        0 3px 8px rgba(5, 150, 105, 0.14);
+}
+
+
+/* =========================================================
+   MESSAGE CONTENT
+   ========================================================= */
+
+.doctor-dashboard .doctor-chat-message-content {
+    width: auto;
+
+    max-width: 76%;
+
+    min-width: 0;
+}
+
+
+/* Doctor content before avatar */
+
+.doctor-dashboard
+.doctor-chat-message.doctor
+.doctor-chat-message-content {
+    order: 1;
+}
+
+
+/* Doctor avatar after bubble */
+
+.doctor-dashboard
+.doctor-chat-message.doctor
+.doctor-chat-avatar {
+    order: 2;
+}
+
+
+/* =========================================================
+   NAME + TIME
+   ========================================================= */
+
+.doctor-dashboard .doctor-chat-message-meta {
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 8px;
+
+    margin-bottom: 3px;
+
+    padding: 0 2px;
+}
+
+
+.doctor-dashboard .doctor-chat-message-meta strong {
+    min-width: 0;
+
+    color: #065f46;
+
+    font-size: 0.70rem;
+    font-weight: 800;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+
+    white-space: nowrap;
+}
+
+
+.doctor-dashboard .doctor-chat-message-meta span {
+    flex: 0 0 auto;
+
+    color: #64748b;
+
+    font-size: 0.57rem;
+
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   MESSAGE BUBBLE
+   ========================================================= */
+
+.doctor-dashboard .doctor-chat-bubble {
+    min-height: 36px;
+
+    padding: 9px 11px;
+
+    border-radius: 11px;
+
+    color: #334155;
+
+    font-size: 0.73rem;
+
+    line-height: 1.45;
+
+    word-break: break-word;
+
+    box-sizing: border-box;
+}
+
+
+/* Patient bubble */
+
+.doctor-dashboard
+.doctor-chat-message.patient
+.doctor-chat-bubble {
+
+    background: #ffffff;
+
+    border: 1px solid rgba(16, 185, 129, 0.17);
+
+    border-top-left-radius: 5px;
+
+    box-shadow:
+        0 2px 6px rgba(6, 95, 70, 0.03);
+}
+
+
+/* Doctor bubble */
+
+.doctor-dashboard
+.doctor-chat-message.doctor
+.doctor-chat-bubble {
+
+    background: rgba(16, 185, 129, 0.10);
+
+    border: 1px solid rgba(16, 185, 129, 0.17);
+
+    border-top-right-radius: 5px;
+}
+
+
+/* =========================================================
+   EMPTY CHAT
+   ========================================================= */
+
+.doctor-dashboard .doctor-chat-empty {
+    flex: 1;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    flex-direction: column;
+
+    text-align: center;
+
+    padding: 20px;
+
+    color: #64748b;
+}
+
+
+.doctor-dashboard .doctor-chat-empty i {
+    margin-bottom: 7px;
+
+    color: #10b981;
+
+    font-size: 1.4rem;
+}
+
+
+.doctor-dashboard .doctor-chat-empty p {
+    margin: 0 0 3px;
+
+    color: #065f46;
+
+    font-size: 0.78rem;
+
+    font-weight: 700;
+}
+
+
+.doctor-dashboard .doctor-chat-empty small {
+    max-width: 240px;
+
+    color: #64748b;
+
+    font-size: 0.67rem;
+
+    line-height: 1.4;
+}
+
+
+/* =========================================================
+   SEND FORM
+   ========================================================= */
+
+.doctor-dashboard .doctor-chat-form {
+    display: flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    width: 100%;
+
+    margin-top: 8px;
+
+    box-sizing: border-box;
+}
+
+
+.doctor-dashboard .doctor-chat-form textarea {
+    flex: 1;
+
+    width: 100%;
+
+    min-width: 0;
+
+    height: 44px;
+    min-height: 44px;
+    max-height: 90px;
+
+    padding: 11px;
+
+    resize: none;
+
+    background: #ffffff;
+
+    border: 1px solid rgba(16, 185, 129, 0.22);
+
+    border-radius: 11px;
+
+    color: #334155;
+
+    font-family: inherit;
+
+    font-size: 0.74rem;
+
+    outline: none;
+
+    box-sizing: border-box;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+.doctor-dashboard .doctor-chat-form textarea::placeholder {
+    color: #64748b;
+}
+
+
+.doctor-dashboard .doctor-chat-form textarea:focus {
+    border-color: #10b981;
+
+    box-shadow:
+        0 0 0 3px rgba(16, 185, 129, 0.10);
+}
+
+
+/* Send button */
+
+.doctor-dashboard .doctor-chat-form button {
+    flex: 0 0 auto;
+
+    height: 44px;
+
+    min-width: 76px;
+
+    padding: 0 14px;
+
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 5px;
+
+    border: 0;
+
+    border-radius: 11px;
+
+    background: linear-gradient(
+        135deg,
+        #059669,
+        #34d399
+    );
+
+    color: #ffffff;
+
+    font-size: 0.72rem;
+
+    font-weight: 800;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 4px 10px rgba(5, 150, 105, 0.15);
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+.doctor-dashboard .doctor-chat-form button:hover {
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 6px 14px rgba(5, 150, 105, 0.20);
+}
+
+
+.doctor-dashboard .doctor-chat-form button:disabled {
+    opacity: 0.65;
+
+    cursor: not-allowed;
+
+    transform: none;
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 768px) {
+
+    .doctor-dashboard .doctor-chat-header {
+        padding: 11px 12px;
+
+        border-radius: 14px;
+    }
+
+
+    .doctor-dashboard .doctor-chat-title {
+        font-size: 0.88rem;
+    }
+
+
+    .doctor-dashboard .doctor-chat-subtitle {
+        font-size: 0.67rem;
+    }
+
+
+    .doctor-dashboard .doctor-chat-messages {
+        height: 380px;
+        max-height: 380px;
+
+        padding: 9px;
+
+        border-radius: 12px;
+
+        gap: 9px;
+    }
+
+
+    .doctor-dashboard .doctor-chat-message-content {
+        max-width: 76%;
+    }
+
+
+    .doctor-dashboard .doctor-chat-avatar {
+        width: 33px;
+        height: 33px;
+
+        min-width: 33px;
+
+        flex-basis: 33px;
+    }
+
+
+    .doctor-dashboard .doctor-chat-bubble {
+        padding: 8px 10px;
+
+        font-size: 0.70rem;
+    }
+
+
+    .doctor-dashboard .doctor-chat-message-meta strong {
+        font-size: 0.68rem;
+    }
+
+
+    .doctor-dashboard .doctor-chat-message-meta span {
+        font-size: 0.55rem;
+    }
+
+
+    .doctor-dashboard .doctor-chat-form {
+        gap: 6px;
+    }
+
+
+    .doctor-dashboard .doctor-chat-form textarea {
+        height: 43px;
+        min-height: 43px;
+
+        padding: 10px;
+
+        font-size: 0.72rem;
+    }
+
+
+    .doctor-dashboard .doctor-chat-form button {
+        height: 43px;
+
+        min-width: 72px;
+
+        padding: 0 11px;
+
+        font-size: 0.70rem;
+    }
+}
+
+
+@media (max-width: 480px) {
+
+    .doctor-dashboard .doctor-chat-header-top {
+        gap: 6px;
+    }
+
+
+    .doctor-dashboard .doctor-chat-title {
+        font-size: 0.84rem;
+    }
+
+
+    .doctor-dashboard .doctor-chat-back {
+        padding: 6px 9px;
+
+        font-size: 0.80rem;
+    }
+
+
+    .doctor-dashboard .doctor-chat-messages {
+        height: 370px;
+        max-height: 370px;
+    }
+
+
+    .doctor-dashboard .doctor-chat-message-content {
+        max-width: 78%;
+    }
+
+
+    .doctor-dashboard .doctor-chat-form button {
+        min-width: 68px;
+
+        padding: 0 9px;
+    }
+
+}
+
+</style>
 </body>
+
 </html>

@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,25 +9,58 @@
     <link rel="stylesheet" href="/main/main.css">
     <link rel="stylesheet" href="/navbar/navbar.css">
     <link rel="stylesheet" href="/doctor/dashboard.css">
+        <link rel="stylesheet" href="/footer/footer.css">
+    <link rel="stylesheet" href="/portal/portal-fixes.css">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
 </head>
 <body>
     <%- include('../headers/preloginheader') %>
     
     <div class="container doctor-dashboard">
         <div class="dashboard-grid">
-            <aside class="sidebar">
+                        <aside class="sidebar">
                 <nav class="sidebar-nav">
                     <ul>
-                        <li><a href="/doctor/dashboard" class="active">Dashboard</a></li>
-                        <li><a href="/doctor/appointments">Appointments</a></li>
-                        <li><a href="/doctor/profile">Profile</a></li>
-                        <li><a href="/auth/logout">Logout</a></li>
+                        <li><a href="/doctor/dashboard" class="active"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                        <li><a href="/doctor/appointments"><i class="fas fa-calendar-check"></i> Appointments</a></li>
+                        <li><a href="/doctor/chats"><i class="fas fa-comments"></i> Patient Chats</a></li>
+                        <li><a href="/doctor/profile"><i class="fas fa-user"></i> Profile</a></li>
+                        <li><a href="/auth/logout"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
                     </ul>
                 </nav>
             </aside>
 
             <main class="dashboard-content">
-                <h1>Welcome, Dr. <%= doctor ? doctor.full_name : 'Doctor' %></h1>
+
+    <section class="welcome-section doctor-welcome-section">
+        <h1>
+            Welcome, Dr. <%= doctor ? doctor.full_name : 'Doctor' %>!
+        </h1>
+        <p>
+            Manage your appointments and continue providing care to your patients.
+        </p>
+    </section>
+                    <!-- Availability toggle -->
+    <section class="availability-card card" style="margin-bottom: 24px;">
+        <div class="availability-row" style="display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap;">
+            <div>
+                <h3 style="margin: 0 0 4px 0; color: var(--text-lighter);">Availability</h3>
+                <p id="availability-label" style="margin: 0; color: var(--text-dark); font-size: 0.95rem;">
+                    <%= doctor && doctor.is_available ? 'You are currently available for appointments.' : 'You are currently unavailable for appointments.' %>
+                </p>
+            </div>
+            <label class="toggle-switch" aria-label="Toggle availability">
+                <input
+                    type="checkbox"
+                    id="availability-toggle"
+                    <%= doctor && doctor.is_available ? 'checked' : '' %>
+                >
+                <span class="toggle-slider"></span>
+            </label>
+        </div>
+        <p id="availability-error" style="display: none; margin: 12px 0 0 0; color: #ef4444; font-size: 0.9rem;"></p>
+    </section>
 
                 <div class="stats">
                     <div class="stat-card">
@@ -42,26 +77,81 @@
                     </div>
                 </div>
 
-                <section class="recent-appointments">
-                    <h2>Recent Appointments</h2>
+                                <section class="recent-appointments">
+                    <div class="section-header">
+                        <h2>Recent Appointments</h2>
+                        <a href="/doctor/appointments" class="view-all">
+                            View All <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
                     <% if (appointments && appointments.length > 0) { %>
-                        <ul class="appointment-list">
-                            <% appointments.forEach(a => { %>
-                                <li>
-                                    <strong><%= a.patient_name || a.patient_name %></strong>
-                                    <span><%= new Date(a.appointment_date).toLocaleString() %></span>
-                                    <span class="status status-<%= a.status %>"><%= a.status %></span>
-                                </li>
+                        <div class="recent-appt-grid">
+                            <% appointments.slice(0, 10).forEach(a => { %>
+                                <div class="recent-appt-card">
+                                    <div class="recent-appt-header">
+                                        <strong><%= a.patient_name %></strong>
+                                        <span class="status status-<%= a.status %>"><%= a.status %></span>
+                                    </div>
+                                    <p class="recent-appt-date">
+                                        <i class="far fa-clock"></i>
+                                        <%= new Date(a.appointment_date).toLocaleString() %>
+                                    </p>
+                                </div>
                             <% }) %>
-                        </ul>
+                        </div>
                     <% } else { %>
-                        <p>No recent appointments.</p>
+                        <p class="empty-hint">No recent appointments.</p>
                     <% } %>
                 </section>
             </main>
         </div>
     </div>
+    
+        <%- include('../main/footer') %>
 
     <script src="/navbar/navbar.js"></script>
+    <script>
+(function () {
+    const toggle = document.getElementById('availability-toggle');
+    const label  = document.getElementById('availability-label');
+    const errEl  = document.getElementById('availability-error');
+    if (!toggle) return;
+
+    let saving = false;
+
+    toggle.addEventListener('change', async function () {
+        if (saving) return;
+        saving = true;
+        errEl.style.display = 'none';
+        const next = toggle.checked;
+
+        try {
+            const res = await fetch('/doctor/update-availability', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ availability: next })
+            });
+            const json = await res.json();
+
+            if (!res.ok || !json.success) {
+                throw new Error(json && json.error ? json.error : 'Update failed');
+            }
+
+            label.textContent = next
+                ? 'You are currently available for appointments.'
+                : 'You are currently unavailable for appointments.';
+        } catch (e) {
+            // Revert the toggle on failure
+            toggle.checked = !next;
+            errEl.textContent = 'Could not update availability. Please try again.';
+            errEl.style.display = 'block';
+            console.error('Availability update failed:', e);
+        } finally {
+            saving = false;
+        }
+    });
+})();
+</script>
+
 </body>
 </html>

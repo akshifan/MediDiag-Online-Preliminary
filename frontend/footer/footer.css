@@ -1,185 +1,208 @@
+/* ==========================================================================
+   MediDiag — Footer (final, with hover animations + fixed contact column)
+   ========================================================================== */
+
 .footer {
   background: var(--bg-darker);
   color: var(--text-light);
-  padding: 80px 0 30px;
+  padding: 60px 0 24px;
   position: relative;
-  border-top: 1px solid rgba(59, 130, 246, 0.1);
+  border-top: 1px solid rgba(16, 185, 129, 0.15);
+  margin-top: 40px;
+  overflow: hidden;
 }
 
 .footer::before {
   content: '';
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
+  top: 0; left: 0; right: 0;
   height: 1px;
-  background: linear-gradient(90deg, transparent, var(--medical-blue), transparent);
+  background: linear-gradient(90deg, transparent, var(--medical-teal), transparent);
 }
 
 .footer-content {
   display: grid;
-  grid-template-columns: 2fr 1fr 1fr 1fr;
-  gap: 50px;
-  margin-bottom: 50px;
+  grid-template-columns: 2fr 1fr 1fr 1fr 1.4fr;
+  gap: 40px;
+  margin-bottom: 40px;
+  position: relative;
+  z-index: 2;
+  align-items: start;
 }
 
-.footer-brand {
-  max-width: 400px;
-}
+.footer-brand { max-width: 340px; }
 
 .footer-logo {
-  font-size: 2rem;
+  font-size: 1.6rem;
   font-weight: 800;
   color: var(--text-lighter);
   text-decoration: none;
   background: linear-gradient(135deg, var(--text-lighter) 0%, var(--medical-teal) 100%);
   -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
   background-clip: text;
-  margin-bottom: 20px;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 14px;
   display: block;
 }
 
 .footer-description {
   color: var(--text-dark);
-  line-height: 1.7;
-  margin-bottom: 25px;
-  font-size: 1rem;
+  line-height: 1.6;
+  margin-bottom: 18px;
+  font-size: 0.92rem;
 }
+
+/* ---------- Section headings ---------- */
 
 .footer-section h3 {
   color: var(--text-lighter);
-  margin-bottom: 25px;
-  font-size: 1.25rem;
+  margin-bottom: 18px;
+  font-size: 1rem;
   font-weight: 700;
   position: relative;
-  padding-bottom: 12px;
+  padding-bottom: 10px;
 }
-
 .footer-section h3::after {
   content: '';
   position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 40px;
+  bottom: 0; left: 0;
+  width: 32px;
   height: 2px;
   background: var(--gradient-medical);
   border-radius: 2px;
+  transition: width 0.35s cubic-bezier(0.4, 0, 0.2, 1);
 }
+.footer-section:hover h3::after {
+  width: 60px;
+}
+
+/* ---------- Lists ---------- */
 
 .footer-section ul {
   list-style: none;
+  padding: 0;
+  margin: 0;
 }
 
 .footer-section ul li {
-  margin-bottom: 14px;
-  transition: transform 0.3s ease;
+  margin-bottom: 10px;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.footer-section ul li:hover {
-  transform: translateX(8px);
-}
+/* ---------- Animated links with underline sweep ---------- */
 
 .footer-section a {
   color: var(--text-dark);
   text-decoration: none;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  display: flex;
+  transition: color 0.3s ease, transform 0.3s ease;
+  display: inline-flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
+  padding: 3px 0;
+  font-size: 0.9rem;
   position: relative;
-  padding: 4px 0;
 }
 
 .footer-section a::before {
   content: '';
   position: absolute;
+  left: 22px;
   bottom: 0;
-  left: 0;
-  width: 0;
   height: 1px;
+  width: 0;
   background: var(--medical-teal);
-  transition: width 0.3s ease;
+  transition: width 0.35s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .footer-section a:hover {
   color: var(--text-lighter);
+  transform: translateX(2px);
 }
-
 .footer-section a:hover::before {
-  width: 100%;
+  width: calc(100% - 22px);
 }
 
-.footer-section a i {
-  color: var(--medical-teal);
-  font-size: 0.9rem;
-  width: 16px;
+.footer-section a i,
+.footer-section a .fas {
+  color: var(--medical-teal) !important;
+  font-size: 0.75rem !important;
+  width: 14px;
   text-align: center;
+  flex-shrink: 0;
+  display: inline-block !important;
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), color 0.3s ease;
+}
+.footer-section a:hover i {
+  transform: translateX(4px);
+  color: var(--primary-dark) !important;
 }
 
-.footer-bottom {
-  border-top: 1px solid rgba(59, 130, 246, 0.2);
-  padding-top: 30px;
-  text-align: center;
-  color: var(--text-dark);
+/* ---------- Contact info column — fixed alignment ---------- */
+
+.footer-contact-info {
+  list-style: none;
+  padding: 0;
+  margin: 0;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 20px;
+  flex-direction: column;
+  gap: 14px;
 }
 
-.copyright {
-  font-size: 0.95rem;
-}
-
-.footer-links {
-  display: flex;
-  gap: 25px;
-  align-items: center;
-}
-
-.footer-links a {
+.footer-contact-info li {
+  display: grid;
+  grid-template-columns: 20px 1fr;
+  align-items: start;
+  gap: 12px;
   color: var(--text-dark);
-  text-decoration: none;
-  font-size: 0.95rem;
-  transition: all 0.3s ease;
-  position: relative;
-  padding: 4px 0;
+  font-size: 0.88rem;
+  line-height: 1.5;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+  transition: color 0.3s ease;
+}
+.footer-contact-info li:hover { color: var(--text-lighter); }
+
+.footer-contact-info li i,
+.footer-contact-info li .fas {
+  color: var(--medical-teal) !important;
+  font-size: 0.95rem !important;
+  margin-top: 2px;
+  width: 20px;
+  text-align: left;
+  display: inline-block !important;
+  font-family: "Font Awesome 6 Free", "Font Awesome 6 Brands", "FontAwesome" !important;
+  font-weight: 900;
+  font-style: normal;
+  transition: transform 0.3s ease;
+}
+.footer-contact-info li:hover i {
+  transform: scale(1.15);
 }
 
-.footer-links a::before {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 0;
-  height: 1px;
-  background: var(--medical-teal);
-  transition: width 0.3s ease;
+/* Two phone numbers stack vertically */
+.phone-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  line-height: 1.35;
 }
+.phone-stack span { white-space: nowrap; }
 
-.footer-links a:hover {
-  color: var(--text-lighter);
-}
-
-.footer-links a:hover::before {
-  width: 100%;
-}
+/* ---------- Social links (with sweep animation preserved) ---------- */
 
 .social-links {
   display: flex;
-  gap: 15px;
+  gap: 10px;
   align-items: center;
 }
 
 .social-link {
-  width: 44px;
-  height: 44px;
+  width: 38px;
+  height: 38px;
   background: var(--bg-light);
-  border: 1px solid rgba(59, 130, 246, 0.2);
-  border-radius: 12px;
-  display: flex;
+  border: 1px solid rgba(16, 185, 129, 0.2);
+  border-radius: 10px;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -188,241 +211,193 @@
   position: relative;
   overflow: hidden;
 }
-
 .social-link::before {
   content: '';
   position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.1), transparent);
+  top: 0; left: -100%;
+  width: 100%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(16, 185, 129, 0.18), transparent);
   transition: left 0.6s ease;
 }
-
-.social-link:hover::before {
-  left: 100%;
-}
-
+.social-link:hover::before { left: 100%; }
 .social-link:hover {
   background: var(--gradient-medical);
-  color: var(--text-lighter);
+  color: #FFFFFF;
   transform: translateY(-3px);
   box-shadow: var(--shadow-medical);
-  border-color: rgba(59, 130, 246, 0.4);
+  border-color: transparent;
 }
-
-.contact-info {
-  list-style: none;
-}
-
-.contact-info li {
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
-  margin-bottom: 18px;
-  color: var(--text-dark);
-  line-height: 1.5;
-}
-
-.contact-info li i {
-  color: var(--medical-teal);
-  margin-top: 2px;
-  font-size: 1.1rem;
-  width: 16px;
-}
-
-.newsletter-form {
-  display: flex;
-  gap: 12px;
-  margin-top: 20px;
-}
-
-.newsletter-input {
-  flex: 1;
-  padding: 14px 16px;
-  background: var(--bg-light);
-  border: 1px solid rgba(59, 130, 246, 0.2);
-  border-radius: 12px;
-  color: var(--text-light);
+.social-link i {
   font-size: 0.95rem;
-  transition: all 0.3s ease;
+  color: inherit !important;
+  font-family: "Font Awesome 6 Free", "Font Awesome 6 Brands", "FontAwesome" !important;
+  font-weight: 900;
+  font-style: normal;
 }
 
-.newsletter-input:focus {
-  outline: none;
-  border-color: var(--medical-blue);
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+/* ---------- Footer bottom row (legal links horizontal) ---------- */
+
+.footer-bottom {
+  border-top: 1px solid rgba(16, 185, 129, 0.15);
+  padding-top: 22px;
+  color: var(--text-dark);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 14px;
+  position: relative;
+  z-index: 2;
 }
 
-.newsletter-btn {
-  padding: 14px 20px;
-  background: var(--gradient-medical);
-  border: none;
-  border-radius: 12px;
-  color: var(--text-lighter);
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: var(--shadow-medical);
+.copyright {
+  font-size: 0.85rem;
+  color: var(--text-dark);
+}
+
+.footer-links {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 22px;
+}
+
+.footer-links a {
+  color: var(--text-dark);
+  text-decoration: none;
+  font-size: 0.85rem;
+  transition: color 0.3s ease, transform 0.3s ease;
   white-space: nowrap;
+  position: relative;
+  padding-bottom: 2px;
 }
-
-.newsletter-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 0 25px rgba(59, 130, 246, 0.5);
+.footer-links a::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0;
+  width: 0;
+  height: 1px;
+  background: var(--medical-teal);
+  transition: width 0.3s ease;
 }
+.footer-links a:hover { color: var(--text-lighter); }
+.footer-links a:hover::after { width: 100%; }
 
-/* Medical-themed background elements */
+/* ---------- Medical background icons (animation preserved) ---------- */
+
 .footer-medical-bg {
   position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  inset: 0;
   pointer-events: none;
   opacity: 0.05;
   z-index: 0;
 }
-
 .footer-medical-icon {
   position: absolute;
   font-size: 1.5rem;
   animation: floatMedical 8s ease-in-out infinite;
 }
 
-@keyframes floatMedical {
-  0%, 100% { transform: translateY(0px) rotate(0deg); }
-  50% { transform: translateY(-10px) rotate(5deg); }
+/* ---------- Scroll to top ---------- */
+
+.scroll-to-top {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 46px;
+  height: 46px;
+  background: var(--gradient-medical);
+  border: none;
+  border-radius: 50%;
+  color: #FFFFFF;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: var(--shadow-medical);
+  z-index: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(20px);
+}
+.scroll-to-top.visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+.scroll-to-top:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 0 30px rgba(16, 185, 129, 0.6);
 }
 
-/* Responsive Design */
+/* ==========================================================================
+   Responsive
+   ========================================================================== */
+
+@media (max-width: 1200px) {
+  .footer-content {
+    grid-template-columns: 1.6fr 1fr 1fr 1fr 1.4fr;
+    gap: 28px;
+  }
+}
+
 @media (max-width: 1024px) {
   .footer-content {
-    grid-template-columns: 1fr 1fr;
-    gap: 40px;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 28px;
   }
-  
-  .footer-brand {
-    grid-column: 1 / -1;
-    max-width: 100%;
-  }
+  .footer-brand { grid-column: 1 / -1; max-width: 100%; }
 }
 
 @media (max-width: 768px) {
-  .footer {
-    padding: 60px 0 25px;
-  }
-  
+  .footer { padding: 44px 0 22px; margin-top: 24px; }
+
   .footer-content {
-    grid-template-columns: 1fr;
-    gap: 35px;
-    margin-bottom: 40px;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-bottom: 28px;
   }
-  
+  .footer-brand { grid-column: 1 / -1; }
+
   .footer-bottom {
     flex-direction: column;
     text-align: center;
-    gap: 15px;
+    gap: 12px;
   }
-  
+
   .footer-links {
-    justify-content: center;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 14px;
   }
-  
-  .social-links {
-    justify-content: center;
-  }
-  
-  .newsletter-form {
-    flex-direction: column;
-  }
-  
-  .newsletter-btn {
-    width: 100%;
-  }
+
+  .social-links { justify-content: flex-start; }
 }
 
 @media (max-width: 480px) {
-  .footer {
-    padding: 50px 0 20px;
-  }
-  
-  .footer-content {
-    gap: 30px;
-  }
-  
-  .footer-section h3 {
-    font-size: 1.2rem;
-    margin-bottom: 20px;
-  }
-  
-  .social-link {
-    width: 40px;
-    height: 40px;
-  }
-  
+  .footer-content { grid-template-columns: 1fr; gap: 22px; }
+  .footer-section h3 { font-size: 0.95rem; margin-bottom: 12px; }
+
   .footer-links {
-    flex-direction: column;
-    gap: 15px;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 12px;
   }
-}
-/* Scroll to Top Button */
-.scroll-to-top {
-    position: fixed;
-    bottom: 30px;
-    right: 30px;
-    width: 50px;
-    height: 50px;
-    background: var(--gradient-medical);
-    border: none;
-    border-radius: 50%;
-    color: var(--text-lighter);
-    font-size: 1.2rem;
-    cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: var(--shadow-medical);
-    z-index: 1000;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0;
-    visibility: hidden;
-    transform: translateY(20px);
+  .footer-links a { font-size: 0.8rem; }
+
+  .social-link { width: 34px; height: 34px; }
+  .scroll-to-top { bottom: 16px; right: 16px; width: 40px; height: 40px; font-size: 1rem; }
+
+  .phone-stack span { white-space: normal; }
 }
 
-.scroll-to-top.visible {
-    opacity: 1;
-    visibility: visible;
-    transform: translateY(0);
-}
-
-.scroll-to-top:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 0 30px rgba(59, 130, 246, 0.6);
-}
-
-.scroll-to-top:active {
-    transform: translateY(-2px);
-}
-
-/* Responsive scroll button */
-@media (max-width: 768px) {
-    .scroll-to-top {
-        bottom: 20px;
-        right: 20px;
-        width: 45px;
-        height: 45px;
-        font-size: 1.1rem;
-    }
-}
-
-@media (max-width: 480px) {
-    .scroll-to-top {
-        bottom: 15px;
-        right: 15px;
-        width: 40px;
-        height: 40px;
-        font-size: 1rem;
-    }
+@media (max-width: 360px) {
+  .footer { padding: 32px 0 16px; }
+  .footer-logo { font-size: 1.4rem; }
+  .footer-links { gap: 10px; }
+  .footer-links a { font-size: 0.75rem; }
 }

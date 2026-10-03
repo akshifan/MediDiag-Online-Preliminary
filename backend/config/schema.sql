@@ -1,15 +1,11 @@
+-- MediDiag schema — idempotent, non-destructive.
+-- This file is safe to run multiple times. It will NOT drop existing tables
+-- or delete existing rows. Use backend/config/seed.js to add sample data.
 -- Drop existing tables if they exist (for clean setup)
-DROP TABLE IF EXISTS medical_records CASCADE;
-DROP TABLE IF EXISTS chats CASCADE;
-DROP TABLE IF EXISTS reviews CASCADE;
-DROP TABLE IF EXISTS notifications CASCADE;
-DROP TABLE IF EXISTS appointments CASCADE;
-DROP TABLE IF EXISTS patients CASCADE;
-DROP TABLE IF EXISTS doctors CASCADE;
-DROP TABLE IF EXISTS users CASCADE;
+
 
 -- Users table
-CREATE TABLE users (
+CREATE TABLE IF NOT EXISTS users (
     id SERIAL PRIMARY KEY,
     email VARCHAR(255) UNIQUE NOT NULL,
     password VARCHAR(255) NOT NULL,
@@ -20,8 +16,24 @@ CREATE TABLE users (
     last_read_message_id INTEGER DEFAULT 0
 );
 
+-- Password reset tokens
+CREATE TABLE IF NOT EXISTS password_reset_tokens (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    token_hash VARCHAR(64) NOT NULL UNIQUE,
+    expires_at TIMESTAMP NOT NULL,
+    used_at TIMESTAMP NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE INDEX IF NOT EXISTS idx_password_reset_tokens_user_id
+ON password_reset_tokens(user_id);
+
+CREATE INDEX IF NOT EXISTS idx_password_reset_tokens_expires_at
+ON password_reset_tokens(expires_at);
+
 -- Patients table
-CREATE TABLE patients (
+CREATE TABLE IF NOT EXISTS patients (
     id SERIAL PRIMARY KEY,
     user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
     full_name VARCHAR(255) NOT NULL,
@@ -37,7 +49,7 @@ CREATE TABLE patients (
 );
 
 -- Doctors table
-CREATE TABLE doctors (
+CREATE TABLE IF NOT EXISTS doctors (
     id SERIAL PRIMARY KEY,
     user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
     full_name VARCHAR(255) NOT NULL,
@@ -56,7 +68,7 @@ CREATE TABLE doctors (
 );
 
 -- Appointments table
-CREATE TABLE appointments (
+CREATE TABLE IF NOT EXISTS appointments (
     id SERIAL PRIMARY KEY,
     patient_id INTEGER REFERENCES patients(id) ON DELETE CASCADE,
     doctor_id INTEGER REFERENCES doctors(id) ON DELETE CASCADE,
@@ -73,7 +85,7 @@ CREATE TABLE appointments (
 );
 
 -- Chats table
-CREATE TABLE chats (
+CREATE TABLE IF NOT EXISTS chats (
     id SERIAL PRIMARY KEY,
     appointment_id INTEGER REFERENCES appointments(id) ON DELETE CASCADE,
     sender_id INTEGER NOT NULL,
@@ -86,7 +98,7 @@ CREATE TABLE chats (
 );
 
 -- Medical records table
-CREATE TABLE medical_records (
+CREATE TABLE IF NOT EXISTS medical_records (
     id SERIAL PRIMARY KEY,
     patient_id INTEGER REFERENCES patients(id) ON DELETE CASCADE,
     record_type VARCHAR(100) NOT NULL,
@@ -99,7 +111,7 @@ CREATE TABLE medical_records (
 );
 
 -- Reviews table
-CREATE TABLE reviews (
+CREATE TABLE IF NOT EXISTS reviews (
     id SERIAL PRIMARY KEY,
     patient_id INTEGER REFERENCES patients(id) ON DELETE CASCADE,
     doctor_id INTEGER REFERENCES doctors(id) ON DELETE CASCADE,
@@ -111,7 +123,7 @@ CREATE TABLE reviews (
 );
 
 -- Notifications table
-CREATE TABLE notifications (
+CREATE TABLE IF NOT EXISTS notifications (
     id SERIAL PRIMARY KEY,
     user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
     title VARCHAR(255) NOT NULL,
@@ -123,22 +135,22 @@ CREATE TABLE notifications (
 );
 
 -- Create indexes for better performance
-CREATE INDEX idx_users_email ON users(email);
-CREATE INDEX idx_users_role ON users(role);
-CREATE INDEX idx_patients_user_id ON patients(user_id);
-CREATE INDEX idx_doctors_user_id ON doctors(user_id);
-CREATE INDEX idx_doctors_specialization ON doctors(specialization);
-CREATE INDEX idx_doctors_availability ON doctors(is_available);
-CREATE INDEX idx_appointments_patient_id ON appointments(patient_id);
-CREATE INDEX idx_appointments_doctor_id ON appointments(doctor_id);
-CREATE INDEX idx_appointments_status ON appointments(status);
-CREATE INDEX idx_appointments_date ON appointments(appointment_date);
-CREATE INDEX idx_chats_appointment_id ON chats(appointment_id);
-CREATE INDEX idx_chats_created_at ON chats(created_at);
-CREATE INDEX idx_medical_records_patient_id ON medical_records(patient_id);
-CREATE INDEX idx_reviews_doctor_id ON reviews(doctor_id);
-CREATE INDEX idx_notifications_user_id ON notifications(user_id);
-CREATE INDEX idx_notifications_is_read ON notifications(is_read);
+CREATE INDEX IF NOT EXISTS idx_users_email ON users(email);
+CREATE INDEX IF NOT EXISTS idx_users_role ON users(role);
+CREATE INDEX IF NOT EXISTS idx_patients_user_id ON patients(user_id);
+CREATE INDEX IF NOT EXISTS idx_doctors_user_id ON doctors(user_id);
+CREATE INDEX IF NOT EXISTS idx_doctors_specialization ON doctors(specialization);
+CREATE INDEX IF NOT EXISTS idx_doctors_availability ON doctors(is_available);
+CREATE INDEX IF NOT EXISTS idx_appointments_patient_id ON appointments(patient_id);
+CREATE INDEX IF NOT EXISTS idx_appointments_doctor_id ON appointments(doctor_id);
+CREATE INDEX IF NOT EXISTS idx_appointments_status ON appointments(status);
+CREATE INDEX IF NOT EXISTS idx_appointments_date ON appointments(appointment_date);
+CREATE INDEX IF NOT EXISTS idx_chats_appointment_id ON chats(appointment_id);
+CREATE INDEX IF NOT EXISTS idx_chats_created_at ON chats(created_at);
+CREATE INDEX IF NOT EXISTS idx_medical_records_patient_id ON medical_records(patient_id);
+CREATE INDEX IF NOT EXISTS idx_reviews_doctor_id ON reviews(doctor_id);
+CREATE INDEX IF NOT EXISTS idx_notifications_user_id ON notifications(user_id);
+CREATE INDEX IF NOT EXISTS idx_notifications_is_read ON notifications(is_read);
 
 -- Update updated_at timestamp function
 CREATE OR REPLACE FUNCTION update_updated_at_column()
@@ -155,28 +167,28 @@ CREATE TRIGGER update_doctors_updated_at BEFORE UPDATE ON doctors FOR EACH ROW E
 CREATE TRIGGER update_appointments_updated_at BEFORE UPDATE ON appointments FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
 -- Insert sample data
-INSERT INTO users (email, password, role, is_verified) VALUES 
-('patient@example.com', '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'patient', true), -- password: password
-('doctor@example.com', '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'doctor', true); -- password: password
+-- Insert sample data (idempotent, non-destructive)
+INSERT INTO users (email, password, role, is_verified) VALUES
+  ('patient@example.com', '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'patient', true),
+  ('doctor@example.com',  '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'doctor',  true)
+ON CONFLICT (email) DO NOTHING;
 
-INSERT INTO patients (user_id, full_name, date_of_birth, gender, phone) VALUES
-(1, 'John Doe', '1990-01-15', 'Male', '+1234567890');
+INSERT INTO patients (user_id, full_name, date_of_birth, gender, phone)
+SELECT u.id, 'John Doe', '1990-01-15', 'Male', '+1234567890'
+FROM users u
+WHERE u.email = 'patient@example.com'
+  AND NOT EXISTS (SELECT 1 FROM patients p WHERE p.user_id = u.id);
 
-INSERT INTO doctors (user_id, full_name, specialization, license_number, experience_years, consultation_fee, availability) VALUES
-(2, 'Dr. Sarah Smith', 'Cardiology', 'MED123456', 10, 100.00, '{"monday": ["09:00-17:00"], "tuesday": ["09:00-17:00"], "wednesday": ["09:00-17:00"], "thursday": ["09:00-17:00"], "friday": ["09:00-17:00"]}'),
-(2, 'Dr. Michael Brown', 'Dermatology', 'MED123457', 8, 80.00, '{"monday": ["10:00-16:00"], "wednesday": ["10:00-16:00"], "friday": ["10:00-16:00"]}');
+INSERT INTO doctors (user_id, full_name, specialization, license_number, experience_years, consultation_fee, availability)
+SELECT u.id, 'Dr. Sarah Smith', 'Cardiology', 'MED123456', 10, 100.00,
+       '{"monday":["09:00-17:00"],"tuesday":["09:00-17:00"],"wednesday":["09:00-17:00"],"thursday":["09:00-17:00"],"friday":["09:00-17:00"]}'::jsonb
+FROM users u
+WHERE u.email = 'doctor@example.com'
+  AND NOT EXISTS (SELECT 1 FROM doctors d WHERE d.license_number = 'MED123456');
 
--- ... (keep all the table creation and index creation code the same) ...
-
--- Insert sample data - FIXED: Use proper bcrypt hashed passwords
-INSERT INTO users (email, password, role, is_verified) VALUES 
-('patient@example.com', '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'patient', true), -- password: password
-('doctor@example.com', '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'doctor', true); -- password: password
-
-INSERT INTO patients (user_id, full_name, date_of_birth, gender, phone) VALUES
-(1, 'John Doe', '1990-01-15', 'Male', '+1234567890');
-
--- FIXED: Use the correct user_id for doctors
-INSERT INTO doctors (user_id, full_name, specialization, license_number, experience_years, phone, consultation_fee, availability) VALUES
-(2, 'Dr. Sarah Smith', 'Cardiology', 'MED123456', 10, '+1234567891', 100.00, '{"monday": ["09:00-17:00"], "tuesday": ["09:00-17:00"], "wednesday": ["09:00-17:00"], "thursday": ["09:00-17:00"], "friday": ["09:00-17:00"]}'),
-(2, 'Dr. Michael Brown', 'Dermatology', 'MED123457', 8, '+1234567892', 80.00, '{"monday": ["10:00-16:00"], "wednesday": ["10:00-16:00"], "friday": ["10:00-16:00"]}');
+INSERT INTO doctors (user_id, full_name, specialization, license_number, experience_years, consultation_fee, availability)
+SELECT u.id, 'Dr. Michael Brown', 'Dermatology', 'MED123457', 8, 80.00,
+       '{"monday":["10:00-16:00"],"wednesday":["10:00-16:00"],"friday":["10:00-16:00"]}'::jsonb
+FROM users u
+WHERE u.email = 'doctor@example.com'
+  AND NOT EXISTS (SELECT 1 FROM doctors d WHERE d.license_number = 'MED123457');

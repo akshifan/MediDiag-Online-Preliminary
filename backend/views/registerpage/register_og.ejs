@@ -3,10 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= title %></title>
+    <title><%= locals.title || 'Register - MediDiag' %></title>
     <link rel="stylesheet" href="/main/main.css">
     <link rel="stylesheet" href="/navbar/navbar.css">
     <link rel="stylesheet" href="/register/register.css">
+        <link rel="stylesheet" href="/footer/footer.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
@@ -18,28 +19,48 @@
     <section class="register-hero">
         <div class="register-container">
 
-            <!-- ONLY ONE FORM -->
-            <form id="register-form" class="register-form" action="/auth/register?role=<%= locals.role %>" method="POST">
+            <%
+              // Safe locals: every value below is guaranteed to be at least null/{}.
+              const v = (typeof values !== 'undefined' && values) ? values : {};
+              const errs = (typeof errors !== 'undefined' && errors) ? errors : {};
+              const lockedRole = (typeof role !== 'undefined' && (role === 'patient' || role === 'doctor')) ? role : null;
+              const topError = (typeof error !== 'undefined' && error) ? error : null;
+              const errCount = Object.keys(errs).length;
+            %>
+
+            <form id="register-form" class="register-form" action="/auth/register" method="POST" novalidate>
 
                 <div class="form-header">
                     <h1>Create Your Account</h1>
                     <p>Join thousands of patients and doctors using MediDiag</p>
                 </div>
 
-                <% if (error) { %>
-                    <div class="alert alert-error"><%= error %></div>
+                <% if (topError) { %>
+                    <div class="alert alert-error"><%= topError %></div>
+                <% } %>
+
+                <% if (errCount > 0) { %>
+                    <div class="alert alert-error">
+                        <strong>Please fix the following:</strong>
+                        <ul style="margin: 8px 0 0 20px;">
+                            <% Object.values(errs).forEach(function (msg) { %>
+                                <li><%= msg %></li>
+                            <% }); %>
+                        </ul>
+                    </div>
                 <% } %>
 
                 <!-- ROLE SELECTION -->
-                <div class="role-selection">
+                <div class="role-selection" aria-label="Select your role">
                     <div class="role-option">
-                        <input 
-                            type="radio" 
-                            id="patient" 
-                            name="role" 
+                        <input
+                            type="radio"
+                            id="patient"
+                            name="role"
                             value="patient"
-                            <%= locals.role === "patient" ? "checked" : "" %>
-                            <%= locals.role ? "disabled" : "" %>
+                            required
+                            <%= (v.role === 'patient' || lockedRole === 'patient') ? 'checked' : '' %>
+                            <%= lockedRole ? 'disabled' : '' %>
                         >
                         <label for="patient" class="role-label">
                             <span class="role-icon">👤</span>
@@ -48,13 +69,14 @@
                     </div>
 
                     <div class="role-option">
-                        <input 
-                            type="radio" 
-                            id="doctor" 
-                            name="role" 
+                        <input
+                            type="radio"
+                            id="doctor"
+                            name="role"
                             value="doctor"
-                            <%= locals.role === "doctor" ? "checked" : "" %>
-                            <%= locals.role ? "disabled" : "" %>
+                            required
+                            <%= (v.role === 'doctor' || lockedRole === 'doctor') ? 'checked' : '' %>
+                            <%= lockedRole ? 'disabled' : '' %>
                         >
                         <label for="doctor" class="role-label">
                             <span class="role-icon">👨‍⚕</span>
@@ -62,105 +84,161 @@
                         </label>
                     </div>
 
-                    
+                    <% if (errs.role) { %>
+                        <div class="field-error role-error"><%= errs.role %></div>
+                    <% } %>
                 </div>
+
+                <%# If a valid role is locked in via the query string, keep it in the POST body
+                    even though the radios are disabled. %>
+                <% if (lockedRole) { %>
+                    <input type="hidden" name="role" value="<%= lockedRole || ''  %>">
+                <% } %>
 
                 <!-- BASIC FIELDS -->
                 <div class="form-group">
-                    <label class="form-label">Full Name</label>
-                    <input type="text" name="full_name" class="form-control" required>
+                    <label class="form-label" for="full_name">Full Name <span class="required-mark">*</span></label>
+                    <input
+                        type="text" id="full_name" name="full_name" class="form-control"
+                        value="<%= v.full_name || '' %>"
+                        required
+                        aria-invalid="<%= errs.full_name ? 'true' : 'false' %>"
+                    >
+                    <% if (errs.full_name) { %>
+                        <div class="field-error"><%= errs.full_name %></div>
+                    <% } %>
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label">Email Address</label>
-                    <input type="email" name="email" class="form-control" required>
+                    <label class="form-label" for="email">Email Address <span class="required-mark">*</span></label>
+                    <input
+                        type="email" id="email" name="email" class="form-control"
+                        value="<%= v.email || '' %>"
+                        required
+                        aria-invalid="<%= errs.email ? 'true' : 'false' %>"
+                    >
+                    <% if (errs.email) { %>
+                        <div class="field-error"><%= errs.email %></div>
+                    <% } %>
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label">Password</label>
-                    <input type="password" id="password" name="password" class="form-control" required minlength="6">
+                    <label class="form-label" for="password">Password <span class="required-mark">*</span></label>
+                    <input
+                        type="password" id="password" name="password" class="form-control"
+                        required minlength="6"
+                        aria-invalid="<%= errs.password ? 'true' : 'false' %>"
+                    >
                     <div class="password-strength">
                         <div class="strength-bar"></div>
                     </div>
+                    <% if (errs.password) { %>
+                        <div class="field-error"><%= errs.password %></div>
+                    <% } %>
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label">Confirm Password</label>
-                    <input type="password" id="confirm_password" name="confirm_password" class="form-control" required>
+                    <label class="form-label" for="confirm_password">Confirm Password <span class="required-mark">*</span></label>
+                    <input
+                        type="password" id="confirm_password" name="confirm_password" class="form-control"
+                        required
+                        aria-invalid="<%= errs.confirm_password ? 'true' : 'false' %>"
+                    >
+                    <% if (errs.confirm_password) { %>
+                        <div class="field-error"><%= errs.confirm_password %></div>
+                    <% } %>
                 </div>
 
                 <!-- PATIENT FIELDS -->
                 <div class="patient-field" style="display: none;">
                     <div class="form-row">
                         <div class="form-group">
-                            <label class="form-label">Date of Birth</label>
-                            <input type="date" name="date_of_birth" class="form-control">
+                            <label class="form-label" for="date_of_birth">Date of Birth</label>
+                            <input type="date" id="date_of_birth" name="date_of_birth" class="form-control"
+                                   value="<%= v.date_of_birth || '' %>">
                         </div>
                         <div class="form-group">
-                            <label class="form-label">Gender</label>
-                            <select name="gender" class="form-control">
+                            <label class="form-label" for="gender">Gender</label>
+                            <select id="gender" name="gender" class="form-control">
                                 <option value="">Select Gender</option>
-                                <option value="Male">Male</option>
-                                <option value="Female">Female</option>
-                                <option value="Other">Other</option>
-                                <option value="Prefer not to say">Prefer not to say</option>
+                                <option value="Male"             <%= v.gender === 'Male' ? 'selected' : '' %>>Male</option>
+                                <option value="Female"           <%= v.gender === 'Female' ? 'selected' : '' %>>Female</option>
+                                <option value="Other"            <%= v.gender === 'Other' ? 'selected' : '' %>>Other</option>
+                                <option value="Prefer not to say" <%= v.gender === 'Prefer not to say' ? 'selected' : '' %>>Prefer not to say</option>
                             </select>
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label class="form-label">Phone Number</label>
-                        <input type="tel" name="phone" class="form-control">
+                        <label class="form-label" for="phone">Phone Number</label>
+                        <input type="tel" id="phone" name="phone" class="form-control"
+                               value="<%= v.phone || '' %>">
                     </div>
                 </div>
 
                 <!-- DOCTOR FIELDS -->
                 <div class="doctor-field" style="display: none;">
                     <div class="form-group">
-                        <label class="form-label">Specialization</label>
-                        <select name="specialization" class="form-control">
+                        <label class="form-label" for="specialization">Specialization <span class="required-mark">*</span></label>
+                        <select id="specialization" name="specialization" class="form-control"
+                                aria-invalid="<%= errs.specialization ? 'true' : 'false' %>">
                             <option value="">Select Specialization</option>
-                            <option value="Cardiology">Cardiology</option>
-                                <option value="Dermatology">Dermatology</option>
-                                <option value="Pediatrics">Pediatrics</option>
-                                <option value="Neurology">Neurology</option>
-                                <option value="Gynecology">Gynecology</option>
-                                <option value="Internal Medicine">Internal Medicine</option>
-                                <option value="Orthopedics">Orthopedics</option>
-                                <option value="ENT">ENT</option>
-                                <option value="Psychiatry">Psychiatry</option>
-                                <option value="Infectious Specialist">Infectious Specialist</option>
-                                <option value="Dentistry">Dentistry</option>
-                                <option value="Hepatology">Hepatology</option>
-                                <option value="Ophthalmology">Ophthalmology</option>
-                                <option value="Endocrinology">Endocrinology</option>
-                                <option value="Oncology">Oncology</option>
-                                <option value="Pulmonology">Pulmonology</option>
-                                <option value="Pathology">Pathology</option>
-                                <option value="General Surgery">General Surgery</option>
-                                <option value="Urology">Urology</option>
-                                <option value="Neurosurgery">Neurosurgery</option>
+                            <option value="Cardiology"            <%= v.specialization === 'Cardiology' ? 'selected' : '' %>>Cardiology</option>
+                            <option value="Dermatology"           <%= v.specialization === 'Dermatology' ? 'selected' : '' %>>Dermatology</option>
+                            <option value="Pediatrics"            <%= v.specialization === 'Pediatrics' ? 'selected' : '' %>>Pediatrics</option>
+                            <option value="Neurology"             <%= v.specialization === 'Neurology' ? 'selected' : '' %>>Neurology</option>
+                            <option value="Gynecology"            <%= v.specialization === 'Gynecology' ? 'selected' : '' %>>Gynecology</option>
+                            <option value="Internal Medicine"     <%= v.specialization === 'Internal Medicine' ? 'selected' : '' %>>Internal Medicine</option>
+                            <option value="Orthopedics"           <%= v.specialization === 'Orthopedics' ? 'selected' : '' %>>Orthopedics</option>
+                            <option value="ENT"                   <%= v.specialization === 'ENT' ? 'selected' : '' %>>ENT</option>
+                            <option value="Psychiatry"            <%= v.specialization === 'Psychiatry' ? 'selected' : '' %>>Psychiatry</option>
+                            <option value="Infectious Specialist" <%= v.specialization === 'Infectious Specialist' ? 'selected' : '' %>>Infectious Specialist</option>
+                            <option value="Dentistry"             <%= v.specialization === 'Dentistry' ? 'selected' : '' %>>Dentistry</option>
+                            <option value="Hepatology"            <%= v.specialization === 'Hepatology' ? 'selected' : '' %>>Hepatology</option>
+                            <option value="Ophthalmology"         <%= v.specialization === 'Ophthalmology' ? 'selected' : '' %>>Ophthalmology</option>
+                            <option value="Endocrinology"         <%= v.specialization === 'Endocrinology' ? 'selected' : '' %>>Endocrinology</option>
+                            <option value="Oncology"              <%= v.specialization === 'Oncology' ? 'selected' : '' %>>Oncology</option>
+                            <option value="Pulmonology"           <%= v.specialization === 'Pulmonology' ? 'selected' : '' %>>Pulmonology</option>
+                            <option value="Pathology"             <%= v.specialization === 'Pathology' ? 'selected' : '' %>>Pathology</option>
+                            <option value="General Surgery"       <%= v.specialization === 'General Surgery' ? 'selected' : '' %>>General Surgery</option>
+                            <option value="Urology"               <%= v.specialization === 'Urology' ? 'selected' : '' %>>Urology</option>
+                            <option value="Neurosurgery"          <%= v.specialization === 'Neurosurgery' ? 'selected' : '' %>>Neurosurgery</option>
                         </select>
+                        <% if (errs.specialization) { %>
+                            <div class="field-error"><%= errs.specialization %></div>
+                        <% } %>
                     </div>
 
                     <div class="form-group">
-                        <label class="form-label">License Number</label>
-                        <input type="text" name="license_number" class="form-control">
+                        <label class="form-label" for="license_number">License Number <span class="required-mark">*</span></label>
+                        <input type="text" id="license_number" name="license_number" class="form-control"
+                               value="<%= v.license_number || '' %>"
+                               aria-invalid="<%= errs.license_number ? 'true' : 'false' %>">
+                        <% if (errs.license_number) { %>
+                            <div class="field-error"><%= errs.license_number %></div>
+                        <% } %>
                     </div>
 
                     <div class="form-group">
-                        <label class="form-label">Years of Experience</label>
-                        <input type="number" name="experience_years" class="form-control" min="0">
-                    </div>
-                
-                    <div class="form-group">
-                        <label class="form-label">Hospital Affiliation</label>
-                        <input type="text" name="hospital_affiliation" class="form-control">
+                        <label class="form-label" for="experience_years">Years of Experience <span class="required-mark">*</span></label>
+                        <input type="number" id="experience_years" name="experience_years" class="form-control" min="0"
+                               value="<%= v.experience_years || '' %>"
+                               aria-invalid="<%= errs.experience_years ? 'true' : 'false' %>">
+                        <% if (errs.experience_years) { %>
+                            <div class="field-error"><%= errs.experience_years %></div>
+                        <% } %>
                     </div>
 
                     <div class="form-group">
-                        <label class="form-label">Consultation Fee (₹)</label>
-                        <input type="number" name="consultation_fee" class="form-control" min="50" step="50">
+                        <label class="form-label" for="hospital_affiliation">Hospital Affiliation</label>
+                        <input type="text" id="hospital_affiliation" name="hospital_affiliation" class="form-control"
+                               value="<%= v.hospital_affiliation || '' %>">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="consultation_fee">Consultation Fee (₹)</label>
+                        <input type="number" id="consultation_fee" name="consultation_fee" class="form-control" min="50" step="50"
+                               value="<%= v.consultation_fee || '' %>">
                     </div>
                 </div>
 
@@ -174,12 +252,10 @@
         </div>
     </section>
 
-    <!-- SCRIPTS -->
     <script src="/navbar/navbar.js"></script>
     <script src="/register/register.js"></script>
 
     <script>
-        // Add floating medical icons
         document.addEventListener('DOMContentLoaded', function() {
             const medicalBackground = document.querySelector('.medical-background');
             if (!medicalBackground) return;
@@ -189,9 +265,9 @@
                 const el = document.createElement('div');
                 el.className = 'medical-icon';
                 el.textContent = icon;
-                el.style.animationDelay = `${i * 2}s`;
-                el.style.left = `${Math.random() * 90}%`;
-                el.style.top = `${Math.random() * 90}%`;
+                el.style.animationDelay = (i * 2) + 's';
+                el.style.left = (Math.random() * 90) + '%';
+                el.style.top = (Math.random() * 90) + '%';
                 medicalBackground.appendChild(el);
             });
         });

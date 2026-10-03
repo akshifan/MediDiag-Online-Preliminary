@@ -1,36 +1,121 @@
-<%- include('../headers/preloginheader') %>
-<main class="container">
-  <h2>Patient Chats</h2>
-  <% if (!patients || patients.length === 0) { %>
-    <p>No patient chats yet.</p>
-  <% } else { %>
-    <ul>
-      <% patients.forEach(p => { %>
-        <li>
-          <a href="/doctor/chats/<%= p.patientId %>">Patient: <%= p.patientId %></a>
-          - Messages: <%= p.count %>
-          <% if (p.lastAt) { %>
-            - Last: <%= new Date(p.lastAt).toLocaleString() %>
-          <% } %>
-          <div><small><%= p.lastMessage %></small></div>
-        </li>
-      <% }) %>
-    </ul>
-  <% } %>
-</main>
-<%- include('../main/footer') %>
+
+
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <title>Patient Chats</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Chats - MediDiag</title>
+    <link rel="stylesheet" href="/main/main.css">
+    <link rel="stylesheet" href="/navbar/navbar.css">
+    <link rel="stylesheet" href="/doctor/dashboard.css">
+    <link rel="stylesheet" href="/footer/footer.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/portal/portal-fixes.css">
 </head>
 <body>
-  <h1>Patient Chats</h1>
-  <ul>
-    <% patients.forEach(p => { %>
-      <li><a href="/doctor/chats/<%= p.id %>">Patient <%= p.id %></a></li>
-    <% }); %>
-  </ul>
+    <%- include('../headers/preloginheader') %>
+
+    <div class="container doctor-dashboard">
+        <div class="dashboard-grid">
+            <aside class="sidebar">
+                <nav class="sidebar-nav">
+                    <ul>
+                        <li><a href="/doctor/dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                        <li><a href="/doctor/appointments"><i class="fas fa-calendar-check"></i> Appointments</a></li>
+                        <li><a href="/doctor/chats" class="active"><i class="fas fa-comments"></i> Patient Chats</a></li>
+                        <li><a href="/doctor/profile"><i class="fas fa-user"></i> Profile</a></li>
+                        <li><a href="/auth/logout"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+                    </ul>
+                </nav>
+            </aside>
+
+            <main class="dashboard-content">
+<div class="chat-page-header">
+    <h1>
+        <i class="fas fa-comments"></i>
+        Patient Chats
+    </h1>
+
+    <p>
+        View and manage your conversations with patients.
+    </p>
+</div>
+                <% if (!patients || patients.length === 0) { %>
+                    <div class="card" style="text-align:center; padding: 40px 20px;">
+                        <i class="fas fa-comment-slash" style="font-size:2.4rem; color: var(--primary-color); opacity:0.5; display:block; margin-bottom:14px;"></i>
+                        <h3>No patient chats yet</h3>
+                        <p>When patients message you, they'll appear here.</p>
+                    </div>
+                <% } else { %>
+                    <div class="chat-patient-list">
+                        <% patients.forEach(p => { %>
+                            <a href="/doctor/chats/<%= p.patientId %>" class="card chat-patient-item">
+                                <div class="chat-patient-avatar">
+                                    <%= (p.patientName || 'P').charAt(0).toUpperCase() %>
+                                </div>
+                                <div class="chat-patient-info">
+                                    <h3><%= p.patientName %></h3>
+                                    <p><%= p.lastMessage || 'No messages yet' %></p>
+                                </div>
+                                <div class="chat-patient-meta">
+<% if (Number(p.unreadCount || 0) > 0) { %>
+    <span class="badge">
+        <%= p.unreadCount %>
+    </span>
+<% } %>
+                                    <% if (p.lastAt) { %>
+                                        <small><%= new Date(p.lastAt).toLocaleDateString() %></small>
+                                    <% } %>
+                                </div>
+                            </a>
+                        <% }) %>
+                    </div>
+                <% } %>
+            </main>
+        </div>
+    </div>
+
+    <%- include('../main/footer') %>
+
+    <script src="/navbar/navbar.js"></script>
+    <style>
+        .chat-patient-list { display: flex; flex-direction: column; gap: 12px; }
+        .chat-patient-item {
+            display: flex; align-items: center; gap: 14px;
+            padding: 14px; text-decoration: none; color: inherit;
+            transition: all 0.3s ease;
+        }
+        .chat-patient-item:hover {
+            transform: translateX(4px);
+            border-color: var(--primary-color);
+            box-shadow: var(--shadow-medical);
+        }
+        .chat-patient-avatar {
+            width: 48px; height: 48px; border-radius: 50%;
+            background: var(--gradient-medical);
+            color: #FFFFFF; display: flex; align-items: center;
+            justify-content: center; font-weight: 700; font-size: 1.15rem;
+            flex-shrink: 0;
+        }
+        .chat-patient-info { flex: 1 1 auto; min-width: 0; }
+        .chat-patient-info h3 {
+            color: var(--text-lighter); font-size: 1.02rem;
+            margin-bottom: 3px; word-break: break-word;
+        }
+        .chat-patient-info p {
+            color: var(--text-dark); font-size: 0.85rem;
+            overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+        }
+        .chat-patient-meta {
+            display: flex; flex-direction: column; align-items: flex-end;
+            gap: 4px; flex-shrink: 0;
+        }
+        .chat-patient-meta .badge {
+            background: var(--primary-color); color: #FFFFFF;
+            padding: 3px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 700;
+        }
+        .chat-patient-meta small { color: var(--text-dark); font-size: 0.72rem; }
+    </style>
 </body>
 </html>

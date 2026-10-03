@@ -1,105 +1,221 @@
-/* Features Page - Same Styling as Homepage */
+/* ==========================================================================
+   MediDiag — features/features.css
+   Crystal Mint theme
+   Responsive layout:
+   - Desktop: original spacious layout
+   - Tablet: compact layout
+   - Mobile: same visual structure, scaled down
+   ========================================================================== */
+
+
+/* ==========================================================================
+   HERO
+   ========================================================================== */
+
 .features-hero {
-  background: 
-    linear-gradient(135deg, var(--bg-darker) 0%, var(--bg-light) 50%, var(--bg-darker) 100%),
-    url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%233b82f6' fill-opacity='0.1' fill-rule='evenodd'/%3E%3C/svg%3E");
+  background:
+    radial-gradient(
+      circle at 15% 20%,
+      rgba(167, 243, 208, 0.55) 0%,
+      transparent 45%
+    ),
+    radial-gradient(
+      circle at 85% 15%,
+      rgba(110, 231, 183, 0.40) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      circle at 50% 100%,
+      rgba(236, 253, 245, 0.90) 0%,
+      transparent 60%
+    ),
+    linear-gradient(
+      135deg,
+      #F0FDF8 0%,
+      #ECFDF5 50%,
+      #F6FFFB 100%
+    );
+
   min-height: 40vh;
+
   display: flex;
   align-items: center;
   justify-content: center;
+
   text-align: center;
   color: var(--text-lighter);
+
   position: relative;
   overflow: hidden;
+
   padding: 140px 0 80px;
 }
 
 .features-hero::before {
   content: '';
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: 
-    radial-gradient(circle at 20% 80%, rgba(59, 130, 246, 0.15) 0%, transparent 50%),
-    radial-gradient(circle at 80% 20%, rgba(16, 185, 129, 0.1) 0%, transparent 50%),
-    radial-gradient(circle at 40% 40%, rgba(20, 184, 166, 0.08) 0%, transparent 50%);
+  inset: 0;
+
+  background:
+    radial-gradient(
+      circle at 20% 80%,
+      rgba(16, 185, 129, 0.10) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      circle at 80% 20%,
+      rgba(52, 211, 153, 0.10) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      circle at 40% 40%,
+      rgba(110, 231, 183, 0.10) 0%,
+      transparent 50%
+    );
+
   animation: backgroundShift 8s ease-in-out infinite;
   z-index: 1;
 }
 
-.features-hero-content {
+.features-hero-container {
   position: relative;
   z-index: 2;
+
+  width: 100%;
   max-width: 800px;
+
   padding: 0 20px;
 }
 
 .features-hero h1 {
   font-size: 3.5rem;
   font-weight: 800;
+
   margin-bottom: 1.5rem;
-  background: linear-gradient(135deg, var(--text-lighter) 0%, var(--medical-teal) 100%);
+
+  background:
+    linear-gradient(
+      135deg,
+      #064E3B 0%,
+      #059669 45%,
+      #34D399 100%
+    );
+
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+
   animation: fadeInUp 1s ease-out 0.2s both;
 }
 
 .features-hero p {
   font-size: 1.25rem;
+
   margin-bottom: 2rem;
-  color: var(--text-light);
+
+  color: var(--text-dark);
+
   opacity: 0;
+
   animation: fadeIn 1s ease-out 0.8s both;
 }
 
+
+/* ==========================================================================
+   MAIN CONTENT
+   ========================================================================== */
+
 .features-content {
   padding: 100px 0;
+
   background: var(--bg-darker);
+
   position: relative;
 }
 
 .features-content::before {
   content: '';
+
   position: absolute;
+
   top: 0;
   left: 0;
   right: 0;
+
   height: 1px;
-  background: linear-gradient(90deg, transparent, var(--medical-blue), transparent);
+
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      var(--primary-color),
+      transparent
+    );
 }
+
+
+/* ==========================================================================
+   FEATURE TABS
+   ========================================================================== */
 
 .features-tabs {
   display: flex;
+
   gap: 16px;
+
   margin-bottom: 60px;
+
   justify-content: center;
+
   flex-wrap: wrap;
 }
 
 .tab-btn {
   padding: 16px 32px;
-  background: var(--bg-lighter);
+
+  background: rgba(255, 255, 255, 0.85);
+
   color: var(--text-light);
-  border: 1px solid rgba(59, 130, 246, 0.1);
+
+  border: 1px solid rgba(167, 243, 208, 0.55);
+
   border-radius: 12px;
+
   cursor: pointer;
-  transition: all 0.3s ease;
+
+  transition:
+    all 0.3s ease;
+
   font-weight: 600;
+
+  font-size: 1rem;
+
+  min-width: 150px;
+
+  text-align: center;
 }
 
 .tab-btn.active,
 .tab-btn:hover {
   background: var(--gradient-medical);
-  color: var(--text-lighter);
+
+  color: #FFFFFF;
+
   transform: translateY(-2px);
+
   box-shadow: var(--shadow-medical);
+
+  border-color: transparent;
 }
+
+
+/* ==========================================================================
+   TAB CONTENT
+   ========================================================================== */
 
 .tab-content {
   display: none;
+
   animation: fadeInUp 0.5s ease;
 }
 
@@ -107,36 +223,82 @@
   display: block;
 }
 
+
+/* ==========================================================================
+   FEATURE SECTION
+   ========================================================================== */
+
 .feature-section {
   margin-bottom: 80px;
 }
 
 .feature-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+
+  grid-template-columns:
+    repeat(
+      auto-fit,
+      minmax(300px, 1fr)
+    );
+
   gap: 40px;
+
   margin-top: 40px;
 }
 
+
+/* ==========================================================================
+   FEATURE CARD
+   ========================================================================== */
+
 .feature-card {
-  background: var(--bg-lighter);
+  background: rgba(255, 255, 255, 0.85);
+
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+
   padding: 50px 30px;
+
   border-radius: 20px;
-  border: 1px solid rgba(59, 130, 246, 0.1);
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+
+  border: 1px solid rgba(167, 243, 208, 0.55);
+
+  transition:
+    all 0.4s cubic-bezier(
+      0.4,
+      0,
+      0.2,
+      1
+    );
+
   position: relative;
+
   overflow: hidden;
+
   text-align: center;
+
+  box-shadow: var(--shadow);
 }
 
 .feature-card::before {
   content: '';
+
   position: absolute;
+
   top: 0;
   left: -100%;
+
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.1), transparent);
+
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      rgba(16, 185, 129, 0.10),
+      transparent
+    );
+
   transition: left 0.6s ease;
 }
 
@@ -146,49 +308,91 @@
 
 .feature-card:hover {
   transform: translateY(-10px);
+
   box-shadow: var(--shadow-medical);
-  border-color: rgba(59, 130, 246, 0.3);
+
+  border-color: var(--primary-color);
 }
+
+
+/* ==========================================================================
+   FEATURE ICON
+   ========================================================================== */
 
 .feature-card .icon {
   width: 90px;
   height: 90px;
+
   margin: 0 auto 25px;
+
   background: var(--gradient-medical);
+
   border-radius: 50%;
+
   display: flex;
+
   align-items: center;
   justify-content: center;
-  font-size: 2.2rem;
-  color: var(--text-lighter);
-  transition: all 0.4s ease;
-  position: relative;
-  z-index: 2;
-}
 
-.feature-card:hover .icon {
-  transform: scale(1.1) rotate(5deg);
+  font-size: 2.2rem;
+
+  color: #FFFFFF;
+
+  transition:
+    all 0.4s ease;
+
+  position: relative;
+
+  z-index: 2;
+
   box-shadow: var(--shadow-medical);
 }
 
+.feature-card:hover .icon {
+  transform:
+    scale(1.1)
+    rotate(5deg);
+
+  box-shadow: var(--shadow-strong);
+}
+
+
+/* ==========================================================================
+   FEATURE TEXT
+   ========================================================================== */
+
 .feature-card h3 {
   font-size: 1.4rem;
+
   color: var(--text-lighter);
+
   margin-bottom: 15px;
+
   position: relative;
+
   z-index: 2;
 }
 
 .feature-card p {
   color: var(--text-dark);
+
   line-height: 1.6;
+
   position: relative;
+
   z-index: 2;
+
+  font-size: 1rem;
 }
+
+
+/* ==========================================================================
+   SECURITY / TECHNOLOGY
+   ========================================================================== */
 
 .security-features,
 .tech-features {
-  padding: 60px 0;
+
   border-radius: 20px;
 }
 
@@ -197,15 +401,20 @@
 }
 
 .tech-features {
-  background: var(--bg-lighter);
+  background: rgba(255, 255, 255, 0.5);
 }
 
-/* Animations */
+
+/* ==========================================================================
+   ANIMATIONS
+   ========================================================================== */
+
 @keyframes fadeInUp {
   from {
     opacity: 0;
     transform: translateY(50px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -213,70 +422,453 @@
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
-/* Responsive */
-@media (max-width: 768px) {
-  .features-hero h1 {
-    font-size: 2.5rem;
+@keyframes backgroundShift {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
   }
-  
-  .features-hero p {
-    font-size: 1.125rem;
-  }
-  
-  .features-tabs {
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  .tab-btn {
-    width: 100%;
-    max-width: 300px;
-  }
-  
-  .feature-grid {
-    grid-template-columns: 1fr;
-    gap: 30px;
+
+  50% {
+    opacity: 0.8;
+    transform: scale(1.02);
   }
 }
-/* Medical Background Elements */
+
+@keyframes floatMedical {
+  0%,
+  100% {
+    transform: translateY(0) rotate(0);
+  }
+
+  50% {
+    transform: translateY(-20px) rotate(5deg);
+  }
+}
+
+
+/* ==========================================================================
+   MEDICAL BACKGROUND
+   ========================================================================== */
+
 .medical-background {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+
+  inset: 0;
+
   pointer-events: none;
+
   z-index: 0;
-  opacity: 0.1;
+
+  opacity: 0.06;
 }
 
 .medical-icon {
   position: absolute;
+
   font-size: 2rem;
-  opacity: 0.1;
-  animation: floatMedical 8s ease-in-out infinite;
+
+  opacity: 0.10;
+
+  animation:
+    floatMedical 8s ease-in-out infinite;
 }
 
-.medical-icon.heart { top: 10%; left: 5%; animation-delay: 0s; }
-.medical-icon.stethoscope { top: 20%; right: 10%; animation-delay: 1s; }
-.medical-icon.pill { bottom: 30%; left: 15%; animation-delay: 2s; }
-.medical-icon.hospital { bottom: 20%; right: 5%; animation-delay: 3s; }
-.medical-icon.time { top: 60%; left: 8%; animation-delay: 4s; }
-.medical-icon.clipboard { top: 40%; right: 15%; animation-delay: 5s; }
-.medical-icon.microscope { bottom: 60%; right: 8%; animation-delay: 6s; }
-.medical-icon.syringe { top: 15%; left: 20%; animation-delay: 7s; }
-.medical-icon.question { top: 70%; right: 25%; animation-delay: 8s; }
-.medical-icon.idea { bottom: 15%; left: 25%; animation-delay: 9s; }
-.medical-icon.phone { top: 35%; left: 12%; animation-delay: 10s; }
-.medical-icon.email { bottom: 45%; right: 18%; animation-delay: 11s; }
-.medical-icon.user { top: 55%; right: 5%; animation-delay: 12s; }
-.medical-icon.doctor { bottom: 25%; left: 8%; animation-delay: 13s; }
 
-@keyframes floatMedical {
-  0%, 100% { transform: translateY(0px) rotate(0deg); }
-  50% { transform: translateY(-20px) rotate(5deg); }
+/* ==========================================================================
+   TABLET
+   ========================================================================== */
+
+@media (max-width: 768px) {
+
+  .features-hero {
+    min-height: 35vh;
+
+    padding:
+      110px
+      20px
+      60px;
+  }
+
+  .features-hero-container {
+    max-width: 650px;
+
+    padding:
+      0 15px;
+  }
+
+  .features-hero h1 {
+    font-size: 2.5rem;
+
+    margin-bottom: 1rem;
+  }
+
+  .features-hero p {
+    font-size: 1.05rem;
+
+    margin-bottom: 1.5rem;
+  }
+
+  .features-content {
+    padding:
+      60px
+      20px;
+  }
+
+  /*
+     IMPORTANT:
+     Keep tabs in a compact horizontal layout.
+     Do NOT stack all four buttons vertically.
+  */
+  .features-tabs {
+    display: grid;
+
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+
+    gap: 12px;
+
+    width: 100%;
+
+    max-width: 500px;
+
+    margin:
+      0 auto 45px;
+  }
+
+  .tab-btn {
+    width: 100%;
+
+    min-width: 0;
+
+    padding:
+      13px
+      12px;
+
+    font-size: 0.9rem;
+
+    border-radius: 11px;
+  }
+
+  .feature-section {
+    margin-bottom: 55px;
+  }
+
+  /*
+     Keep cards compact instead of creating huge cards.
+  */
+  .feature-grid {
+    grid-template-columns:
+      repeat(
+        2,
+        minmax(0, 1fr)
+      );
+
+    gap: 18px;
+
+    margin-top: 30px;
+  }
+
+  .feature-card {
+    padding:
+      30px
+      18px;
+
+    border-radius: 16px;
+  }
+
+  .feature-card .icon {
+    width: 68px;
+    height: 68px;
+
+    margin-bottom: 18px;
+
+    font-size: 1.7rem;
+  }
+
+  .feature-card h3 {
+    font-size: 1.05rem;
+
+    margin-bottom: 10px;
+  }
+
+  .feature-card p {
+    font-size: 0.82rem;
+
+    line-height: 1.5;
+  }
+
+  .security-features,
+  .tech-features {
+    
+
+    border-radius: 16px;
+  }
+}
+
+
+/* ==========================================================================
+   MOBILE
+   ========================================================================== */
+
+@media (max-width: 480px) {
+
+  .features-hero {
+    min-height: auto;
+
+    padding:
+      100px
+      15px
+      50px;
+  }
+
+  .features-hero-container {
+    padding: 0 10px;
+  }
+
+  .features-hero h1 {
+    font-size: 2rem;
+
+    margin-bottom: 1rem;
+  }
+
+  .features-hero p {
+    font-size: 1rem;
+
+    line-height: 1.7;
+
+    margin-bottom: 1rem;
+  }
+
+  .features-content {
+    padding:
+      45px
+      15px;
+  }
+
+  /*
+     4 tabs = 2 x 2.
+     This keeps the same compact visual structure
+     as the desktop layout.
+  */
+  .features-tabs {
+    grid-template-columns:
+      repeat(2, 1fr);
+
+    gap: 10px;
+
+    max-width: 100%;
+
+    margin-bottom: 38px;
+  }
+
+  .tab-btn {
+    padding:
+      12px
+      8px;
+
+    font-size: 1rem;
+
+    border-radius: 10px;
+  }
+
+  /*
+     Feature cards remain compact.
+  */
+  .feature-grid {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+
+    gap: 12px;
+
+    margin-top: 25px;
+  }
+
+  .feature-card {
+    padding:
+      24px
+      12px;
+
+    border-radius: 14px;
+  }
+
+  .feature-card .icon {
+    width: 58px;
+    height: 58px;
+
+    margin-bottom: 14px;
+
+    font-size: 1.45rem;
+  }
+
+  .feature-card h3 {
+    font-size: 1rem;
+
+    margin-bottom: 12px;
+  }
+
+  .feature-card p {
+    font-size: 0.80rem;
+
+    line-height: 1.7;
+  }
+
+  .security-features,
+  .tech-features {
+    
+
+    border-radius: 14px;
+  }
+}
+
+
+/* ==========================================================================
+   SMALL PHONES
+   ========================================================================== */
+
+@media (max-width: 360px) {
+
+  .features-hero {
+    padding:
+      90px
+      12px
+      45px;
+  }
+
+  .features-hero h1 {
+    font-size: 1.7rem;
+  }
+
+  .features-hero p {
+    font-size: 1rem;
+    line-height: 1.7;
+  }
+
+  .features-content {
+    padding:
+      38px
+      12px;
+  }
+
+  .features-tabs {
+    gap: 8px;
+
+    margin-bottom: 32px;
+  }
+
+  .tab-btn {
+    padding:
+      10px
+      6px;
+
+    font-size: 1rem;
+  }
+
+  .feature-grid {
+    gap: 10px;
+  }
+
+  .feature-card {
+    padding:
+      20px
+      9px;
+
+    border-radius: 12px;
+  }
+
+  .feature-card .icon {
+    width: 52px;
+    height: 52px;
+
+    font-size: 1.3rem;
+
+    margin-bottom: 12px;
+  }
+
+  .feature-card h3 {
+    font-size: 1rem;
+  }
+
+  .feature-card p {
+    font-size: 0.80rem;
+
+    line-height: 1.6;
+  }
+}
+
+
+/* ==========================================================================
+   VERY SMALL PHONES
+   ========================================================================== */
+
+@media (max-width: 320px) {
+
+  .features-hero {
+    padding:
+      80px
+      10px
+      40px;
+  }
+
+  .features-hero h1 {
+    font-size: 1.5rem;
+  }
+
+  .features-hero p {
+    font-size: 0.82rem;
+  }
+
+  .features-content {
+    padding:
+      32px
+      10px;
+  }
+
+  .features-tabs {
+    gap: 7px;
+  }
+
+  .tab-btn {
+    padding:
+      9px
+      5px;
+
+    font-size: 0.7rem;
+  }
+
+  .feature-grid {
+    gap: 8px;
+  }
+
+  .feature-card {
+    padding:
+      18px
+      7px;
+
+    border-radius: 11px;
+  }
+
+  .feature-card .icon {
+    width: 48px;
+    height: 48px;
+
+    font-size: 1.2rem;
+  }
+
+  .feature-card h3 {
+    font-size: 0.78rem;
+  }
+
+  .feature-card p {
+    font-size: 0.64rem;
+  }
 }

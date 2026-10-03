@@ -1,29 +1,32 @@
-/* Login Page - Centered Layout */
+/* ==========================================================================
+   MediDiag — login/login.css (compact, responsive)
+   ========================================================================== */
+
 .login-hero {
-  background: 
-    linear-gradient(135deg, var(--bg-darker) 0%, var(--bg-light) 50%, var(--bg-darker) 100%),
-    url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%233b82f6' fill-opacity='0.1' fill-rule='evenodd'/%3E%3C/svg%3E");
+  background:
+    radial-gradient(circle at 15% 20%, rgba(167, 243, 208, 0.55) 0%, transparent 45%),
+    radial-gradient(circle at 85% 15%, rgba(110, 231, 183, 0.40) 0%, transparent 50%),
+    radial-gradient(circle at 50% 100%, rgba(236, 253, 245, 0.90) 0%, transparent 60%),
+    linear-gradient(135deg, #F0FDF8 0%, #ECFDF5 50%, #F6FFFB 100%);
   min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   align-items: center;
   justify-content: center;
   color: var(--text-lighter);
   position: relative;
   overflow: hidden;
-  padding: 120px 20px 80px; /* Added top padding for header */
+  padding: 110px 20px 60px;
 }
 
 .login-hero::before {
   content: '';
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: 
-    radial-gradient(circle at 20% 80%, rgba(59, 130, 246, 0.15) 0%, transparent 50%),
-    radial-gradient(circle at 80% 20%, rgba(16, 185, 129, 0.1) 0%, transparent 50%),
-    radial-gradient(circle at 40% 40%, rgba(20, 184, 166, 0.08) 0%, transparent 50%);
+  inset: 0;
+  background:
+    radial-gradient(circle at 20% 80%, rgba(16, 185, 129, 0.10) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(52, 211, 153, 0.10) 0%, transparent 50%),
+    radial-gradient(circle at 40% 40%, rgba(110, 231, 183, 0.10) 0%, transparent 50%);
   animation: backgroundShift 8s ease-in-out infinite;
   z-index: 1;
 }
@@ -32,17 +35,19 @@
   position: relative;
   z-index: 2;
   width: 100%;
-  max-width: 450px;
+  max-width: 400px;
   margin: 0 auto;
   animation: fadeInUp 0.8s ease-out;
 }
 
 .login-form {
-  background: var(--bg-lighter);
-  padding: 50px 40px;
-  border-radius: 20px;
-  border: 1px solid rgba(59, 130, 246, 0.1);
-  box-shadow: var(--shadow-lg);
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  padding: 34px 30px;
+  border-radius: 18px;
+  border: 1px solid rgba(167, 243, 208, 0.55);
+  box-shadow: var(--shadow-medical);
   position: relative;
   overflow: hidden;
 }
@@ -50,125 +55,160 @@
 .login-form::before {
   content: '';
   position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.1), transparent);
+  top: 0; left: -100%;
+  width: 100%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(16, 185, 129, 0.08), transparent);
   transition: left 0.6s ease;
 }
-
-.login-form:hover::before {
-  left: 100%;
-}
+.login-form:hover::before { left: 100%; }
 
 .form-header {
   text-align: center;
-  margin-bottom: 40px;
-}
-
-.form-header h1 {
-  font-size: 2.5rem;
-  color: var(--text-lighter);
-  margin-bottom: 16px;
-  background: linear-gradient(135deg, var(--text-lighter) 0%, var(--medical-teal) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.form-header p {
-  color: var(--text-light);
-  font-size: 1.1rem;
-}
-
-.form-group {
   margin-bottom: 24px;
 }
 
+.form-header h1 {
+  font-size: clamp(1.4rem, 1.1rem + 1vw, 1.85rem);
+  color: var(--text-lighter);
+  margin-bottom: 8px;
+  background: linear-gradient(135deg, #064E3B 0%, #059669 45%, #34D399 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  line-height: 1.2;
+}
+
+.form-header p {
+  color: var(--text-dark);
+  font-size: 0.92rem;
+}
+
+.form-group { margin-bottom: 16px; }
+
 .form-label {
   display: block;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
   font-weight: 600;
   color: var(--text-lighter);
+  font-size: 0.88rem;
 }
 
 .form-control {
   width: 100%;
-  padding: 16px;
-  background: var(--bg-dark);
-  border: 2px solid rgba(59, 130, 246, 0.2);
-  border-radius: 12px;
-  font-size: 16px;
+  padding: 11px 14px;
+  background: rgba(255, 255, 255, 0.92);
+  border: 2px solid var(--border-color);
+  border-radius: 10px;
+  font-size: 0.95rem;
   color: var(--text-light);
   transition: all 0.3s ease;
+  font-family: inherit;
 }
 
+.form-control::placeholder { color: var(--text-muted); }
 .form-control:focus {
   outline: none;
-  border-color: var(--medical-blue);
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-  background: var(--bg-darker);
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.15);
+  background: #FFFFFF;
 }
 
-.login-form .btn {
+.login-form .btn,
+.login-form button.btn,
+.login-form a.btn {
   width: 100%;
-  padding: 16px;
-  font-size: 1.1rem;
-  margin-top: 10px;
+  padding: 12px;
+  font-size: 0.98rem;
+  margin-top: 6px;
+  background: var(--gradient-medical);
+  color: #FFFFFF;
+  border: none;
 }
 
 .form-footer {
   text-align: center;
-  margin-top: 30px;
-  color: var(--text-light);
+  margin-top: 20px;
+  color: var(--text-dark);
+  font-size: 0.9rem;
 }
 
 .form-footer a {
-  color: var(--medical-teal);
+  color: var(--primary-dark);
   text-decoration: none;
   font-weight: 600;
   transition: all 0.3s ease;
 }
-
 .form-footer a:hover {
   text-decoration: underline;
-  color: var(--medical-blue);
+  color: var(--primary-color);
 }
 
-/* Animations */
 @keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(50px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(30px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes backgroundShift {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%      { opacity: 0.8; transform: scale(1.02); }
 }
 
 /* Responsive */
 @media (max-width: 768px) {
-  .login-hero {
-    padding: 100px 20px 60px;
-  }
-  
-  .login-form {
-    padding: 40px 30px;
-  }
-  
-  .form-header h1 {
-    font-size: 2rem;
-  }
+  .login-hero { padding: 90px 16px 40px; }
+  .login-container { max-width: 100%; }
+  .login-form { padding: 26px 20px; border-radius: 16px; }
 }
 
 @media (max-width: 480px) {
-  .login-form {
-    padding: 30px 20px;
-  }
-  
-  .form-header h1 {
-    font-size: 1.8rem;
-  }
+  .login-hero { padding: 78px 14px 30px; align-items: flex-start; }
+  .login-form { padding: 22px 18px; border-radius: 14px; }
+  .form-header { margin-bottom: 20px; }
+  .form-header h1 { font-size: 1.35rem; }
+  .form-header p { font-size: 0.85rem; }
+  .form-group { margin-bottom: 14px; }
+  .form-control { padding: 10px 12px; font-size: 0.92rem; }
+  .login-form .btn { padding: 11px; font-size: 0.92rem; }
+  .form-footer { margin-top: 16px; font-size: 0.85rem; }
+}
+
+@media (max-width: 360px) {
+  .login-hero { padding: 72px 12px 24px; }
+  .login-form { padding: 18px 14px; }
+  .form-header h1 { font-size: 1.2rem; }
+}
+
+/* Ensure the fixed navbar never overlaps the top of the register form,
+   across 320–480px where navbar height changes. */
+.login-hero {
+  padding-top: calc(80px + env(safe-area-inset-top, 0px) + 20px);
+}
+@media (max-width: 480px) {
+  .login-hero { padding-top: calc(70px + env(safe-area-inset-top, 0px) + 16px); }
+}
+@media (max-width: 360px) {
+  .login-hero { padding-top: calc(64px + env(safe-area-inset-top, 0px) + 12px); }
+}
+
+
+/* =========================================================
+   Forgot Password
+   ========================================================= */
+
+.forgot-password-row {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 7px;
+}
+
+.forgot-password-row a {
+    color: var(--primary-dark);
+    font-size: 0.82rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.forgot-password-row a:hover {
+    color: var(--primary-color);
+    text-decoration: underline;
 }

@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,142 +9,806 @@
     <link rel="stylesheet" href="/main/main.css">
     <link rel="stylesheet" href="/navbar/navbar.css">
     <link rel="stylesheet" href="/doctor/dashboard.css">
+    <link rel="stylesheet" href="/footer/footer.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/portal/portal-fixes.css">
 </head>
 <body>
     <%- include('../headers/preloginheader') %>
-    
+
     <div class="container doctor-dashboard">
         <div class="dashboard-grid">
             <aside class="sidebar">
                 <nav class="sidebar-nav">
                     <ul>
-                        <li><a href="/doctor/dashboard">Dashboard</a></li>
-                        <li><a href="/doctor/appointments" class="active">Appointments</a></li>
-                        <li><a href="/doctor/profile">Profile</a></li>
-                        <li><a href="/auth/logout">Logout</a></li>
+                        <li>
+                            <a href="/doctor/dashboard">
+                                <i class="fas fa-tachometer-alt"></i> Dashboard
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/doctor/appointments" class="active">
+                                <i class="fas fa-calendar-check"></i> Appointments
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/doctor/chats">
+                                <i class="fas fa-comments"></i> Patient Chats
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/doctor/profile">
+                                <i class="fas fa-user"></i> Profile
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/auth/logout">
+                                <i class="fas fa-sign-out-alt"></i> Logout
+                            </a>
+                        </li>
                     </ul>
                 </nav>
             </aside>
 
             <main class="dashboard-content">
-                <h1>My Appointments</h1>
-                
+<section class="page-welcome-section">
+    <h1>
+        <i class="fas fa-calendar-check"></i>
+        My Appointments
+    </h1>
+    <p>View and manage your appointment history.</p>
+</section>
                 <div class="appointments-filters">
-                    <select id="status-filter" class="form-control" style="max-width: 200px;">
-                        <option value="all">All Appointments</option>
-                        <option value="scheduled">Scheduled</option>
-                        <option value="completed">Completed</option>
-                        <option value="cancelled">Cancelled</option>
-                    </select>
-                </div>
+    <div class="custom-status-filter" id="customStatusFilter">
 
-                <div class="appointments-list">
-                    <% if (appointments.length > 0) { %>
-                        <% appointments.forEach(appointment => { %>
-                            <div class="card appointment-card" data-status="<%= appointment.status %>">
+        <button
+            type="button"
+            class="custom-status-trigger"
+            id="statusFilterTrigger"
+            aria-expanded="false"
+        >
+            <span id="statusFilterText">All Appointments</span>
+            <i class="fas fa-chevron-down"></i>
+        </button>
+
+        <div class="custom-status-menu" id="statusFilterMenu">
+
+            <button
+                type="button"
+                class="custom-status-option active"
+                data-value="all"
+            >
+                All Appointments
+            </button>
+
+            <button
+                type="button"
+                class="custom-status-option"
+                data-value="scheduled"
+            >
+                Scheduled
+            </button>
+
+            <button
+                type="button"
+                class="custom-status-option"
+                data-value="completed"
+            >
+                Completed
+            </button>
+
+            <button
+                type="button"
+                class="custom-status-option"
+                data-value="cancelled"
+            >
+                Cancelled
+            </button>
+
+        </div>
+
+        <!-- Keep this because your existing pagination/filter JS uses #status-filter -->
+        <select id="status-filter" hidden>
+            <option value="all">All Appointments</option>
+            <option value="scheduled">Scheduled</option>
+            <option value="completed">Completed</option>
+            <option value="cancelled">Cancelled</option>
+        </select>
+
+    </div>
+</div>
+
+                <% if (appointments && appointments.length > 0) { %>
+                    <div class="appointments-grid" id="doctorAppointmentsGrid">
+                        <% appointments.forEach(function (appointment, index) { %>
+                            <div class="appointment-card" data-idx="<%= index %>" data-status="<%= appointment.status %>" data-appointment-id="<%= appointment.id %>">
                                 <div class="appointment-header">
                                     <div>
                                         <h3><%= appointment.patient_name %></h3>
-                                        <p class="patient-contact">Phone: <%= appointment.patient_phone %></p>
+                                        <p class="patient-contact">
+                                            <i class="fas fa-phone"></i>
+                                            <%= appointment.patient_phone || 'N/A' %>
+                                        </p>
                                     </div>
                                     <div class="appointment-status status-<%= appointment.status %>">
                                         <%= appointment.status %>
                                     </div>
                                 </div>
-                                
+
                                 <div class="appointment-details">
-                                    <p><strong>Date & Time:</strong> <%= new Date(appointment.appointment_date).toLocaleString() %></p>
-                                    <p><strong>Symptoms:</strong> <%= appointment.symptoms %></p>
+                                    <p><strong>Date:</strong> <%= new Date(appointment.appointment_date).toLocaleString() %></p>
+                                    <p><strong>Symptoms:</strong> <%= appointment.symptoms || 'N/A' %></p>
                                     <% if (appointment.preliminary_diagnosis) { %>
-                                        <p><strong>Preliminary Diagnosis:</strong> <%= appointment.preliminary_diagnosis %></p>
+                                        <p><strong>Diagnosis:</strong> <%= appointment.preliminary_diagnosis %></p>
                                     <% } %>
                                 </div>
-                                
-                                <div class="appointment-actions">
-                                    <% if (appointment.status === 'scheduled' || appointment.status === 'rescheduled' ) { %>
-                                        <button class="btn btn-outline" data-id="<%= appointment.id %>" onclick="completeAppointment(this.dataset.id)">Mark Complete</button>
-                                    <% } %>
-                                   
-                                </div>
+
+                                <% if (appointment.status === 'scheduled' || appointment.status === 'rescheduled') { %>
+    <button
+        type="button"
+        class="complete-btn"
+        data-id="<%= appointment.id %>"
+    >
+        <i class="fas fa-check"></i>
+        <span>Mark Complete</span>
+    </button>
+<% } %>
                             </div>
                         <% }); %>
-                    <% } else { %>
-                        <div class="card" style="text-align: center; padding: 60px 40px;">
-                            <h3>No Appointments</h3>
-                            <p>You don't have any appointments scheduled yet.</p>
-                        </div>
-                    <% } %>
-                </div>
+                    </div>
+
+                    <!-- APPOINTMENT PAGINATION -->
+<div class="appointments-pagination" id="doctorAppointmentPagination">
+    <button
+        type="button"
+        id="prevPage"
+        class="pagination-btn"
+        disabled
+    >
+        <i class="fas fa-chevron-left"></i>
+        Previous
+    </button>
+
+    <span id="pageInfo" class="pagination-info">
+        Page 1 of 1
+    </span>
+
+    <button
+        type="button"
+        id="nextPage"
+        class="pagination-btn"
+    >
+        Next
+        <i class="fas fa-chevron-right"></i>
+    </button>
+</div>
+                <% } else { %>
+                    <div class="card" style="text-align:center; padding: 48px 24px;">
+                        <i class="fas fa-calendar-times" style="font-size:2.4rem; color: var(--primary-color); opacity: 0.5; display:block; margin-bottom:14px;"></i>
+                        <h3 style="color: var(--text-lighter); margin-bottom: 8px;">No Appointments</h3>
+                        <p style="color: var(--text-dark);">You don't have any appointments scheduled yet.</p>
+                    </div>
+                <% } %>
             </main>
         </div>
     </div>
 
+    <%- include('../main/footer') %>
+
+    <script src="/navbar/navbar.js"></script>
     <script>
-        function viewAppointment(appointmentId) {
-            // In real app, open appointment details modal
-            alert('Appointment details would open for ID: ' + appointmentId);
+document.addEventListener('DOMContentLoaded', function () {
+
+    const grid = document.getElementById('doctorAppointmentsGrid');
+
+    if (!grid) {
+        return;
+    }
+
+    const cards = Array.from(
+        grid.querySelectorAll('.appointment-card')
+    );
+
+    const filter = document.getElementById('status-filter');
+
+    const prevBtn =
+        document.getElementById('doctorApptPrev');
+
+    const nextBtn =
+        document.getElementById('doctorApptNext');
+
+    const pageInfo =
+        document.getElementById('doctorApptPageInfo');
+
+    const pagination =
+        document.getElementById(
+            'doctorAppointmentPagination'
+        );
+
+    /* =========================================================
+       SETTINGS
+       ========================================================= */
+
+    const ITEMS_PER_PAGE = 8;
+
+    let currentPage = 1;
+
+    let filteredCards = [...cards];
+
+
+    /* =========================================================
+       NORMALIZE STATUS
+       ========================================================= */
+
+    function normalizeStatus(status) {
+
+        return String(status || '')
+            .trim()
+            .toLowerCase();
+
+    }
+
+
+    /* =========================================================
+       GET FILTERED APPOINTMENTS
+       ========================================================= */
+
+    function getFilteredCards() {
+
+        const selectedStatus = filter
+            ? normalizeStatus(filter.value)
+            : 'all';
+
+        if (selectedStatus === 'all') {
+            return [...cards];
         }
 
-        async function completeAppointment(appointmentId) {
-                const confirmed = confirm("Mark this appointment as completed?");
-                if (!confirmed) return;
+        return cards.filter(function (card) {
 
-                try {
-                    const response = await fetch(`/doctor/appointments/${appointmentId}/complete`, {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json"
-                        }
-                    });
+            const cardStatus =
+                normalizeStatus(card.dataset.status);
 
-                    const data = await response.json();
-
-                    if (!data.success) {
-                      alert("Failed to complete appointment.");
-                     return;
-                    }       
-
-                    alert("Appointment marked as completed!");
-
-                    // Update UI without reloading
-                    const card = document.querySelector(`button[data-id='${appointmentId}']`).closest(".appointment-card");
-
-                    // Update the status badge
-                    const statusBadge = card.querySelector(".appointment-status");
-                    statusBadge.innerText = "completed";
-                    statusBadge.classList.remove("status-scheduled");
-                    statusBadge.classList.add("status-completed");
-
-                    // Remove old buttons and keep only "View Details"
-                    const actions = card.querySelector(".appointment-actions");
-                    actions.innerHTML = "";
-                    // <button class="btn btn-outline" data-id="${appointmentId}" onclick="viewAppointment(this.dataset.id)">
-                    //     View Details
-                    // </button>
-                    // `;
-
-                    // Update dataset for filtering
-                    card.dataset.status = "completed";
-
-                } catch (err) {
-                    console.error(err);
-                    alert("Server error occurred.");
-                }           
+            /*
+             * Rescheduled appointments belong
+             * under Scheduled.
+             */
+            if (
+                selectedStatus === 'scheduled' &&
+                (
+                    cardStatus === 'scheduled' ||
+                    cardStatus === 'rescheduled'
+                )
+            ) {
+                return true;
             }
 
-        // Filter appointments by status
-        document.getElementById('status-filter').addEventListener('change', function() {
-            const status = this.value;
-            const appointments = document.querySelectorAll('.appointment-card');
-            
-            appointments.forEach(appointment => {
-                if (status === 'all' || appointment.dataset.status === status) {
-                    appointment.style.display = 'block';
-                } else {
-                    appointment.style.display = 'none';
+            return cardStatus === selectedStatus;
+
+        });
+    }
+
+
+    /* =========================================================
+       RENDER APPOINTMENTS
+       ========================================================= */
+
+    function renderAppointments() {
+
+        filteredCards = getFilteredCards();
+
+        const totalItems =
+            filteredCards.length;
+
+        const totalPages =
+            Math.max(
+                1,
+                Math.ceil(
+                    totalItems / ITEMS_PER_PAGE
+                )
+            );
+
+        /*
+         * Keep page valid after filtering.
+         */
+        if (currentPage > totalPages) {
+            currentPage = totalPages;
+        }
+
+        if (currentPage < 1) {
+            currentPage = 1;
+        }
+
+
+        /* -----------------------------------------------------
+           IMPORTANT FIX
+
+           CSS contains:
+
+           display: flex !important;
+
+           Therefore normal:
+
+           card.style.display = 'none'
+
+           DOES NOT WORK.
+
+           We use setProperty(..., 'important').
+           ----------------------------------------------------- */
+
+        cards.forEach(function (card) {
+
+            card.style.setProperty(
+                'display',
+                'none',
+                'important'
+            );
+
+        });
+
+
+        /* -----------------------------------------------------
+           Current page
+           ----------------------------------------------------- */
+
+        const startIndex =
+            (currentPage - 1) *
+            ITEMS_PER_PAGE;
+
+        const endIndex =
+            startIndex +
+            ITEMS_PER_PAGE;
+
+        const visibleCards =
+            filteredCards.slice(
+                startIndex,
+                endIndex
+            );
+
+
+        visibleCards.forEach(function (card) {
+
+            card.style.setProperty(
+                'display',
+                'flex',
+                'important'
+            );
+
+        });
+
+
+        /* -----------------------------------------------------
+           PAGE INFORMATION
+           ----------------------------------------------------- */
+
+        if (pageInfo) {
+
+            pageInfo.textContent =
+                'Page ' +
+                currentPage +
+                ' of ' +
+                totalPages;
+
+        }
+
+
+        /* -----------------------------------------------------
+           PREVIOUS
+           ----------------------------------------------------- */
+
+        if (prevBtn) {
+
+            prevBtn.disabled =
+                currentPage <= 1;
+
+        }
+
+
+        /* -----------------------------------------------------
+           NEXT
+           ----------------------------------------------------- */
+
+        if (nextBtn) {
+
+            nextBtn.disabled =
+                currentPage >= totalPages;
+
+        }
+
+
+        /*
+         * Keep pagination visible even when there
+         * is only one page.
+
+         * This means with 5 appointments you will
+         * still see:
+         *
+         * Previous | Page 1 of 1 | Next
+         *
+         * with buttons disabled appropriately.
+         */
+        if (pagination) {
+
+            pagination.style.display = 'flex';
+
+        }
+
+
+        /*
+         * Empty filtered result.
+         */
+        let emptyMessage =
+            document.getElementById(
+                'doctorFilteredEmpty'
+            );
+
+        if (filteredCards.length === 0) {
+
+            grid.style.display = 'none';
+
+            if (!emptyMessage) {
+
+                emptyMessage =
+                    document.createElement('div');
+
+                emptyMessage.id =
+                    'doctorFilteredEmpty';
+
+                emptyMessage.className =
+                    'doctor-filtered-empty';
+
+                emptyMessage.innerHTML =
+                    '<i class="fas fa-calendar-times"></i>' +
+                    '<h3>No appointments found</h3>' +
+                    '<p>No appointments match the selected status.</p>';
+
+                grid.parentNode.insertBefore(
+                    emptyMessage,
+                    pagination
+                );
+
+            }
+
+            emptyMessage.style.display = 'block';
+
+            if (pagination) {
+                pagination.style.display = 'none';
+            }
+
+        } else {
+
+            grid.style.display = 'grid';
+
+            if (emptyMessage) {
+                emptyMessage.style.display = 'none';
+            }
+
+        }
+
+    }
+
+
+    /* =========================================================
+       FILTER CHANGE
+       ========================================================= */
+
+    if (filter) {
+
+        filter.addEventListener(
+            'change',
+            function () {
+
+                currentPage = 1;
+
+                renderAppointments();
+
+            }
+        );
+
+    }
+
+
+    /* =========================================================
+       PREVIOUS PAGE
+       ========================================================= */
+
+    if (prevBtn) {
+
+        prevBtn.addEventListener(
+            'click',
+            function () {
+
+                if (currentPage <= 1) {
+                    return;
                 }
+
+                currentPage--;
+
+                renderAppointments();
+
+                grid.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+
+            }
+        );
+
+    }
+
+
+    /* =========================================================
+       NEXT PAGE
+       ========================================================= */
+
+    if (nextBtn) {
+
+        nextBtn.addEventListener(
+            'click',
+            function () {
+
+                const totalPages =
+                    Math.max(
+                        1,
+                        Math.ceil(
+                            filteredCards.length /
+                            ITEMS_PER_PAGE
+                        )
+                    );
+
+                if (currentPage >= totalPages) {
+                    return;
+                }
+
+                currentPage++;
+
+                renderAppointments();
+
+                grid.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+
+            }
+        );
+
+    }
+
+
+    /* =========================================================
+       MARK APPOINTMENT COMPLETE
+       ========================================================= */
+
+    grid.querySelectorAll(
+        '.complete-btn'
+    ).forEach(function (btn) {
+
+        btn.addEventListener(
+            'click',
+            async function () {
+
+                if (
+                    !confirm(
+                        'Mark this appointment as completed?'
+                    )
+                ) {
+                    return;
+                }
+
+                const button = this;
+
+                const id =
+                    button.dataset.id;
+
+                const originalHTML =
+                    button.innerHTML;
+
+                button.disabled = true;
+
+                button.innerHTML =
+                    '<i class="fas fa-spinner fa-spin"></i> Saving...';
+
+
+                try {
+
+                    const response =
+                        await fetch(
+                            '/doctor/appointments/' +
+                            id +
+                            '/complete',
+                            {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type':
+                                        'application/json'
+                                }
+                            }
+                        );
+
+
+                    const json =
+                        await response.json();
+
+
+                    if (!response.ok || !json.success) {
+
+                        throw new Error(
+                            json.error ||
+                            'Failed to update appointment'
+                        );
+
+                    }
+
+
+                    const card =
+                        button.closest(
+                            '.appointment-card'
+                        );
+
+
+                    if (card) {
+
+                        card.dataset.status =
+                            'completed';
+
+
+                        const badge =
+                            card.querySelector(
+                                '.appointment-status'
+                            );
+
+
+                        if (badge) {
+
+                            badge.className =
+                                'appointment-status status-completed';
+
+                            badge.textContent =
+                                'completed';
+
+                        }
+
+
+                        button.remove();
+
+                    }
+
+
+                    /*
+                     * Re-render current filter
+                     * and pagination.
+                     */
+                    renderAppointments();
+
+
+                } catch (error) {
+
+                    console.error(
+                        'Complete appointment error:',
+                        error
+                    );
+
+                    alert(
+                        error.message ||
+                        'Server error'
+                    );
+
+                    button.disabled = false;
+
+                    button.innerHTML =
+                        originalHTML;
+
+                }
+
+            }
+        );
+
+    });
+
+
+    /* =========================================================
+       INITIAL RENDER
+       ========================================================= */
+
+    renderAppointments();
+
+});
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+    const filterWrapper =
+        document.getElementById('customStatusFilter');
+
+    const trigger =
+        document.getElementById('statusFilterTrigger');
+
+    const menu =
+        document.getElementById('statusFilterMenu');
+
+    const text =
+        document.getElementById('statusFilterText');
+
+    const nativeSelect =
+        document.getElementById('status-filter');
+
+    if (!filterWrapper || !trigger || !menu || !nativeSelect) {
+        return;
+    }
+
+    trigger.addEventListener('click', function (event) {
+        event.stopPropagation();
+
+        const isOpen =
+            filterWrapper.classList.toggle('open');
+
+        trigger.setAttribute(
+            'aria-expanded',
+            isOpen ? 'true' : 'false'
+        );
+    });
+
+
+    menu.querySelectorAll('.custom-status-option')
+        .forEach(function (option) {
+
+            option.addEventListener('click', function () {
+
+                const value =
+                    this.dataset.value;
+
+                const label =
+                    this.textContent.trim();
+
+                /* Update visible text */
+                text.textContent = label;
+
+                /* Update hidden native select */
+                nativeSelect.value = value;
+
+                /* Trigger existing filtering code */
+                nativeSelect.dispatchEvent(
+                    new Event('change', {
+                        bubbles: true
+                    })
+                );
+
+                /* Update active option */
+                menu.querySelectorAll(
+                    '.custom-status-option'
+                ).forEach(function (item) {
+                    item.classList.remove('active');
+                });
+
+                this.classList.add('active');
+
+                /* Close */
+                filterWrapper.classList.remove('open');
+
+                trigger.setAttribute(
+                    'aria-expanded',
+                    'false'
+                );
             });
         });
-    </script>
+
+
+    /* Close when clicking outside */
+
+    document.addEventListener('click', function (event) {
+
+        if (!filterWrapper.contains(event.target)) {
+
+            filterWrapper.classList.remove('open');
+
+            trigger.setAttribute(
+                'aria-expanded',
+                'false'
+            );
+        }
+    });
+
+});
+</script>
+
 </body>
 </html>

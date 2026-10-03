@@ -1,25 +1,38 @@
+/* ==========================================================================
+   MediDiag — homepage/launchpage.css
+   Crystal Mint light-green theme. Structure, animations and layout
+   preserved; only colors, surfaces, borders, shadows and gradients were
+   re-mapped to the new premium healthcare aesthetic.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   Root tokens (mirrors main.css — kept local so this file works standalone)
+   -------------------------------------------------------------------------- */
+
 :root {
-  --bg-dark: #0f0f23;
-  --bg-darker: #0a0a1a;
-  --bg-light: #1a1a2e;
-  --bg-lighter: #25253d;
-  --primary-color: #6366f1;
-  --primary-dark: #4f46e5;
-  --secondary-color: #8b5cf6;
-  --accent-color: #06b6d4;
-  --medical-blue: #3b82f6;
-  --medical-green: #10b981;
-  --medical-teal: #14b8a6;
-  --text-light: #e2e8f0;
-  --text-lighter: #f8fafc;
-  --text-dark: #94a3b8;
-  --white: #ffffff;
-  --gradient-primary: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-  --gradient-medical: linear-gradient(135deg, var(--medical-blue) 0%, var(--medical-teal) 100%);
-  --gradient-dark: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);
-  --shadow-glow: 0 0 20px rgba(99, 102, 241, 0.3);
-  --shadow-strong: 0 0 40px rgba(99, 102, 241, 0.5);
-  --shadow-medical: 0 0 30px rgba(59, 130, 246, 0.4);
+  --bg-dark:        #F6FFFB;
+  --bg-darker:      #F0FDF8;
+  --bg-light:       #ECFDF5;
+  --bg-lighter:     #FFFFFF;
+  --primary-color:  #10B981;
+  --primary-dark:   #059669;
+  --secondary-color:#34D399;
+  --accent-color:   #6EE7B7;
+  --medical-blue:   #10B981;
+  --medical-green:  #10B981;
+  --medical-teal:   #059669;
+  --text-light:     #1F2937;
+  --text-lighter:   #064E3B;
+  --text-dark:      #374151;
+  --text-muted:     #6B7280;
+  --white:          #FFFFFF;
+  --gradient-primary: linear-gradient(135deg, #10B981 0%, #34D399 100%);
+  --gradient-medical: linear-gradient(135deg, #059669 0%, #10B981 55%, #6EE7B7 100%);
+  --gradient-mint:    linear-gradient(135deg, #ECFDF5 0%, #F0FDF8 100%);
+  --gradient-dark:    linear-gradient(135deg, #ECFDF5 0%, #D1FAE5 100%);
+  --shadow-glow:     0 0 22px rgba(16, 185, 129, 0.22);
+  --shadow-strong:   0 18px 44px rgba(5, 150, 105, 0.22);
+  --shadow-medical:  0 10px 26px rgba(16, 185, 129, 0.18);
 }
 
 * {
@@ -36,7 +49,10 @@ body {
   overflow-x: hidden;
 }
 
-/* Medical Background Elements */
+/* --------------------------------------------------------------------------
+   Medical background elements
+   -------------------------------------------------------------------------- */
+
 .medical-background {
   position: fixed;
   top: 0;
@@ -45,39 +61,44 @@ body {
   height: 100%;
   pointer-events: none;
   z-index: 0;
-  opacity: 0.1;
+  opacity: 0.06;
 }
 
 .medical-icon {
   position: absolute;
   font-size: 2rem;
-  opacity: 0.1;
+  opacity: 0.10;
   animation: floatMedical 8s ease-in-out infinite;
 }
 
-.medical-icon.heart { top: 10%; left: 5%; animation-delay: 0s; }
+.medical-icon.heart       { top: 10%; left: 5%;  animation-delay: 0s; }
 .medical-icon.stethoscope { top: 20%; right: 10%; animation-delay: 1s; }
-.medical-icon.pill { bottom: 30%; left: 15%; animation-delay: 2s; }
-.medical-icon.hospital { bottom: 20%; right: 5%; animation-delay: 3s; }
+.medical-icon.pill        { bottom: 30%; left: 15%; animation-delay: 2s; }
+.medical-icon.hospital    { bottom: 20%; right: 5%; animation-delay: 3s; }
 
 @keyframes floatMedical {
   0%, 100% { transform: translateY(0px) rotate(0deg); }
-  50% { transform: translateY(-20px) rotate(5deg); }
+  50%      { transform: translateY(-20px) rotate(5deg); }
 }
 
-/* Pulse Animation for Medical Elements */
 @keyframes pulseMedical {
-  0% { transform: scale(1); opacity: 0.1; }
-  50% { transform: scale(1.1); opacity: 0.15; }
-  100% { transform: scale(1); opacity: 0.1; }
+  0%   { transform: scale(1);    opacity: 0.10; }
+  50%  { transform: scale(1.1);  opacity: 0.15; }
+  100% { transform: scale(1);    opacity: 0.10; }
 }
 
-/* Hero Section with Medical Theme */
+/* --------------------------------------------------------------------------
+   Hero section
+   -------------------------------------------------------------------------- */
+
 .hero-section {
-  background: 
-    linear-gradient(135deg, var(--bg-darker) 0%, var(--bg-light) 50%, var(--bg-darker) 100%),
-    url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%233b82f6' fill-opacity='0.1' fill-rule='evenodd'/%3E%3C/svg%3E");
+  background:
+    radial-gradient(circle at 15% 20%, rgba(167, 243, 208, 0.55) 0%, transparent 45%),
+    radial-gradient(circle at 85% 15%, rgba(110, 231, 183, 0.40) 0%, transparent 50%),
+    radial-gradient(circle at 50% 100%, rgba(236, 253, 245, 0.90) 0%, transparent 60%),
+    linear-gradient(135deg, #F0FDF8 0%, #ECFDF5 50%, #F6FFFB 100%);
   min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -94,10 +115,10 @@ body {
   left: 0;
   right: 0;
   bottom: 0;
-  background: 
-    radial-gradient(circle at 20% 80%, rgba(59, 130, 246, 0.15) 0%, transparent 50%),
-    radial-gradient(circle at 80% 20%, rgba(16, 185, 129, 0.1) 0%, transparent 50%),
-    radial-gradient(circle at 40% 40%, rgba(20, 184, 166, 0.08) 0%, transparent 50%);
+  background:
+    radial-gradient(circle at 20% 80%, rgba(52, 211, 153, 0.14) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(16, 185, 129, 0.10) 0%, transparent 50%),
+    radial-gradient(circle at 40% 40%, rgba(110, 231, 183, 0.10) 0%, transparent 50%);
   animation: backgroundShift 8s ease-in-out infinite;
   z-index: 1;
 }
@@ -113,8 +134,9 @@ body {
 .hero-content h1 {
   font-size: 3.5rem;
   font-weight: 800;
-  margin-bottom: 1.5rem;
-  background: linear-gradient(135deg, var(--text-lighter) 0%, var(--medical-teal) 100%);
+  margin-bottom: 4rem;
+  margin-top: 2rem;
+  background: linear-gradient(135deg, #064E3B 0%, #059669 45%, #34D399 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -124,7 +146,7 @@ body {
 .hero-subtitle {
   font-size: 1.25rem;
   margin-bottom: 2rem;
-  color: var(--text-light);
+  color: var(--text-dark);
   opacity: 0;
   animation: fadeIn 1s ease-out 0.8s both;
 }
@@ -147,7 +169,7 @@ body {
   display: block;
   font-size: 2rem;
   font-weight: 700;
-  color: var(--medical-teal);
+  color: var(--primary-dark);
   margin-bottom: 5px;
 }
 
@@ -166,6 +188,10 @@ body {
   animation: fadeIn 1s ease-out 1.2s both;
 }
 
+/* --------------------------------------------------------------------------
+   Buttons
+   -------------------------------------------------------------------------- */
+
 .btn {
   padding: 15px 32px;
   border-radius: 12px;
@@ -178,34 +204,44 @@ body {
   border: 2px solid transparent;
   cursor: pointer;
   z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
 }
 
 .btn-primary {
   background: var(--gradient-medical);
-  color: var(--text-lighter);
+  color: #FFFFFF;
   box-shadow: var(--shadow-medical);
 }
 
 .btn-primary:hover {
   transform: translateY(-3px);
-  box-shadow: 0 0 50px rgba(59, 130, 246, 0.6);
+  background: linear-gradient(135deg, #047857 0%, #059669 55%, #34D399 100%);
+  box-shadow: 0 12px 32px rgba(5, 150, 105, 0.35);
   animation: pulse 2s infinite;
 }
 
 .btn-secondary {
-  background: transparent;
-  color: var(--text-light);
-  border: 2px solid var(--medical-blue);
+  background: rgba(255, 255, 255, 0.85);
+  color: var(--primary-dark);
+  border: 2px solid var(--primary-color);
+  backdrop-filter: blur(8px);
 }
 
 .btn-secondary:hover {
-  background: var(--medical-blue);
-  color: var(--text-lighter);
+  background: var(--gradient-medical);
+  color: #FFFFFF;
   transform: translateY(-3px);
   box-shadow: var(--shadow-medical);
+  border-color: transparent;
 }
 
-/* Portal Cards Section */
+/* --------------------------------------------------------------------------
+   Portal highlight section
+   -------------------------------------------------------------------------- */
+
 .portal-highlight {
   padding: 120px 0;
   background: var(--bg-darker);
@@ -219,7 +255,7 @@ body {
   left: 0;
   right: 0;
   height: 1px;
-  background: linear-gradient(90deg, transparent, var(--medical-blue), transparent);
+  background: linear-gradient(90deg, transparent, var(--primary-color), transparent);
 }
 
 .section-title {
@@ -233,7 +269,7 @@ body {
   font-size: 2.8rem;
   color: var(--text-lighter);
   margin-bottom: 20px;
-  background: linear-gradient(135deg, var(--text-lighter) 0%, var(--medical-teal) 100%);
+  background: linear-gradient(135deg, #064E3B 0%, #059669 55%, #34D399 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -255,15 +291,18 @@ body {
 }
 
 .portal-card {
-  background: var(--bg-lighter);
+  background: rgba(255, 255, 255, 0.78);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
   border-radius: 20px;
   padding: 40px 30px;
   text-align: center;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  border: 1px solid rgba(59, 130, 246, 0.1);
+  border: 1px solid rgba(167, 243, 208, 0.55);
   position: relative;
   overflow: hidden;
   cursor: pointer;
+  box-shadow: var(--shadow-medical);
 }
 
 .portal-card::before {
@@ -273,14 +312,14 @@ body {
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.1), transparent);
+  background: linear-gradient(90deg, transparent, rgba(16, 185, 129, 0.12), transparent);
   transition: left 0.6s ease;
 }
 
 .portal-card:hover {
   transform: translateY(-10px);
-  box-shadow: var(--shadow-medical);
-  border-color: rgba(59, 130, 246, 0.3);
+  box-shadow: var(--shadow-strong);
+  border-color: var(--primary-color);
 }
 
 .portal-card:hover::before {
@@ -297,15 +336,16 @@ body {
   align-items: center;
   justify-content: center;
   font-size: 2.5rem;
-  color: var(--text-lighter);
+  color: #FFFFFF;
   transition: all 0.4s ease;
   position: relative;
   z-index: 2;
+  box-shadow: var(--shadow-medical);
 }
 
 .portal-card:hover .portal-icon {
   transform: scale(1.1) rotate(5deg);
-  box-shadow: var(--shadow-medical);
+  box-shadow: var(--shadow-strong);
 }
 
 .portal-card h3 {
@@ -323,7 +363,10 @@ body {
   z-index: 2;
 }
 
-/* Feature Highlight Section */
+/* --------------------------------------------------------------------------
+   Feature highlight section
+   -------------------------------------------------------------------------- */
+
 .feature-highlight {
   padding: 120px 0;
   background: var(--bg-light);
@@ -341,12 +384,15 @@ body {
 .feature-item {
   text-align: center;
   padding: 50px 30px;
-  background: var(--bg-lighter);
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   border-radius: 20px;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  border: 1px solid rgba(59, 130, 246, 0.1);
+  border: 1px solid rgba(167, 243, 208, 0.55);
   position: relative;
   overflow: hidden;
+  box-shadow: var(--shadow-medical);
 }
 
 .feature-item::before {
@@ -356,14 +402,14 @@ body {
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.1), transparent);
+  background: linear-gradient(90deg, transparent, rgba(16, 185, 129, 0.10), transparent);
   transition: left 0.6s ease;
 }
 
 .feature-item:hover {
   transform: translateY(-10px);
-  box-shadow: var(--shadow-medical);
-  border-color: rgba(59, 130, 246, 0.3);
+  box-shadow: var(--shadow-strong);
+  border-color: var(--primary-color);
 }
 
 .feature-item:hover::before {
@@ -380,15 +426,16 @@ body {
   align-items: center;
   justify-content: center;
   font-size: 2.5rem;
-  color: var(--text-lighter);
+  color: #FFFFFF;
   transition: all 0.4s ease;
   position: relative;
   z-index: 2;
+  box-shadow: var(--shadow-medical);
 }
 
 .feature-item:hover .feature-icon {
   transform: scale(1.1) rotate(5deg);
-  box-shadow: var(--shadow-medical);
+  box-shadow: var(--shadow-strong);
 }
 
 .feature-item h3 {
@@ -405,9 +452,12 @@ body {
   z-index: 2;
 }
 
-/* CTA Section */
+/* --------------------------------------------------------------------------
+   CTA section
+   -------------------------------------------------------------------------- */
+
 .cta-section {
-  background: linear-gradient(135deg, var(--bg-light) 0%, var(--bg-darker) 100%);
+  background: linear-gradient(135deg, #ECFDF5 0%, #F0FDF8 60%, #FFFFFF 100%);
   color: var(--text-lighter);
   padding: 120px 0;
   text-align: center;
@@ -422,7 +472,7 @@ body {
   left: -50%;
   width: 200%;
   height: 200%;
-  background: radial-gradient(circle at center, rgba(59, 130, 246, 0.1) 0%, transparent 70%);
+  background: radial-gradient(circle at center, rgba(16, 185, 129, 0.10) 0%, transparent 70%);
   animation: pulse 4s ease-in-out infinite;
 }
 
@@ -436,7 +486,7 @@ body {
 .cta-content h2 {
   font-size: 3rem;
   margin-bottom: 20px;
-  background: linear-gradient(135deg, var(--text-lighter) 0%, var(--medical-teal) 100%);
+  background: linear-gradient(135deg, #064E3B 0%, #059669 55%, #34D399 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -445,64 +495,123 @@ body {
 .cta-content p {
   font-size: 1.25rem;
   margin-bottom: 40px;
-  color: var(--text-light);
+  color: var(--text-dark);
   max-width: 600px;
   margin-left: auto;
   margin-right: auto;
 }
 
-/* Animations */
+.cta-buttons {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.cta-buttons .btn {
+  padding: 16px 32px;
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+
+/* ==========================================================================
+   Professional homepage expansion
+   ========================================================================== */
+.eyebrow{
+  display:inline-block;
+  margin-bottom:12px;
+  font-size:.72rem;
+  font-weight:800;
+  letter-spacing:.16em;
+  color:#059669;
+}
+.care-promise{padding:26px 0;background:#fff;border-bottom:1px solid rgba(16,185,129,.12)}
+.care-promise-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.care-promise-item{display:flex;align-items:center;gap:14px;padding:20px;border:1px solid rgba(167,243,208,.55);border-radius:16px;background:#f8fffc;box-shadow:var(--shadow-medical)}
+.care-promise-icon{flex:0 0 46px;width:46px;height:46px;border-radius:14px;display:grid;place-items:center;background:var(--gradient-medical);color:#fff}
+.care-promise-item strong{display:block;color:#064e3b;font-size:1rem;margin-bottom:3px}
+.care-promise-item p{margin:0;color:var(--text-dark);font-size:.82rem;line-height:1.45}
+.journey-section,.trust-section,.testimonial-section,.home-faq-section{padding:100px 0;background:var(--bg-darker)}
+.specialties-section{padding:100px 0;background:var(--bg-light)}
+.experience-section{padding:100px 0;background:linear-gradient(135deg,#ecfdf5,#f7fffb)}
+.journey-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:22px}
+.journey-card{position:relative;padding:34px 24px 28px;background:rgba(255,255,255,.88);border:1px solid rgba(167,243,208,.55);border-radius:20px;box-shadow:var(--shadow-medical);overflow:hidden}
+.journey-card i{display:grid;place-items:center;width:58px;height:58px;margin:8px 0 20px;border-radius:16px;background:#ecfdf5;color:#059669;font-size:1.5rem}
+.journey-number{position:absolute;top:16px;right:18px;font-weight:900;font-size:1.5rem;color:rgba(5,150,105,.12)}
+.journey-card h3{font-size:1.05rem;color:#064e3b;margin-bottom:10px}
+.journey-card p{font-size:.88rem;line-height:1.6;color:var(--text-dark);margin:0}
+.medical-disclaimer{max-width:850px;margin:28px auto 0;text-align:center;font-size:.78rem;line-height:1.6;color:#55746b}
+.medical-disclaimer i{color:#059669;margin-right:5px}
+.specialty-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.specialty-card{display:grid;grid-template-columns:48px 1fr;grid-template-rows:auto auto;column-gap:14px;align-items:center;padding:22px;background:#fff;border:1px solid rgba(167,243,208,.6);border-radius:16px;box-shadow:var(--shadow-medical);transition:.3s ease}
+.specialty-card:hover{transform:translateY(-5px);border-color:#34d399;box-shadow:var(--shadow-strong)}
+.specialty-card i{grid-row:1/3;display:grid;place-items:center;width:48px;height:48px;border-radius:14px;background:#ecfdf5;color:#059669;font-size:1.25rem}
+.specialty-card span{font-weight:800;color:#064e3b}
+.specialty-card small{color:#6b827a;font-size:.76rem;margin-top:3px}
+.experience-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px}
+.experience-panel{padding:42px;background:#fff;border:1px solid rgba(167,243,208,.65);border-radius:24px;box-shadow:var(--shadow-medical)}
+.experience-panel.doctor-panel{background:#064e3b;color:#fff;border-color:#064e3b}
+.experience-panel h2{font-size:clamp(1.55rem,1rem + 1.2vw,2.1rem);line-height:1.15;color:#064e3b;margin:8px 0 14px}
+.doctor-panel h2,.doctor-panel p,.doctor-panel li{color:#fff}
+.experience-panel>p{color:var(--text-dark);line-height:1.6;max-width:600px}
+.experience-panel ul{list-style:none;margin:24px 0;padding:0;display:grid;gap:12px}
+.experience-panel li{font-size:.9rem;color:#355c50}
+.experience-panel li i{color:#10b981;margin-right:8px}
+.text-link{font-weight:800;color:#059669;text-decoration:none}
+.doctor-panel .text-link{color:#a7f3d0}
+.trust-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
+.trust-card{text-align:center;padding:34px 24px;background:#fff;border:1px solid rgba(167,243,208,.55);border-radius:20px;box-shadow:var(--shadow-medical)}
+.trust-card>i{display:grid;place-items:center;width:56px;height:56px;margin:0 auto 18px;border-radius:16px;background:#ecfdf5;color:#059669;font-size:1.35rem}
+.trust-card h3{color:#064e3b;font-size:1.05rem;margin-bottom:9px}
+.trust-card p{color:var(--text-dark);font-size:.86rem;line-height:1.6;margin:0}
+.testimonial-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
+.testimonial-card{margin:0;padding:30px;background:#fff;border:1px solid rgba(167,243,208,.55);border-radius:20px;box-shadow:var(--shadow-medical)}
+.testimonial-card>i{color:#34d399;font-size:1.4rem}
+.testimonial-card p{color:#355c50;line-height:1.7;font-size:.9rem;margin:16px 0}
+.testimonial-card footer{font-size:.75rem;font-weight:800;color:#059669}
+.home-faq-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;max-width:980px;margin:0 auto}
+.home-faq{background:#fff;border:1px solid rgba(167,243,208,.55);border-radius:14px;padding:18px 20px;box-shadow:var(--shadow-medical)}
+.home-faq summary{cursor:pointer;color:#064e3b;font-weight:800;font-size:.92rem}
+.home-faq p{color:var(--text-dark);font-size:.84rem;line-height:1.6;margin:12px 0 2px}
+
+/* --------------------------------------------------------------------------
+   Animations (preserved)
+   -------------------------------------------------------------------------- */
+
 @keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(50px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(50px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes slideInFromTop {
-  from {
-    opacity: 0;
-    transform: translateY(-50px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(-50px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes fadeIn {
   from { opacity: 0; }
-  to { opacity: 1; }
+  to   { opacity: 1; }
 }
 
 @keyframes backgroundShift {
-  0%, 100% {
-    opacity: 1;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 0.8;
-    transform: scale(1.02);
-  }
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%      { opacity: 0.8; transform: scale(1.02); }
 }
 
 @keyframes pulse {
-  0% {
-    box-shadow: var(--shadow-medical);
-  }
-  50% {
-    box-shadow: 0 0 50px rgba(59, 130, 246, 0.6);
-  }
-  100% {
-    box-shadow: var(--shadow-medical);
-  }
+  0%   { box-shadow: var(--shadow-medical); }
+  50%  { box-shadow: 0 0 50px rgba(16, 185, 129, 0.35); }
+  100% { box-shadow: var(--shadow-medical); }
 }
 
-/* Scroll Animations */
+@keyframes pulseIcon {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.1); }
+}
+
 .animate-on-scroll {
   opacity: 0;
   transform: translateY(50px);
@@ -514,307 +623,2568 @@ body {
   transform: translateY(0);
 }
 
-/* Responsive Design */
+/* --------------------------------------------------------------------------
+   Responsive
+   -------------------------------------------------------------------------- */
+
 @media (max-width: 768px) {
-  .hero-content h1 {
-    font-size: 2.5rem;
-  }
-  
-  .hero-subtitle {
-    font-size: 1.125rem;
-  }
-  
-  .section-title h2 {
-    font-size: 2rem;
-  }
-  
-  .portal-grid,
-  .feature-grid {
-    grid-template-columns: 1fr;
-    gap: 30px;
-  }
-  
-  .cta-content h2 {
-    font-size: 2.2rem;
-  }
-  
-  .btn {
-    padding: 12px 24px;
-    font-size: 0.9rem;
-  }
-  
-  .hero-stats {
-    gap: 20px;
-  }
-  
-  .stat-number {
-    font-size: 1.5rem;
-  }
+  .hero-content h1 { font-size: 2.5rem; }
+  .hero-subtitle { font-size: 1.125rem; }
+  .section-title h2 { font-size: 2rem; }
+  .portal-grid, .feature-grid { grid-template-columns: 1fr; gap: 30px; }
+  .cta-content h2 { font-size: 2.2rem; }
+  .btn { padding: 12px 24px; font-size: 0.9rem; }
+  .hero-stats { gap: 20px; }
+  .stat-number { font-size: 1.5rem; }
+  .process-steps { grid-template-columns: 1fr; gap: 30px; }
+  .process-step { padding: 30px 20px; }
+  .cta-buttons { flex-direction: column; align-items: center; }
+  .cta-buttons .btn { width: 100%; max-width: 300px; justify-content: center; }
+  .portal-image { height: 160px; margin: -40px -24px 24px -24px; }
+  .image-placeholder { width: 100px; height: 100px; font-size: 2.5rem; }
 }
 
 @media (max-width: 480px) {
-  .hero-content h1 {
-    font-size: 2rem;
-  }
-  
-  .hero-buttons {
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  .btn {
-    width: 200px;
-  }
+  .hero-content h1 { font-size: 2rem; }
+  .hero-buttons { flex-direction: column; align-items: center; }
+  .btn { width: 200px; }
+  .portal-image { height: 140px; }
+  .image-placeholder { width: 80px; height: 80px; font-size: 2rem; }
+  .portal-features li { font-size: 0.9rem; }
 }
 
-/* Add these styles to your existing launchpage.css */
+.hero-stats { flex-wrap: wrap; }
 
-/* Portal Images */
+@media (max-width: 360px) {
+  .hero-content h1 { font-size: 1.7rem; }
+  .hero-subtitle { font-size: 1rem; }
+  .hero-stats { gap: 14px; }
+  .stat-number { font-size: 1.3rem; }
+  .stat-label { font-size: 0.8rem; }
+  .btn { width: 100%; max-width: 260px; }
+  .section-title h2 { font-size: 1.7rem; }
+  .portal-card, .feature-item { padding: 30px 20px; }
+  .portal-icon, .feature-icon { width: 80px; height: 80px; font-size: 2rem; }
+}
+
+@media (max-width: 320px) {
+  .hero-content { padding: 0 14px; }
+  .hero-content h1 { font-size: 1.5rem; }
+  .section-title h2 { font-size: 1.5rem; }
+  .cta-content h2 { font-size: 1.7rem; }
+}
+
+/* --------------------------------------------------------------------------
+   Portal images (preserved, retuned)
+   -------------------------------------------------------------------------- */
+
 .portal-image {
-    height: 200px;
-    background: var(--bg-dark);
-    border-radius: 16px 16px 0 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: -40px -30px 30px -30px;
-    position: relative;
-    overflow: hidden;
+  height: 200px;
+  background: linear-gradient(135deg, #ECFDF5 0%, #D1FAE5 100%);
+  border-radius: 16px 16px 0 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: -40px -30px 30px -30px;
+  position: relative;
+  overflow: hidden;
 }
 
 .portal-image::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: var(--gradient-medical);
-    opacity: 0.1;
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--gradient-medical);
+  opacity: 0.08;
 }
 
 .image-placeholder {
-    width: 120px;
-    height: 120px;
-    background: rgba(59, 130, 246, 0.2);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 3rem;
-    color: var(--medical-blue);
-    border: 4px solid rgba(59, 130, 246, 0.3);
+  width: 120px;
+  height: 120px;
+  background: rgba(16, 185, 129, 0.12);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3rem;
+  color: var(--primary-dark);
+  border: 4px solid rgba(16, 185, 129, 0.25);
 }
 
 .patient-image .image-placeholder {
-    background: rgba(16, 185, 129, 0.2);
-    border-color: rgba(16, 185, 129, 0.3);
-    color: var(--medical-green);
+  background: rgba(16, 185, 129, 0.15);
+  border-color: rgba(16, 185, 129, 0.30);
+  color: var(--primary-dark);
 }
 
 .doctor-image .image-placeholder {
-    background: rgba(59, 130, 246, 0.2);
-    border-color: rgba(59, 130, 246, 0.3);
-    color: var(--medical-blue);
+  background: rgba(5, 150, 105, 0.15);
+  border-color: rgba(5, 150, 105, 0.30);
+  color: var(--primary-dark);
 }
 
-.portal-content {
-    padding: 0 20px 30px 20px;
-}
+.portal-content { padding: 0 20px 30px 20px; }
 
-.portal-features {
-    list-style: none;
-    margin: 20px 0;
-    padding: 0;
-}
+.portal-features { list-style: none; margin: 20px 0; padding: 0; }
 
 .portal-features li {
-    padding: 8px 0;
-    color: var(--text-light);
-    display: flex;
-    align-items: center;
-    gap: 10px;
+  padding: 8px 0;
+  color: var(--text-dark);
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
-.portal-features li i {
-    color: var(--medical-teal);
-    width: 20px;
-}
+.portal-features li i { color: var(--primary-dark); width: 20px; }
 
 .portal-btn {
-    width: 100%;
-    margin-top: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
+  width: 100%;
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
 }
 
-/* Process Section */
+/* --------------------------------------------------------------------------
+   Process section (preserved, retuned)
+   -------------------------------------------------------------------------- */
+
 .process-section {
-    padding: 100px 0;
+  padding: 100px 0;
+  background: var(--bg-darker);
+  position: relative;
+}
+
+.process-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--primary-color), transparent);
+}
+
+.process-steps {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 40px;
+  margin-top: 60px;
+}
+
+.process-step {
+  text-align: center;
+  padding: 40px 20px;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 20px;
+  border: 1px solid rgba(167, 243, 208, 0.55);
+  transition: all 0.4s ease;
+  position: relative;
+  box-shadow: var(--shadow-medical);
+}
+
+.process-step:hover {
+  transform: translateY(-10px);
+  box-shadow: var(--shadow-strong);
+  border-color: var(--primary-color);
+}
+
+.step-number {
+  position: absolute;
+  top: -15px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40px;
+  height: 40px;
+  background: var(--gradient-medical);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #FFFFFF;
+  font-weight: 700;
+  font-size: 1.2rem;
+  box-shadow: var(--shadow-medical);
+}
+
+.step-icon {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 20px;
+  background: var(--bg-darker);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  color: var(--primary-dark);
+  border: 2px solid rgba(16, 185, 129, 0.20);
+}
+
+.process-step h3 {
+  font-size: 1.3rem;
+  color: var(--text-lighter);
+  margin-bottom: 15px;
+}
+
+.process-step p {
+  color: var(--text-dark);
+  font-size: 0.95rem;
+}
+
+.feature-icon i,
+.step-icon i {
+  animation: pulseIcon 3s ease-in-out infinite;
+}
+
+.feature-item:hover .feature-icon i,
+.process-step:hover .step-icon i {
+  animation: pulseIcon 1s ease-in-out infinite;
+}
+
+/* ==========================================================================
+   MediDiag — hero 3D layer (Lumen-inspired, Crystal Mint)
+   The canvas sits INSIDE .hero-section, between the ::before mint
+   gradient (z=0) and the .hero-content (z=2). It scrolls with the hero.
+   ========================================================================== */
+
+.hero-section {
+  position: relative;
+  isolation: isolate;     /* keeps z-indexes local to the hero */
+}
+
+#hero-3d-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  pointer-events: none;   /* hero buttons and links remain clickable */
+  z-index: 1;             /* above ::before gradient, below hero content */
+  opacity: 1;
+  transition: opacity 0.4s linear;
+  will-change: opacity;
+}
+
+/* The existing hero gradient overlay sits below the canvas. */
+.hero-section::before {
+  z-index: 0;
+}
+
+/* Hero content is the priority layer. */
+.hero-section > .hero-content {
+  position: relative;
+  z-index: 2;
+}
+
+/* The floating medical icons should sit behind the 3D canvas. */
+.medical-background {
+  z-index: -1;
+}
+
+/* Reduced motion — no 3D, hero stays as it was. */
+@media (prefers-reduced-motion: reduce) {
+  #hero-3d-canvas { display: none; }
+}
+
+/* On very small screens keep the effect but soften it further. */
+@media (max-width: 480px) {
+  #hero-3d-canvas { opacity: 0.94; }
+}
+
+/* ==========================================================================
+   MediDiag — launch page responsive hardening
+   Targets the launch homepage only. Covers 320px through 480px and
+   fine-tunes the 481–768 range. Does not touch other pages.
+   ========================================================================== */
+
+/* ---------- Tablet range (481px – 768px) ---------- */
+
+@media (max-width: 768px) and (min-width: 481px) {
+  body.launch-home .hero-section {
+    min-height: 92vh;
+    padding: 20px 0;
+  }
+
+  body.launch-home .portal-highlight,
+  body.launch-home .feature-highlight,
+  body.launch-home .process-section,
+  body.launch-home .cta-section {
+    padding: 64px 0;
+  }
+
+  body.launch-home .portal-grid,
+  body.launch-home .feature-grid {
+    grid-template-columns: 1fr;
+    gap: 22px;
+  }
+
+  body.launch-home .process-steps {
+    grid-template-columns: 1fr 1fr;
+    gap: 22px;
+  }
+}
+
+/* ---------- Phone range (320px – 480px) ---------- */
+
+@media (max-width: 480px) {
+  /* Hero */
+
+  body.launch-home .hero-section {
+    min-height: 92vh;
+    min-height: 92dvh;
+    padding: 88px 16px 40px;   /* leaves room for the fixed navbar */
+  }
+
+  body.launch-home .hero-content {
+    padding: 0 4px;
+    max-width: 100%;
+  }
+
+  body.launch-home .hero-content h1 {
+    font-size: 2rem;
+    line-height: 1.12;
+    margin-bottom: 2rem;
+  }
+
+  body.launch-home .hero-subtitle {
+    font-size: 1rem;
+    line-height: 1.5;
+    margin-bottom: 1.5rem;
+  }
+
+  body.launch-home .hero-stats {
+    gap: 14px;
+    margin: 24px 0;
+  }
+
+  body.launch-home .stat-number {
+    font-size: 1.4rem;
+  }
+
+  body.launch-home .stat-label {
+    font-size: 0.78rem;
+  }
+
+  body.launch-home .hero-buttons {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+    margin-top: 24px;
+  }
+
+  body.launch-home .hero-buttons .btn {
+    width: 100%;
+    max-width: 100%;
+    justify-content: center;
+  }
+
+  /* Section titles */
+
+  body.launch-home .section-title {
+    margin-bottom: 40px;
+  }
+
+  body.launch-home .section-title h2 {
+    font-size: 1.75rem;
+    line-height: 1.15;
+  }
+
+  body.launch-home .section-title p {
+    font-size: 0.95rem;
+    padding: 0 6px;
+  }
+
+  /* Portal section */
+
+  body.launch-home .portal-highlight {
+    padding: 56px 0;
+  }
+
+  body.launch-home .portal-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+    padding: 0 4px;
+  }
+
+  body.launch-home .portal-card {
+    padding: 28px 18px;
+    border-radius: 16px;
+  }
+
+  body.launch-home .portal-image {
+    height: 128px;
+    margin: -28px -18px 20px -18px;
+    border-radius: 16px 16px 0 0;
+  }
+
+  body.launch-home .image-placeholder {
+    width: 72px;
+    height: 72px;
+    font-size: 1.8rem;
+    border-width: 3px;
+  }
+
+  body.launch-home .portal-card h3 {
+    font-size: 1.2rem;
+  }
+
+  body.launch-home .portal-card p {
+    font-size: 0.92rem;
+    line-height: 1.5;
+  }
+
+  body.launch-home .portal-btn {
+    padding: 12px 18px;
+    font-size: 0.92rem;
+  }
+
+  /* Feature section */
+
+  body.launch-home .feature-highlight {
+    padding: 56px 0;
+  }
+
+  body.launch-home .feature-grid {
+    grid-template-columns: 1fr;
+    gap: 18px;
+    padding: 0 4px;
+  }
+
+  body.launch-home .feature-item {
+    padding: 32px 18px;
+    border-radius: 16px;
+  }
+
+  body.launch-home .feature-icon {
+    width: 72px;
+    height: 72px;
+    font-size: 1.8rem;
+    margin-bottom: 18px;
+  }
+
+  body.launch-home .feature-item h3 {
+    font-size: 1.2rem;
+  }
+
+  body.launch-home .feature-item p {
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+
+  /* Process section */
+
+  body.launch-home .process-section {
+    padding: 56px 0;
+  }
+
+  body.launch-home .process-steps {
+    grid-template-columns: 1fr;
+    gap: 18px;
+    margin-top: 40px;
+    padding: 0 4px;
+  }
+
+  body.launch-home .process-step {
+    padding: 30px 18px;
+    border-radius: 16px;
+  }
+
+  body.launch-home .step-icon {
+    width: 64px;
+    height: 64px;
+    font-size: 1.6rem;
+  }
+
+  body.launch-home .step-number {
+    width: 34px;
+    height: 34px;
+    font-size: 1rem;
+    top: -12px;
+  }
+
+  body.launch-home .process-step h3 {
+    font-size: 1.15rem;
+  }
+
+  body.launch-home .process-step p {
+    font-size: 0.88rem;
+    line-height: 1.5;
+  }
+
+  /* CTA */
+
+  body.launch-home .cta-section {
+    padding: 56px 0;
+  }
+
+  body.launch-home .cta-content {
+    padding: 0 8px;
+  }
+
+  body.launch-home .cta-content h2 {
+    font-size: 1.7rem;
+    line-height: 1.15;
+  }
+
+  body.launch-home .cta-content p {
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+
+  body.launch-home .cta-buttons {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+    margin-top: 22px;
+  }
+
+  body.launch-home .cta-buttons .btn {
+    width: 100%;
+    max-width: 100%;
+    justify-content: center;
+    padding: 14px 20px;
+    font-size: 0.95rem;
+  }
+
+  /* Prevent horizontal overflow from any inner element */
+  body.launch-home {
+    overflow-x: hidden;
+  }
+
+  body.launch-home main,
+  body.launch-home section,
+  body.launch-home .container {
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+}
+
+/* ---------- Very narrow phones (320px – 360px) ---------- */
+
+@media (max-width: 360px) {
+  body.launch-home .hero-section {
+    padding: 78px 12px 32px;
+  }
+
+  body.launch-home .hero-content h1 {
+    font-size: 1.7rem;
+  }
+
+  body.launch-home .hero-subtitle {
+    font-size: 0.92rem;
+  }
+
+  body.launch-home .stat-number {
+    font-size: 1.25rem;
+  }
+
+  body.launch-home .section-title h2 {
+    font-size: 1.5rem;
+  }
+
+  body.launch-home .portal-card,
+  body.launch-home .feature-item,
+  body.launch-home .process-step {
+    padding: 24px 14px;
+  }
+
+  body.launch-home .cta-content h2 {
+    font-size: 1.45rem;
+  }
+
+  body.launch-home .btn {
+    font-size: 0.88rem;
+    padding: 12px 16px;
+  }
+}
+
+/* ---------- 320px only ---------- */
+
+@media (max-width: 320px) {
+  body.launch-home .hero-section {
+    padding: 72px 10px 28px;
+  }
+
+  body.launch-home .hero-content h1 {
+    font-size: 1.5rem;
+  }
+
+  body.launch-home .section-title h2 {
+    font-size: 1.35rem;
+  }
+
+  body.launch-home .portal-card h3,
+  body.launch-home .feature-item h3,
+  body.launch-home .process-step h3 {
+    font-size: 1.05rem;
+  }
+
+  body.launch-home .cta-content h2 {
+    font-size: 1.3rem;
+  }
+}
+
+/* ---------- Ensure the 3D canvas really fills the hero on small screens ---------- */
+
+@media (max-width: 768px) {
+  body.launch-home .hero-section {
+    position: relative;
+    isolation: isolate;
+  }
+
+  body.launch-home #hero-3d-canvas {
+    position: absolute;
+    inset: 0;
+    width: 100% !important;
+    height: 100% !important;
+    display: block;
+  }
+}
+
+
+
+/* Guarantee page-level vertical scrolling */
+html, body { overflow-y: auto; }
+body.launch-home { overflow-x: hidden; }
+
+/* Do NOT set overflow-x: hidden on <section> — it can break continuous scroll
+   in some mobile engines when combined with min-height. Use max-width only. */
+body.launch-home main,
+body.launch-home section,
+body.launch-home .container {
+  max-width: 100%;
+}
+
+/* v2 — ensure the canvas doesn't create a stacking context issue */
+#hero-3d-canvas { will-change: opacity; }
+
+
+
+
+/* Cap oversized headings on very large desktops */
+@media (min-width: 1600px) {
+  .hero-content h1 { font-size: 3.75rem; }
+  .section-title h2 { font-size: 2.75rem; }
+  .cta-content h2 { font-size: 2.75rem; }
+}
+
+
+/* ==========================================================================
+   Typography overhaul — professional sizing on desktop
+   ========================================================================== */
+
+.hero-content h1 {
+  font-size: clamp(1.9rem, 1rem + 3.2vw, 3rem);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.hero-subtitle {
+  font-size: clamp(0.95rem, 0.85rem + 0.6vw, 1.15rem);
+  line-height: 1.5;
+  max-width: 620px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.section-title h2 {
+  font-size: clamp(1.5rem, 1rem + 1.6vw, 2.25rem);
+  line-height: 1.15;
+  letter-spacing: -0.015em;
+}
+
+.section-title p {
+  font-size: clamp(0.92rem, 0.85rem + 0.4vw, 1.05rem);
+  line-height: 1.5;
+}
+
+.cta-content h2 {
+  font-size: clamp(1.5rem, 1rem + 1.8vw, 2.4rem);
+  line-height: 1.15;
+  letter-spacing: -0.015em;
+}
+
+.cta-content p {
+  font-size: clamp(0.9rem, 0.85rem + 0.4vw, 1.05rem);
+  line-height: 1.5;
+}
+
+/* Portal cards — smaller and better proportioned */
+.portal-highlight { padding: 72px 0; }
+
+.portal-grid {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+  gap: 22px;
+  max-width: 880px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.portal-card {
+  padding: 26px 22px;
+  border-radius: 16px;
+}
+
+.portal-image {
+  height: 140px;
+  margin: -26px -22px 20px -22px;
+  border-radius: 16px 16px 0 0;
+}
+.image-placeholder {
+  width: 80px;
+  height: 80px;
+  font-size: 2rem;
+  border-width: 3px;
+}
+
+.portal-content { padding: 0 6px 20px 6px; }
+.portal-card h3 { font-size: 1.1rem; margin-bottom: 10px; }
+.portal-card p  { font-size: 0.9rem; margin-bottom: 16px; line-height: 1.5; }
+
+.portal-btn {
+  padding: 10px 18px;
+  font-size: 0.9rem;
+  margin-top: 12px;
+}
+
+/* Feature cards */
+.feature-highlight { padding: 72px 0; }
+
+.feature-grid {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+  gap: 20px;
+}
+
+.feature-item { padding: 26px 20px; border-radius: 16px; }
+.feature-icon {
+  width: 66px;
+  height: 66px;
+  font-size: 1.6rem;
+  margin-bottom: 16px;
+}
+.feature-item h3 { font-size: 1.05rem; margin-bottom: 10px; }
+.feature-item p  { font-size: 0.88rem; line-height: 1.5; }
+
+/* Process steps */
+.process-section { padding: 72px 0; }
+.process-steps {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
+  gap: 18px;
+  margin-top: 40px;
+}
+.process-step { padding: 26px 18px; border-radius: 16px; }
+.step-icon {
+  width: 60px; height: 60px;
+  font-size: 1.4rem;
+  margin-bottom: 14px;
+}
+.step-number { width: 32px; height: 32px; font-size: 0.95rem; top: -12px; }
+.process-step h3 { font-size: 1rem; margin-bottom: 10px; }
+.process-step p  { font-size: 0.85rem; line-height: 1.5; }
+
+/* CTA buttons */
+.cta-section { padding: 72px 0; }
+.cta-buttons .btn { padding: 12px 22px; font-size: 0.95rem; }
+
+.hero-buttons .btn { padding: 12px 22px; font-size: 0.95rem; }
+
+/* Hero stats */
+.stat-number { font-size: clamp(1.3rem, 1rem + 0.9vw, 1.75rem); }
+.stat-label  { font-size: 0.82rem; }
+
+/* Desktop caps so nothing runs away */
+@media (min-width: 1600px) {
+  .hero-content h1 { font-size: 3.1rem; }
+  .section-title h2 { font-size: 2.3rem; }
+  .cta-content h2 { font-size: 2.5rem; }
+}
+
+/* Mobile refinements */
+@media (max-width: 640px) {
+  .portal-highlight,
+  .feature-highlight,
+  .process-section,
+  .cta-section { padding: 56px 0; }
+
+  .portal-grid { grid-template-columns: 1fr; gap: 16px; }
+  .feature-grid,
+  .process-steps { grid-template-columns: 1fr; gap: 14px; }
+
+  .portal-image { height: 120px; }
+  .image-placeholder { width: 68px; height: 68px; font-size: 1.7rem; }
+  .portal-card h3 { font-size: 1.08rem; }
+  .portal-card p  { font-size: 0.88rem; }
+
+  .cta-buttons .btn,
+  .hero-buttons .btn {
+    width: 100%;
+    max-width: 300px;
+  }
+}
+/* ==========================================================================
+   Responsive grid parity — preserve the desktop information architecture
+   on phones; cards scale down instead of collapsing to one column.
+   ========================================================================== */
+@media (max-width: 768px){
+  .care-promise-grid,.experience-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .journey-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .specialty-grid,.trust-grid,.testimonial-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .home-faq-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .care-promise-item{padding:14px 12px;gap:9px}
+  .care-promise-icon{width:38px;height:38px;flex-basis:38px;font-size:.85rem}
+  .care-promise-item strong{font-size:.78rem}
+  .care-promise-item p{font-size:.66rem}
+  .journey-card{padding:26px 15px 22px}
+  .journey-card i{width:46px;height:46px;font-size:1.15rem}
+  .journey-card h3{font-size:.86rem}
+  .journey-card p{font-size:.72rem}
+  .specialty-card{grid-template-columns:36px 1fr;padding:14px;column-gap:9px}
+  .specialty-card i{width:36px;height:36px;font-size:.9rem}
+  .specialty-card span{font-size:.78rem}
+  .specialty-card small{font-size:.62rem}
+  .experience-panel{padding:26px 18px}
+  .experience-panel h2{font-size:1.15rem}
+  .experience-panel p,.experience-panel li{font-size:.72rem}
+  .trust-card,.testimonial-card{padding:22px 12px}
+  .trust-card h3{font-size:.82rem}
+  .trust-card p,.testimonial-card p{font-size:.68rem}
+  .testimonial-card footer{font-size:.62rem}
+  .home-faq{padding:14px}
+  .home-faq summary{font-size:.72rem}
+  .home-faq p{font-size:.66rem}
+}
+@media (max-width: 480px){
+  .portal-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+  .feature-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+  .process-steps{grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+  .portal-card{padding:18px 10px}
+  .portal-image{height:100px;margin:-18px -10px 15px}
+  .image-placeholder{width:54px;height:54px;font-size:1.35rem}
+  .portal-card h3{font-size:.8rem}
+  .portal-card p{font-size:.64rem;line-height:1.4}
+  .portal-btn{font-size:.64rem;padding:8px 7px}
+  .feature-item{padding:18px 8px}
+  .feature-icon{width:44px;height:44px;font-size:1.1rem;margin-bottom:10px}
+  .feature-item h3{font-size:.68rem}
+  .feature-item p{font-size:.56rem;line-height:1.45}
+  .process-step{padding:22px 7px}
+  .step-icon{width:42px;height:42px;font-size:1rem}
+  .process-step h3{font-size:.62rem}
+  .process-step p{font-size:.5rem;line-height:1.4}
+  .step-number{width:26px;height:26px;font-size:.72rem;top:-10px}
+  .care-promise-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}
+  .care-promise-item{display:block;text-align:center;padding:12px 5px}
+  .care-promise-icon{margin:0 auto 7px}
+  .care-promise-item strong{font-size:.62rem}
+  .care-promise-item p{font-size:.52rem}
+  .journey-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .specialty-grid,.trust-grid,.testimonial-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}
+  .specialty-card{display:block;text-align:center;padding:10px 5px}
+  .specialty-card i{margin:0 auto 7px}
+  .specialty-card span{display:block;font-size:.6rem}
+  .specialty-card small{font-size:.48rem}
+  .experience-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+  .experience-panel{padding:18px 9px;border-radius:15px}
+  .experience-panel h2{font-size:.82rem}
+  .experience-panel>p,.experience-panel li{font-size:.55rem}
+  .experience-panel ul{gap:7px}
+  .text-link{font-size:.56rem}
+  .trust-card,.testimonial-card{padding:14px 5px}
+  .trust-card>i{width:36px;height:36px;font-size:.85rem;margin-bottom:8px}
+  .trust-card h3{font-size:.6rem}
+  .trust-card p,.testimonial-card p{font-size:.5rem}
+  .testimonial-card>i{font-size:.8rem}
+  .testimonial-card footer{font-size:.48rem}
+  .home-faq-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}
+  .home-faq{padding:10px 7px}
+  .home-faq summary{font-size:.56rem}
+  .home-faq p{font-size:.52rem}
+}
+@media (max-width: 360px){
+  .portal-card p,.feature-item p,.process-step p{font-size:.46rem}
+  .portal-card h3,.feature-item h3,.process-step h3{font-size:.56rem}
+  .specialty-card span,.trust-card h3{font-size:.52rem}
+  .specialty-card small,.trust-card p,.testimonial-card p{font-size:.42rem}
+  .experience-panel h2{font-size:.7rem}
+  .experience-panel>p,.experience-panel li,.text-link{font-size:.46rem}
+}
+
+
+/* ==========================================================================
+   PROFESSIONAL MEDICAL HOMEPAGE EXTENSIONS
+   Reuses the visual language established by About + Features pages.
+   ========================================================================== */
+
+.why-medidiag-section,
+.services-section,
+.ai-spotlight-section {
+    padding: 90px 0;
     background: var(--bg-darker);
     position: relative;
 }
 
-.process-section::before {
+.why-medidiag-section::before,
+.services-section::before,
+.ai-spotlight-section::before {
     content: '';
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
     height: 1px;
-    background: linear-gradient(90deg, transparent, var(--medical-blue), transparent);
+    background: linear-gradient(90deg, transparent, var(--primary-color), transparent);
 }
 
-.process-steps {
+.why-grid,
+.services-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 40px;
-    margin-top: 60px;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 30px;
 }
 
-.process-step {
+.why-card,
+.service-card {
+    background: rgba(255,255,255,.82);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    padding: 35px 28px;
+    border-radius: 18px;
+    box-shadow: var(--shadow-medical);
     text-align: center;
-    padding: 40px 20px;
-    background: var(--bg-lighter);
-    border-radius: 20px;
-    border: 1px solid rgba(59, 130, 246, 0.1);
-    transition: all 0.4s ease;
+    border: 1px solid rgba(167,243,208,.55);
+    transition: all .4s cubic-bezier(.4,0,.2,1);
     position: relative;
+    overflow: hidden;
 }
 
-.process-step:hover {
-    transform: translateY(-10px);
-    box-shadow: var(--shadow-medical);
-    border-color: rgba(59, 130, 246, 0.3);
-}
-
-.step-number {
+.why-card::before,
+.service-card::before {
+    content: '';
     position: absolute;
-    top: -15px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 40px;
-    height: 40px;
-    background: var(--gradient-medical);
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(16,185,129,.10), transparent);
+    transition: left .6s ease;
+}
+
+.why-card:hover::before,
+.service-card:hover::before { left: 100%; }
+
+.why-card:hover,
+.service-card:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--shadow-strong);
+    border-color: var(--primary-color);
+}
+
+.why-icon {
+    width: 68px;
+    height: 68px;
+    margin: 0 auto 20px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--text-lighter);
-    font-weight: 700;
-    font-size: 1.2rem;
+    background: var(--gradient-medical);
+    color: #fff;
+    font-size: 1.55rem;
     box-shadow: var(--shadow-medical);
 }
 
-.step-icon {
-    width: 80px;
-    height: 80px;
-    margin: 0 auto 20px;
-    background: var(--bg-dark);
+.why-card h3,
+.service-card h3 {
+    color: var(--text-lighter);
+    font-size: 1.15rem;
+    margin-bottom: 12px;
+}
+
+.why-card p,
+.service-card p {
+    color: var(--text-dark);
+    font-size: .84rem;
+    line-height: 1.65;
+    margin-bottom: 18px;
+}
+
+.service-card {
+    text-align: left;
+}
+
+.service-card > i {
+    width: 58px;
+    height: 58px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 2rem;
-    color: var(--medical-teal);
-    border: 2px solid rgba(59, 130, 246, 0.2);
-}
-
-.process-step h3 {
+    margin-bottom: 20px;
+    background: var(--gradient-medical);
+    color: #fff;
     font-size: 1.3rem;
-    color: var(--text-lighter);
-    margin-bottom: 15px;
+    box-shadow: var(--shadow-medical);
 }
 
-.process-step p {
-    color: var(--text-dark);
-    font-size: 0.95rem;
+.ai-spotlight {
+    display: grid;
+    grid-template-columns: 90px minmax(0,1fr);
+    gap: 30px;
+    align-items: start;
+    background: rgba(255,255,255,.82);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(167,243,208,.55);
+    border-radius: 18px;
+    box-shadow: var(--shadow-medical);
+    padding: 45px;
 }
 
-/* CTA Buttons */
-.cta-buttons {
-    display: flex;
-    gap: 20px;
-    justify-content: center;
-    flex-wrap: wrap;
-}
-
-.cta-buttons .btn {
-    padding: 16px 32px;
-    font-size: 1.1rem;
+.ai-spotlight-icon {
+    width: 82px;
+    height: 82px;
+    border-radius: 22px;
     display: flex;
     align-items: center;
-    gap: 10px;
+    justify-content: center;
+    background: var(--gradient-medical);
+    color: #fff;
+    font-size: 2rem;
+    box-shadow: var(--shadow-medical);
 }
 
-/* Enhanced Animations */
-@keyframes pulseIcon {
-    0%, 100% {
-        transform: scale(1);
-    }
-    50% {
-        transform: scale(1.1);
-    }
+.ai-spotlight-content .eyebrow {
+    color: var(--primary-dark);
+    font-size: .72rem;
+    font-weight: 800;
+    letter-spacing: .16em;
 }
 
-.feature-icon i,
-.step-icon i {
-    animation: pulseIcon 3s ease-in-out infinite;
+.ai-spotlight h2 {
+    color: var(--text-lighter);
+    font-size: 2rem;
+    line-height: 1.25;
+    margin: 10px 0 14px;
 }
 
-.feature-item:hover .feature-icon i,
-.process-step:hover .step-icon i {
-    animation: pulseIcon 1s ease-in-out infinite;
+.ai-spotlight-content > p {
+    color: var(--text-dark);
+    line-height: 1.7;
+    max-width: 850px;
+    margin-bottom: 20px;
 }
 
-/* Responsive Design for New Elements */
+.ai-points {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0,1fr));
+    gap: 12px;
+    margin-bottom: 25px;
+}
+
+.ai-points span {
+    color: var(--text-dark);
+    font-size: .78rem;
+    line-height: 1.4;
+}
+
+.ai-points i {
+    color: var(--primary-dark);
+    margin-right: 5px;
+}
+
 @media (max-width: 768px) {
-    .portal-image {
-        height: 160px;
-        margin: -40px -24px 24px -24px;
+    .why-medidiag-section,
+    .services-section,
+    .ai-spotlight-section { padding: 60px 20px; }
+
+    .why-grid,
+    .services-grid {
+        grid-template-columns: repeat(2, minmax(0,1fr));
+        gap: 18px;
     }
-    
-    .image-placeholder {
-        width: 100px;
-        height: 100px;
-        font-size: 2.5rem;
+
+    .why-card,
+    .service-card {
+        padding: 28px 18px;
+        border-radius: 16px;
     }
-    
-    .process-steps {
-        grid-template-columns: 1fr;
-        gap: 30px;
+
+    .ai-spotlight {
+        grid-template-columns: 70px minmax(0,1fr);
+        gap: 20px;
+        padding: 30px 24px;
     }
-    
-    .process-step {
-        padding: 30px 20px;
+
+    .ai-spotlight-icon {
+        width: 64px;
+        height: 64px;
+        font-size: 1.5rem;
     }
-    
-    .cta-buttons {
-        flex-direction: column;
-        align-items: center;
-    }
-    
-    .cta-buttons .btn {
-        width: 100%;
-        max-width: 300px;
-        justify-content: center;
-    }
+
+    .ai-spotlight h2 { font-size: 1.45rem; }
+    .ai-points { grid-template-columns: repeat(2, minmax(0,1fr)); }
 }
 
 @media (max-width: 480px) {
-    .portal-image {
-        height: 140px;
+    .why-medidiag-section,
+    .services-section,
+    .ai-spotlight-section { padding: 45px 15px; }
+
+    .why-grid,
+    .services-grid {
+        grid-template-columns: repeat(2, minmax(0,1fr));
+        gap: 10px;
+    }
+
+    .why-card,
+    .service-card {
+        padding: 20px 9px;
+        border-radius: 14px;
+    }
+
+    .why-icon,
+    .service-card > i {
+        width: 50px;
+        height: 50px;
+        font-size: 1.15rem;
+        margin-bottom: 13px;
+    }
+
+    .why-card h3,
+    .service-card h3 { font-size: .76rem; }
+
+    .why-card p,
+    .service-card p {
+        font-size: .58rem;
+        line-height: 1.5;
+    }
+
+    .service-card .text-link { font-size: .6rem; }
+
+    .ai-spotlight {
+        grid-template-columns: 1fr;
+        gap: 15px;
+        padding: 24px 16px;
+        border-radius: 14px;
+    }
+
+    .ai-spotlight-icon {
+        width: 52px;
+        height: 52px;
+        border-radius: 15px;
+    }
+
+    .ai-spotlight h2 { font-size: 1.05rem; }
+
+    .ai-spotlight-content > p {
+        font-size: .68rem;
+        line-height: 1.55;
+    }
+
+    .ai-points {
+        grid-template-columns: repeat(2, minmax(0,1fr));
+        gap: 8px;
+    }
+
+    .ai-points span { font-size: .58rem; }
+}
+
+/* ========================================================================== 
+   FINAL HOMEPAGE RESPONSIVE OVERRIDES
+   The homepage uses the same grid philosophy as About / Features.
+   IMPORTANT: mobile keeps two columns instead of collapsing portal cards.
+   ========================================================================== */
+
+body.launch-home .portal-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 24px;
+}
+
+body.launch-home .portal-card {
+    min-width: 0;
+}
+
+body.launch-home .feature-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+}
+
+body.launch-home .why-grid,
+body.launch-home .services-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+body.launch-home .process-steps {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+body.launch-home .specialty-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+body.launch-home .ai-spotlight {
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+/* Tablet */
+@media (max-width: 768px) {
+    body.launch-home .portal-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 18px;
+    }
+
+    body.launch-home .feature-grid,
+    body.launch-home .why-grid,
+    body.launch-home .services-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 16px;
+    }
+
+    body.launch-home .process-steps {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 16px;
+    }
+
+    body.launch-home .specialty-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+        gap: 12px;
     }
     
+
+    body.launch-home .portal-image {
+        height: 125px;
+    }
+
+    body.launch-home .portal-content {
+        padding: 18px 16px 22px;
+    }
+
+    body.launch-home .portal-card h3 {
+        font-size: 1.0rem;
+    }
+
+    body.launch-home .portal-card p {
+        font-size: .78rem;
+        line-height: 1.5;
+    }
+
+    body.launch-home .portal-btn {
+        width: 100%;
+        font-size: .76rem;
+        padding: 10px 8px;
+    }
+}
+
+/* Mobile: NEVER collapse the patient/doctor portal into one column */
+@media (max-width: 480px) {
+    body.launch-home .portal-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 10px !important;
+    }
+
+    body.launch-home .portal-card {
+        border-radius: 14px;
+        overflow: hidden;
+    }
+
+    body.launch-home .portal-image {
+        height: 88px !important;
+        margin: 0 !important;
+    }
+
+    body.launch-home .portal-image .image-placeholder {
+        transform: scale(.78);
+    }
+
+    body.launch-home .portal-content {
+        padding: 16px 9px 18px !important;
+        text-align: center;
+    }
+
+    body.launch-home .portal-card h3 {
+        font-size: 1rem !important;
+        margin-bottom: 12px;
+    }
+
+    body.launch-home .portal-card p {
+        font-size: .61rem !important;
+        line-height: 1.45;
+        margin-bottom: 12px;
+    }
+
+    body.launch-home .portal-btn {
+        min-height: 34px;
+        padding: 8px 5px !important;
+        border-radius: 9px;
+        font-size: .59rem !important;
+        line-height: 1.1;
+        white-space: nowrap;
+    }
+
+    body.launch-home .portal-btn i {
+        margin-right: 2px;
+    }
+
+    body.launch-home .feature-grid,
+    body.launch-home .why-grid,
+    body.launch-home .services-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 10px !important;
+    }
+
+    body.launch-home .process-steps {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 10px !important;
+    }
+
+    body.launch-home .specialty-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+        gap: 7px !important;
+    }
+
+    body.launch-home .why-card,
+    body.launch-home .service-card,
+    body.launch-home .process-step {
+        padding: 18px 9px;
+        border-radius: 14px;
+    }
+
+    body.launch-home .why-card h3,
+    body.launch-home .service-card h3,
+    body.launch-home .process-step h3 {
+        font-size: .72rem;
+    }
+
+    body.launch-home .why-card p,
+    body.launch-home .service-card p,
+    body.launch-home .process-step p {
+        font-size: .57rem;
+        line-height: 1.45;
+    }
+
+    body.launch-home .specialty-card {
+        grid-template-columns: 1fr !important;
+        grid-template-rows: auto auto auto !important;
+        gap: 4px;
+        min-height: 100px;
+        padding: 13px 6px;
+        text-align: center;
+    }
+
+    body.launch-home .specialty-card i {
+        margin: 0 auto 2px;
+        font-size: 1.1rem;
+    }
+
+    body.launch-home .specialty-card span {
+        font-size: .64rem;
+    }
+
+    body.launch-home .specialty-card small {
+        font-size: .48rem;
+    }
+
+    body.launch-home .ai-spotlight {
+        grid-template-columns: 1fr;
+        gap: 12px;
+        padding: 22px 15px;
+    }
+
+    body.launch-home .ai-spotlight-icon {
+        width: 50px;
+        height: 50px;
+        font-size: 1.2rem;
+    }
+
+    body.launch-home .ai-points {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    body.launch-home .cta-buttons {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+    }
+
+    body.launch-home .cta-buttons .btn {
+        min-width: 0;
+        padding: 9px 6px;
+        font-size: .63rem;
+    }
+}
+
+/* Very small phones: still keep two portal columns */
+@media (max-width: 360px) {
+    body.launch-home .portal-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 8px !important;
+    }
+
+    body.launch-home .portal-image {
+        height: 76px !important;
+    }
+
+    body.launch-home .portal-content {
+        padding: 13px 7px 15px !important;
+    }
+
+    body.launch-home .portal-card h3 {
+        font-size: 1rem !important;
+    }
+
+    body.launch-home .portal-card p {
+        font-size: .54rem !important;
+    }
+
+    body.launch-home .portal-btn {
+        font-size: .51rem !important;
+        padding: 7px 3px !important;
+    }
+}
+
+
+/* ==========================================================================\n   FINAL MOBILE HOMEPAGE HERO — CLEAN SPACING\n   This block intentionally comes LAST so it overrides all older responsive\n   rules in this stylesheet.\n   ========================================================================== */
+
+@media (max-width: 768px) {
+  body.launch-home .hero-section {
+    min-height: auto !important;
+    height: auto !important;
+    padding: 118px 20px 68px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  body.launch-home .hero-content {
+    width: 100% !important;
+    max-width: 520px !important;
+    padding: 26px 6px 8px !important;
+    margin: 0 auto !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center !important;
+  }
+
+  body.launch-home .hero-eyebrow {
+    display: block !important;
+    width: 100% !important;
+    max-width: 390px !important;
+    margin-bottom: 28px !important;
+    font-size: .70rem !important;
+    line-height: 1.55 !important;
+    letter-spacing: .08em !important;
+  }
+
+  body.launch-home .hero-content h1 {
+    width: 100% !important;
+    max-width: 390px !important;
+    margin: 0 auto 24px !important;
+    font-size: 2.35rem !important;
+    line-height: 1.14 !important;
+  }
+
+  body.launch-home .hero-subtitle {
+    width: 100% !important;
+    max-width: 390px !important;
+    margin: 0 auto 34px !important;
+    font-size: .94rem !important;
+    line-height: 1.72 !important;
+  }
+
+  body.launch-home .hero-stats {
+    width: 100% !important;
+    max-width: 390px !important;
+    margin: 0 auto 34px !important;
+    padding: 0 2px !important;
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 10px !important;
+    flex-wrap: nowrap !important;
+  }
+
+  body.launch-home .stat-item {
+    min-width: 0 !important;
+    padding: 4px 2px !important;
+  }
+
+  body.launch-home .stat-number {
+    margin-bottom: 8px !important;
+    font-size: 1.35rem !important;
+    line-height: 1.05 !important;
+  }
+
+  body.launch-home .stat-label {
+    display: block !important;
+    max-width: 105px !important;
+    margin: 0 auto !important;
+    font-size: .62rem !important;
+    line-height: 1.4 !important;
+  }
+
+  body.launch-home .hero-buttons {
+    width: 100% !important;
+    max-width: 390px !important;
+    margin: 0 auto !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 14px !important;
+  }
+
+  body.launch-home .hero-buttons .btn {
+    width: 100% !important;
+    max-width: none !important;
+    min-height: 50px !important;
+    padding: 13px 18px !important;
+    border-radius: 12px !important;
+    font-size: .88rem !important;
+  }
+
+  body.launch-home #hero-3d-canvas {
+    opacity: .25 !important;
+  }
+}
+
+@media (max-width: 480px) {
+  body.launch-home .hero-section {
+    padding: 108px 16px 58px !important;
+  }
+
+  body.launch-home .hero-content {
+    max-width: 360px !important;
+    padding: 24px 2px 6px !important;
+  }
+
+  body.launch-home .hero-eyebrow {
+    max-width: 340px !important;
+    margin-bottom: 20px !important;
+    font-size: .80rem !important;
+  }
+
+  body.launch-home .hero-content h1 {
+    max-width: 340px !important;
+    margin-bottom: 20px !important;
+    font-size: 2rem !important;
+    line-height: 1.16 !important;
+  }
+
+  body.launch-home .hero-subtitle {
+    max-width: 340px !important;
+    margin-bottom: 29px !important;
+    font-size: .84rem !important;
+    line-height: 1.68 !important;
+  }
+
+  body.launch-home .hero-stats {
+    max-width: 340px !important;
+    margin-bottom: 29px !important;
+    gap: 5px !important;
+  }
+
+  body.launch-home .stat-number {
+    font-size: 1.18rem !important;
+  }
+
+  body.launch-home .stat-label {
+    max-width: 90px !important;
+    font-size: .56rem !important;
+  }
+
+  body.launch-home .hero-buttons {
+    max-width: 340px !important;
+    gap: 11px !important;
+  }
+
+  body.launch-home .hero-buttons .btn {
+    min-height: 47px !important;
+    font-size: .82rem !important;
+  }
+}
+
+@media (max-width: 360px) {
+  body.launch-home .hero-section {
+    padding: 98px 12px 52px !important;
+  }
+
+  body.launch-home .hero-content {
+    max-width: 320px !important;
+    padding-top: 20px !important;
+  }
+
+  body.launch-home .hero-eyebrow {
+    max-width: 300px !important;
+    margin-bottom: 18px !important;
+    font-size: .80rem !important;
+  }
+
+  body.launch-home .hero-content h1 {
+    max-width: 300px !important;
+    margin-bottom: 18px !important;
+    font-size: 1.72rem !important;
+  }
+
+  body.launch-home .hero-subtitle {
+    max-width: 300px !important;
+    margin-bottom: 25px !important;
+    font-size: .76rem !important;
+    line-height: 1.62 !important;
+  }
+
+  body.launch-home .hero-stats {
+    max-width: 300px !important;
+    margin-bottom: 25px !important;
+    gap: 3px !important;
+  }
+
+  body.launch-home .stat-number {
+    font-size: 1.04rem !important;
+  }
+
+  body.launch-home .stat-label {
+    max-width: 78px !important;
+    font-size: .50rem !important;
+  }
+
+  body.launch-home .hero-buttons {
+    max-width: 300px !important;
+  }
+
+  /* Keep the Patient / Doctor cards side-by-side on very small phones. */
+  body.launch-home .portal-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 8px !important;
+  }
+}
+
+/* ============================================================
+   FINAL MEDIDIAG HOMEPAGE MOBILE DESIGN
+   ============================================================ */
+
+
+/* ============================================================
+   HERO — CLEAN SPACING
+   ============================================================ */
+
+@media (max-width: 768px) {
+
+    body.launch-home .hero-section {
+        min-height: auto !important;
+
+        padding:
+            115px
+            16px
+            65px !important;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    body.launch-home .hero-content {
+        width: 100% !important;
+        max-width: 390px !important;
+
+        padding: 0 !important;
+
+        margin: 0 auto !important;
+
+        text-align: center;
+    }
+
+
+    /* SMARTER • SIMPLER... */
+
+    body.launch-home .hero-eyebrow {
+        display: block !important;
+
+        width: 100% !important;
+
+       
+
+        font-size: .80rem !important;
+
+        line-height: 1.5 !important;
+
+        letter-spacing: .10em !important;
+    }
+
+
+    /* Welcome to MediDiag */
+
+    body.launch-home .hero-content h1 {
+        width: 100% !important;
+
+        font-size: 2.15rem !important;
+        margin-bottom: 40px !important;
+
+        line-height: 1.12 !important;
+
+        letter-spacing: -.025em !important;
+    }
+
+
+    /* Description */
+
+    body.launch-home .hero-subtitle {
+        width: 100% !important;
+
+        max-width: 350px !important;
+
+        margin:
+            0
+            auto
+            30px !important;
+
+        font-size: .90rem !important;
+
+        line-height: 1.65 !important;
+    }
+
+
+    /* Statistics */
+
+    body.launch-home .hero-stats {
+        width: 100% !important;
+
+        margin:
+            0
+            auto
+            32px !important;
+
+        display: grid !important;
+
+        grid-template-columns:
+            repeat(3, minmax(0, 1fr)) !important;
+
+        gap: 4px !important;
+    }
+
+
+    body.launch-home .stat-item {
+        min-width: 0 !important;
+    }
+
+
+    body.launch-home .stat-number {
+        font-size: 1.25rem !important;
+
+        margin-bottom: 6px !important;
+    }
+
+
+    body.launch-home .stat-label {
+        font-size: .56rem !important;
+
+        line-height: 1.35 !important;
+    }
+
+
+    /* Hero buttons */
+
+    body.launch-home .hero-buttons {
+        width: 100% !important;
+
+        display: flex !important;
+
+        flex-direction: column !important;
+
+        align-items: center !important;
+
+        gap: 10px !important;
+
+        margin:
+            0
+            auto !important;
+    }
+
+
+    body.launch-home .hero-buttons .btn {
+        width: auto !important;
+
+        min-width: 145px !important;
+
+        max-width: 165px !important;
+
+        height: 38px !important;
+
+        min-height: 38px !important;
+
+        padding:
+            8px
+            15px !important;
+
+        border-radius: 9px !important;
+
+        font-size: .68rem !important;
+
+        line-height: 1 !important;
+
+        justify-content: center !important;
+    }
+}
+
+/* ============================================================
+   COMPACT PATIENT / DOCTOR PORTALS
+   ============================================================ */
+
+body.launch-home .portal-grid {
+    display: grid !important;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr)) !important;
+
+    gap: 16px !important;
+
+    max-width: 760px !important;
+
+    margin:
+        0
+        auto !important;
+}
+
+
+/* Remove the oversized outer-card appearance */
+
+body.launch-home .portal-card {
+    min-width: 0 !important;
+
+    width: 100% !important;
+
+    padding: 0 !important;
+
+    margin: 0 !important;
+
+    border-radius: 14px !important;
+
+    overflow: hidden !important;
+
+    cursor: default !important;
+
+    background:
+        rgba(255, 255, 255, .88) !important;
+
+    border:
+        1px solid rgba(167, 243, 208, .45) !important;
+
+    box-shadow:
+        0 8px 25px rgba(5, 150, 105, .08) !important;
+
+    transform: none !important;
+}
+
+
+/* Remove the card-wide hover movement */
+
+body.launch-home .portal-card:hover {
+    transform: none !important;
+
+    box-shadow:
+        0 8px 25px rgba(5, 150, 105, .08) !important;
+
+    border-color:
+        rgba(167, 243, 208, .45) !important;
+}
+
+
+/* Remove the decorative sweep across the entire card */
+
+body.launch-home .portal-card::before {
+    display: none !important;
+}
+
+
+/* ============================================================
+   SMALL IMAGE AREA
+   ============================================================ */
+
+body.launch-home .portal-image {
+    width: 100% !important;
+
+    height: 78px !important;
+
+    min-height: 78px !important;
+
+    margin: 0 !important;
+
+    border-radius: 0 !important;
+
+    display: flex !important;
+
+    align-items: center !important;
+
+    justify-content: center !important;
+}
+
+
+/* Smaller circular icon */
+
+body.launch-home .image-placeholder {
+    width: 42px !important;
+
+    height: 42px !important;
+
+    border-width: 2px !important;
+
+    font-size: 1rem !important;
+}
+
+
+/* ============================================================
+   COMPACT CONTENT
+   ============================================================ */
+
+body.launch-home .portal-content {
+    padding:
+        11px
+        8px
+        12px !important;
+
+    text-align: center !important;
+}
+
+
+body.launch-home .portal-content h3 {
+    margin:
+        0
+        0
+        6px !important;
+
+    font-size: .75rem !important;
+
+    line-height: 1.2 !important;
+}
+
+
+body.launch-home .portal-content p {
+    max-width: 145px !important;
+
+    margin:
+        0
+        auto
+        10px !important;
+
+    font-size: .52rem !important;
+
+    line-height: 1.4 !important;
+}
+
+
+/* ============================================================
+   ONLY BUTTON IS INTERACTIVE
+   ============================================================ */
+
+body.launch-home .portal-btn {
+    width: auto !important;
+
+    min-width: 0 !important;
+
+    height: 29px !important;
+
+    min-height: 29px !important;
+
+    margin:
+        0
+        auto !important;
+
+    padding:
+        6px
+        9px !important;
+
+    border-radius: 7px !important;
+
+    font-size: .50rem !important;
+
+    display: inline-flex !important;
+
+    align-items: center !important;
+
+    justify-content: center !important;
+
+    gap: 4px !important;
+
+    cursor: pointer !important;
+}
+
+
+/* Button hover is allowed */
+
+body.launch-home .portal-btn:hover {
+    transform: translateY(-1px);
+}
+
+/* ============================================================
+   MOBILE — ALWAYS TWO PORTALS SIDE BY SIDE
+   ============================================================ */
+
+@media (max-width: 768px) {
+
+    body.launch-home .portal-grid {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr)) !important;
+
+        gap: 15px !important;
+
+        width: 100% !important;
+
+        max-width: 390px !important;
+
+        padding: 0 !important;
+    }
+
+
+    body.launch-home .portal-card {
+        border-radius: 12px !important;
+    }
+
+
+    body.launch-home .portal-image {
+        height: 68px !important;
+
+        min-height: 68px !important;
+    }
+
+
+    body.launch-home .image-placeholder {
+        width: 38px !important;
+
+        height: 38px !important;
+
+        font-size: .85rem !important;
+    }
+
+
+    body.launch-home .portal-content {
+        padding:
+            9px
+            6px
+            10px !important;
+    }
+
+
+    body.launch-home .portal-content h3 {
+        font-size: .66rem !important;
+
+        margin-bottom: 5px !important;
+    }
+
+
+    body.launch-home .portal-content p {
+        max-width: 135px !important;
+
+        font-size: .48rem !important;
+
+        line-height: 1.35 !important;
+
+        margin-bottom: 8px !important;
+    }
+
+
+    body.launch-home .portal-btn {
+        height: 26px !important;
+
+        min-height: 26px !important;
+
+        padding:
+            5px
+            7px !important;
+
+        font-size: .45rem !important;
+
+        border-radius: 6px !important;
+    }
+}
+
+@media (max-width: 360px) {
+
+    body.launch-home .hero-section {
+        padding:
+            105px
+            12px
+            55px !important;
+    }
+
+
+    body.launch-home .hero-eyebrow {
+        margin-bottom: 24px !important;
+
+        font-size: .60rem !important;
+    }
+
+
+    body.launch-home .hero-content h1 {
+        font-size: 1.85rem !important;
+
+        margin-bottom: 24px !important;
+    }
+
+
+    body.launch-home .hero-subtitle {
+        max-width: 300px !important;
+
+        font-size: .78rem !important;
+
+        margin-bottom: 26px !important;
+    }
+
+
+    body.launch-home .hero-stats {
+        margin-bottom: 28px !important;
+    }
+
+
+    body.launch-home .hero-buttons .btn {
+        min-width: 125px !important;
+
+        height: 35px !important;
+
+        min-height: 35px !important;
+
+        font-size: .62rem !important;
+    }
+
+
+    body.launch-home .portal-grid {
+        gap: 8px !important;
+    }
+
+
+    body.launch-home .portal-image {
+        height: 62px !important;
+
+        min-height: 62px !important;
+    }
+
+
+    body.launch-home .image-placeholder {
+        width: 34px !important;
+
+        height: 34px !important;
+    }
+
+
+    body.launch-home .portal-content h3 {
+        font-size: .61rem !important;
+    }
+
+
+    body.launch-home .portal-content p {
+        font-size: .44rem !important;
+    }
+
+
+    body.launch-home .portal-btn {
+        height: 24px !important;
+
+        min-height: 24px !important;
+
+        font-size: .41rem !important;
+
+        padding:
+            4px
+            6px !important;
+    }
+}
+
+/* ============================================================
+   FINAL PORTAL CARD POLISH
+   ============================================================ */
+
+/* Card itself is NOT clickable */
+body.launch-home .portal-card {
+    cursor: default !important;
+
+    position: relative !important;
+
+    /* Visible border */
+    border: 1px solid rgba(16, 185, 129, 0.28) !important;
+
+    /* Soft shadow */
+    box-shadow:
+        0 8px 22px rgba(5, 150, 105, 0.10),
+        0 2px 6px rgba(15, 23, 42, 0.05) !important;
+
+    /* Smooth hover animation */
+    transition:
+        transform 0.28s ease,
+        box-shadow 0.28s ease,
+        border-color 0.28s ease,
+        background 0.28s ease !important;
+
+    /* Don't use the old huge hover movement */
+    transform: translateY(0) scale(1) !important;
+}
+
+
+/* ============================================================
+   HOVER EFFECT
+   ============================================================ */
+
+@media (hover: hover) and (pointer: fine) {
+
+    body.launch-home .portal-card:hover {
+
+        transform:
+            translateY(-6px)
+            scale(1.015) !important;
+
+        border-color:
+            rgba(16, 185, 129, 0.55) !important;
+
+        box-shadow:
+            0 16px 32px rgba(5, 150, 105, 0.16),
+            0 4px 10px rgba(15, 23, 42, 0.07) !important;
+
+        background:
+            rgba(255, 255, 255, 0.96) !important;
+    }
+
+
+    /* Slightly enhance the icon on hover */
+
+    body.launch-home .portal-card:hover
     .image-placeholder {
-        width: 80px;
-        height: 80px;
-        font-size: 2rem;
+
+        transform: scale(1.08);
+
+        border-color:
+            rgba(16, 185, 129, 0.65) !important;
     }
-    
-    .portal-features li {
-        font-size: 0.9rem;
+}
+
+
+/* Smooth icon animation */
+body.launch-home .image-placeholder {
+
+    transition:
+        transform 0.28s ease,
+        border-color 0.28s ease,
+        box-shadow 0.28s ease !important;
+}
+
+
+/* ============================================================
+   DESCRIPTION → BUTTON SPACING
+   ============================================================ */
+
+body.launch-home .portal-content p {
+
+    margin-bottom: 20px !important;
+}
+
+
+/* ============================================================
+   CONTINUE BUTTON
+   ============================================================ */
+
+body.launch-home .portal-btn {
+
+    position: relative !important;
+
+    z-index: 10 !important;
+
+    cursor: pointer !important;
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        filter 0.2s ease !important;
+}
+
+
+/* Button hover */
+
+@media (hover: hover) and (pointer: fine) {
+
+    body.launch-home .portal-btn:hover {
+
+        transform:
+            translateY(-2px)
+            scale(1.02) !important;
+
+        box-shadow:
+            0 7px 16px rgba(5, 150, 105, 0.20) !important;
+
+        filter: brightness(1.03);
+    }
+}
+
+
+/* Button press */
+
+body.launch-home .portal-btn:active {
+
+    transform:
+        translateY(0)
+        scale(0.97) !important;
+}
+
+
+/* ============================================================
+   MOBILE
+   ============================================================ */
+
+@media (max-width: 768px) {
+
+    body.launch-home .portal-card {
+
+        border-radius: 12px !important;
+
+        box-shadow:
+            0 6px 16px rgba(5, 150, 105, 0.09),
+            0 2px 5px rgba(15, 23, 42, 0.04) !important;
+
+        transition:
+            transform 0.25s ease,
+            box-shadow 0.25s ease,
+            border-color 0.25s ease !important;
+    }
+
+
+    /* Touch devices don't need the desktop hover lift */
+    body.launch-home .portal-card:active {
+
+        transform:
+            scale(0.985) !important;
+
+        box-shadow:
+            0 5px 14px rgba(5, 150, 105, 0.12) !important;
+    }
+
+
+    /* More space above Continue button */
+
+    body.launch-home .portal-content p {
+
+        margin-bottom: 25px !important;
+    }
+
+
+    body.launch-home .portal-btn {
+      margin-bottom: 10px !important;
+
+        transition:
+            transform 0.18s ease,
+            box-shadow 0.18s ease !important;
+    }
+}
+
+
+/* ============================================================
+   VERY SMALL PHONES
+   ============================================================ */
+
+@media (max-width: 480px) {
+
+    body.launch-home .portal-content p {
+
+        margin-bottom: 15px !important;
+    }
+}
+/* ============================================================
+   PORTAL CARD HOVER EFFECT
+   Match the other homepage cards
+   ============================================================ */
+
+body.launch-home .portal-card {
+    position: relative !important;
+    overflow: hidden !important;
+
+    transition:
+        
+        box-shadow 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+        border-color 0.4s ease !important;
+
+    border:
+        1px solid rgba(167, 243, 208, 0.55) !important;
+
+    box-shadow:
+        var(--shadow-medical) !important;
+}
+
+
+/* Moving light sweep */
+body.launch-home .portal-card::before {
+    content: '';
+
+    position: absolute;
+
+    top: 0;
+    left: -100%;
+
+    width: 100%;
+    height: 100%;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(16, 185, 129, 0.12),
+            transparent
+        );
+
+    transition:
+        left 0.6s ease;
+
+    pointer-events: none;
+
+    z-index: 1;
+}
+
+
+/* Card hover */
+body.launch-home .portal-card:hover {
+    transform: translateY(-6px) !important;
+
+    box-shadow:
+        var(--shadow-strong) !important;
+
+    border-color:
+        var(--primary-color) !important;
+}
+
+
+/* Light sweep */
+body.launch-home .portal-card:hover::before {
+    left: 100%;
+}
+
+
+/* Keep content above the sweep */
+body.launch-home .portal-card .portal-image,
+body.launch-home .portal-card .portal-content {
+    position: relative;
+
+    z-index: 2;
+}
+
+
+/* Icon hover effect */
+body.launch-home .portal-card .image-placeholder {
+    transition:
+        transform 0.4s ease,
+        box-shadow 0.4s ease !important;
+}
+
+
+body.launch-home .portal-card:hover .image-placeholder {
+    transform:
+        scale(1.1)
+        rotate(5deg) !important;
+
+    box-shadow:
+        var(--shadow-strong) !important;
+}
+
+
+/* Button stays independently clickable */
+body.launch-home .portal-card .portal-btn {
+    position: relative;
+
+    z-index: 5;
+
+    transition:
+        transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+        box-shadow 0.3s ease !important;
+}
+
+
+/* Don't move the button when the CARD is hovered */
+body.launch-home .portal-card:hover .portal-btn {
+    transform: none !important;
+}
+
+
+/* Button's own hover */
+body.launch-home .portal-card .portal-btn:hover {
+    transform: translateY(-2px) !important;
+}
+
+@media (max-width: 768px) {
+
+    body.launch-home .portal-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 12px !important;
+    }
+
+    /* Make the card a little taller */
+    body.launch-home .portal-card {
+      height: 275px !important;
+        min-height: 200px !important;
+        padding: 0 !important;
+    }
+
+    /* Top icon area */
+    body.launch-home .portal-image {
+        height: 80px !important;
+        min-height: 80px !important;
+
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+
+    /* Icon */
+    body.launch-home .image-placeholder {
+        width: 42px !important;
+        height: 42px !important;
+
+        font-size: 1rem !important;
+    }
+
+    /* Content spacing */
+    body.launch-home .portal-content {
+        padding:
+            14px
+            8px
+            18px !important;
+
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+
+        flex: 1 !important;
+    }
+
+    /* Heading */
+    body.launch-home .portal-content h3 {
+        margin-bottom: 20px !important;
+        margin-top: 6px !important;
+        font-size: 1rem !important;
+    }
+
+    /* Description */
+    body.launch-home .portal-content p {
+        max-width: 140px !important;
+
+
+        font-size: .65rem !important;
+
+        line-height: 1.5 !important;
+    }
+
+    /* Continue button */
+    body.launch-home .portal-btn {
+        margin-top: 20px !important;
+
+        width: auto !important;
+
+        height: 30px !important;
+        min-height: 30px !important;
+
+        padding:
+            6px
+            9px !important;
+
+        font-size: .65rem !important;
+
+        border-radius: 10px !important;
     }
 }

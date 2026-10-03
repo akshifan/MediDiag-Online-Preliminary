@@ -1,0 +1,1039 @@
+/* MediDiag portal layout — corrected shared layer
+   Purpose: one identical secondary portal navbar on every portal page.
+   IMPORTANT: the mobile sub-nav stays in normal document flow. It is NOT fixed
+   or sticky, so page content can never slide underneath it. */
+
+:root {
+  --portal-navbar-height: 80px;
+  --portal-subnav-height: 48px;
+}
+
+/* Shared portal shell */
+.patient-dashboard,
+.doctor-dashboard {
+  width: min(1200px, calc(100% - 32px)) !important;
+  max-width: 1200px !important;
+  margin: var(--navbar-h, var(--portal-navbar-height)) auto 0 !important;
+  padding: 0 0 32px !important;
+  box-sizing: border-box !important;
+  min-width: 0 !important;
+}
+
+.patient-dashboard .dashboard-grid,
+.doctor-dashboard .dashboard-grid {
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  margin: 0 !important;
+  box-sizing: border-box !important;
+}
+
+.patient-dashboard .dashboard-content,
+.doctor-dashboard .dashboard-content {
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  margin: 0 !important;
+  box-sizing: border-box !important;
+  overflow-x: hidden !important;
+  overflow-wrap: anywhere !important;
+}
+
+/* Never let a portal page itself become a horizontal scroller. */
+.patient-dashboard,
+.doctor-dashboard,
+.patient-dashboard .dashboard-grid,
+.doctor-dashboard .dashboard-grid,
+.patient-dashboard .dashboard-content,
+.doctor-dashboard .dashboard-content {
+  max-width: 100vw !important;
+}
+
+/* Recent appointments: only this component may scroll horizontally. */
+.recent-appointments {
+  width: 100% !important;
+  min-width: 0 !important;
+  overflow: hidden !important;
+}
+
+/* Appointment horizontal scroller */
+.appointment-scroll-grid {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    gap: 12px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    padding: 4px 2px 10px !important;
+    box-sizing: border-box !important;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+}
+
+.appointment-scroll-grid .appointment-item {
+    flex: 0 0 250px !important;
+    width: 250px !important;
+    min-width: 250px !important;
+    max-width: 250px !important;
+    box-sizing: border-box !important;
+}
+
+/* Doctors: 2 columns everywhere. */
+.doctor-grid {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 10px !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  max-height: none !important;
+  overflow: visible !important;
+  padding: 0 !important;
+  margin: 0 0 16px !important;
+  box-sizing: border-box !important;
+}
+
+.doctor-grid .doctor-card {
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  min-height: 0 !important;
+  padding: 12px !important;
+  box-sizing: border-box !important;
+  overflow: hidden !important;
+}
+
+.doctor-grid .doctor-rating,
+.doctor-grid .stars,
+.doctor-grid .rating,
+.doctor-grid .doctor-reviews { display: none !important; }
+
+.doctor-grid .doctor-avatar {
+  width: 42px !important;
+  height: 42px !important;
+  min-width: 42px !important;
+  font-size: .85rem !important;
+}
+
+.doctor-grid .doctor-info,
+.doctor-grid .doctor-details,
+.doctor-grid .doctor-actions { min-width: 0 !important; }
+
+.doctor-grid .doctor-info h3,
+.doctor-grid .doctor-specialty,
+.doctor-grid .doctor-experience,
+.doctor-grid .detail-item {
+  overflow-wrap: anywhere !important;
+  word-break: break-word !important;
+}
+
+.doctor-grid .doctor-details { margin-top: 8px !important; gap: 5px !important; }
+.doctor-grid .detail-item { font-size: .72rem !important; line-height: 1.3 !important; }
+.doctor-grid .doctor-actions {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 7px !important;
+  margin-top: 8px !important;
+}
+.doctor-grid .doctor-actions .btn {
+  width: 100% !important;
+  min-height: 34px !important;
+  padding: 7px 9px !important;
+  font-size: .72rem !important;
+}
+
+/* Appointment history: 2 columns, 8 cards per page. */
+.appointments-grid {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 10px !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  overflow: visible !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  box-sizing: border-box !important;
+}
+
+.appointments-grid .appointment-card {
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  padding: 12px !important;
+  box-sizing: border-box !important;
+}
+
+.appointments-grid .appointment-actions {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 6px !important;
+  margin-top: auto !important;
+  padding-top: 7px !important;
+}
+
+.appointments-grid .appointment-actions .btn {
+  width: 100% !important;
+  min-width: 0 !important;
+  padding: 7px 6px !important;
+  font-size: .7rem !important;
+}
+
+.portal-pagination {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 10px !important;
+  margin: 18px auto 6px !important;
+  padding: 4px 0 !important;
+  flex-wrap: wrap !important;
+  clear: both !important;
+  position: relative !important;
+  z-index: 2 !important;
+}
+
+.portal-pagination .page-info {
+  min-width: 92px;
+  text-align: center;
+  font-size: .78rem;
+  font-weight: 700;
+}
+
+.portal-pagination button {
+  min-width: 82px !important;
+  padding: 8px 10px !important;
+  font-size: .74rem !important;
+}
+
+/* Chat layouts. */
+.portal-chat-layout {
+  display: grid !important;
+  grid-template-columns: 270px minmax(0, 1fr) !important;
+  gap: 14px !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+}
+
+.portal-chat-list {
+  min-width: 0 !important;
+  max-height: 560px !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+}
+
+/* ---------------------------------------------------------------
+   MOBILE PORTAL NAVBAR — NORMAL FLOW, NOT FIXED/STICKY
+   --------------------------------------------------------------- */
+@media (max-width: 768px) {
+  :root {
+    --portal-navbar-height: 70px;
+    --portal-subnav-height: 48px;
+  }
+
+  .patient-dashboard,
+  .doctor-dashboard {
+    width: 100% !important;
+    max-width: 100vw !important;
+    margin: var(--navbar-h, 70px) 0 0 !important;
+    padding: 0 12px 28px !important;
+    box-sizing: border-box !important;
+    overflow-x: hidden !important;
+    margin-top: 80px !important;
+  }
+
+  /* One column in the shell, but the sidebar remains the first row. */
+  .patient-dashboard .dashboard-grid,
+  .doctor-dashboard .dashboard-grid {
+    display: block !important;
+    grid-template-columns: 1fr !important;
+    gap: 0 !important;
+    width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  /* CRITICAL: the portal nav is in normal flow. */
+  .patient-dashboard .sidebar,
+  .doctor-dashboard .sidebar {
+    position: fixed !important;
+    top: auto !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: auto !important;
+    z-index: 10 !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: var(--portal-subnav-height) !important;
+    max-height: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border-radius: 7px !important;
+    border: 1px solid rgba(16,185,129,.12) !important;
+    background: rgba(254, 255, 254, 0.96) !important;
+    box-shadow: 0 4px 14px rgba(16,185,129,.08) !important;
+    overflow: hidden !important;
+    display: flex !important;
+    align-items: center !important;
+    box-sizing: border-box !important;
+  }
+
+  .patient-dashboard .sidebar-header,
+  .doctor-dashboard .sidebar-header { display: none !important; }
+
+  .patient-dashboard .sidebar-nav,
+  .doctor-dashboard .sidebar-nav,
+  .patient-dashboard .sidebar-nav ul,
+  .doctor-dashboard .sidebar-nav ul {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    gap: 8px !important;
+    width: 100% !important;
+    height: auto !important;
+    min-width: 0 !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    padding: 6px !important;
+    margin: 0 !important;
+    list-style: none !important;
+    scrollbar-width: none !important;
+    -webkit-overflow-scrolling: touch !important;
+    box-sizing: border-box !important;
+  }
+
+  .patient-dashboard .sidebar-nav::-webkit-scrollbar,
+  .doctor-dashboard .sidebar-nav::-webkit-scrollbar { display: none !important; }
+
+  .patient-dashboard .sidebar-nav li,
+  .doctor-dashboard .sidebar-nav li {
+    flex: 0 0 auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .patient-dashboard .sidebar-nav a,
+  .doctor-dashboard .sidebar-nav a {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 6px !important;
+    white-space: nowrap !important;
+    width: auto !important;
+    min-width: max-content !important;
+    height: 34px !important;
+    padding: 7px 13px !important;
+    margin: 0 !important;
+    border-radius: 999px !important;
+    font-size: .78rem !important;
+    line-height: 1 !important;
+    transform: none !important;
+    position: relative !important;
+    overflow: hidden !important;
+    box-sizing: border-box !important;
+  }
+
+  .patient-dashboard .sidebar-nav a i,
+  .doctor-dashboard .sidebar-nav a i {
+    width: auto !important;
+    flex: 0 0 auto !important;
+    font-size: .78rem !important;
+  }
+
+  /* Content is the NEXT grid item, so it can never sit under the nav. */
+  .patient-dashboard .dashboard-content,
+  .doctor-dashboard .dashboard-content {
+    grid-column: 1 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+    box-sizing: border-box !important;
+    overflow-x: hidden !important;
+  }
+
+  /* Page-specific CSS sometimes adds its own top padding/margin. */
+  .patient-dashboard .dashboard-content:first-child,
+  .doctor-dashboard .dashboard-content:first-child {
+    margin-top: 0 !important;
+  }
+
+  .doctor-grid,
+  .appointments-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  .portal-chat-layout {
+    grid-template-columns: 1fr !important;
+  }
+
+  .portal-chat-list {
+    max-height: none !important;
+    overflow: visible !important;
+  }
+}
+
+@media (max-width: 480px) {
+  :root {
+    --portal-navbar-height: 66px;
+    --portal-subnav-height: 46px;
+  }
+
+  .patient-dashboard,
+  .doctor-dashboard {
+    margin-top: var(--navbar-h, 66px) !important;
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+  }
+
+  .patient-dashboard .sidebar,
+  .doctor-dashboard .sidebar {
+    margin-bottom: 25px !important;
+  }
+
+  .patient-dashboard .sidebar-nav a,
+  .doctor-dashboard .sidebar-nav a {
+    height: 32px !important;
+    padding: 6px 11px !important;
+    font-size: .74rem !important;
+  }
+
+  .patient-dashboard .dashboard-content,
+  .doctor-dashboard .dashboard-content {
+    padding: 70px 12px 12px !important;
+  }
+}
+
+@media (max-width: 360px) {
+  :root {
+    --portal-navbar-height: 62px;
+    --portal-subnav-height: 44px;
+  }
+
+  .patient-dashboard,
+  .doctor-dashboard {
+    margin-top: var(--navbar-h, 62px) !important;
+    padding-left: 8px !important;
+    padding-right: 8px !important;
+  }
+
+  .patient-dashboard .sidebar-nav a,
+  .doctor-dashboard .sidebar-nav a {
+    height: 31px !important;
+    padding: 6px 10px !important;
+    font-size: .71rem !important;
+  }
+}
+
+
+/* =========================================================
+   MY CHATS PAGE HEADER
+   Matches Find Doctors / My Appointments page header
+   ========================================================= */
+
+.chat-page-header {
+    background: #effcf8;
+    border: 1px solid #b7eee0;
+    border-radius: 16px;
+    padding: 16px 14px;
+    margin-bottom: 14px;
+    text-align: center;
+}
+
+.chat-page-header h1 {
+    margin: 0;
+    color: #075e4d;
+    font-size: 1.50rem;
+    font-weight: 700;
+    line-height: 1.3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    font-weight: 700;
+}
+
+.chat-page-header h1 i {
+    color: #059669 !important;
+}
+
+.chat-page-header p {
+    margin: 6px 0 0;
+    color: #40556a;
+    font-size: 0.8rem;
+    line-height: 1.4;
+}
+
+@media (max-width: 640px) {
+    .chat-page-header {
+        margin-bottom: 19px !important;
+        padding: 15px 15px 15px !important;
+        border-radius: 15px;
+    }
+
+    .chat-page-header h1 {
+        font-size: 1.40rem !important;
+    }
+
+    .chat-page-header p {
+        font-size: 0.8rem;
+    }
+}
+
+/* =========================================================
+   PROFILE PAGE HEADER
+   EXACT MATCH WITH MY CHATS HEADER
+   ========================================================= */
+
+.profile-page-header {
+    background: #effcf8;
+    border: 1px solid rgba(16, 185, 129, 0.25);
+    border-radius: 16px;
+    padding: 16px 14px;
+    margin-bottom: 14px;
+    text-align: center;
+}
+
+.profile-page-header h1 {
+    margin: 0;
+    color: #075e4d;
+    font-size: 1.50rem;
+    font-weight: 700;
+    line-height: 1.3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+}
+
+.profile-page-header h1 i {
+    color: #059669 !important;
+    font-size: 1rem;
+}
+
+.profile-page-header p {
+    margin: 6px 0 0;
+    color: #40556a;
+    font-size: 0.8rem;
+    line-height: 1.4;
+}
+
+/* Professional information becomes a normal section */
+.profile-form-card h2,
+.profile-card h2 {
+    margin: 0 0 16px;
+    color: var(--text-lighter);
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+@media (max-width: 640px) {
+    .profile-page-header {
+        margin-bottom: 15px !important;
+        padding: 15px 15px 15px !important;
+        border-radius: 15px;
+    }
+
+    .profile-page-header h1 {
+        font-size: 1.40rem !important;
+    }
+
+    .profile-page-header h1 i {
+        font-size: 0.95rem !important;
+    }
+
+    .profile-page-header p {
+        font-size: 0.75rem !important;
+    }
+}
+
+
+/* =========================================================
+   MEDIDIAG - PROFESSIONAL CARD DEPTH / SURFACE SYSTEM
+   Apply to patient + doctor portals
+   ========================================================= */
+
+/* ---------------------------------------------------------
+   Shared card surface
+   --------------------------------------------------------- */
+
+.patient-dashboard .dashboard-content,
+.doctor-dashboard .dashboard-content {
+    background: rgba(248, 255, 252, 0.96) !important;
+
+    border: 1px solid rgba(16, 185, 129, 0.22) !important;
+
+    box-shadow:
+        0 4px 18px rgba(6, 95, 70, 0.08),
+        0 1px 3px rgba(6, 95, 70, 0.05) !important;
+}
+
+
+/* ---------------------------------------------------------
+   Main sections / panels
+   --------------------------------------------------------- */
+
+.patient-dashboard .welcome-section,
+.doctor-dashboard .welcome-section,
+
+.patient-dashboard .section-card,
+.doctor-dashboard .section-card,
+
+.patient-dashboard .recent-appointments,
+.doctor-dashboard .recent-appointments,
+
+.patient-dashboard .quick-actions-section,
+.doctor-dashboard .quick-actions-section,
+
+.patient-dashboard .chat-section,
+.doctor-dashboard .chat-section,
+
+.patient-dashboard .profile-section,
+.doctor-dashboard .profile-section {
+    background: rgba(247, 255, 252, 0.98) !important;
+
+    border: 1px solid rgba(16, 185, 129, 0.24) !important;
+
+    border-radius: 16px !important;
+
+    box-shadow:
+        0 5px 18px rgba(6, 95, 70, 0.07),
+        0 1px 3px rgba(6, 95, 70, 0.04) !important;
+}
+
+
+/* ---------------------------------------------------------
+   Stat cards
+   --------------------------------------------------------- */
+
+.patient-dashboard .stat-card,
+.doctor-dashboard .stat-card {
+    background: #ffffff !important;
+
+    border: 1px solid rgba(16, 185, 129, 0.22) !important;
+
+    border-radius: 14px !important;
+
+    box-shadow:
+        0 4px 14px rgba(6, 95, 70, 0.07),
+        0 1px 3px rgba(6, 95, 70, 0.05) !important;
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        border-color 0.2s ease !important;
+}
+
+.patient-dashboard .stat-card:hover,
+.doctor-dashboard .stat-card:hover {
+    transform: translateY(-2px) !important;
+
+    border-color: rgba(16, 185, 129, 0.40) !important;
+
+    box-shadow:
+        0 8px 22px rgba(6, 95, 70, 0.11),
+        0 2px 5px rgba(6, 95, 70, 0.06) !important;
+}
+
+
+/* ---------------------------------------------------------
+   Doctor cards
+   --------------------------------------------------------- */
+
+.patient-dashboard .doctor-card,
+.doctor-dashboard .doctor-card {
+    background: #ffffff !important;
+
+    border: 1px solid rgba(16, 185, 129, 0.25) !important;
+
+    border-radius: 14px !important;
+
+    box-shadow:
+        0 4px 14px rgba(6, 95, 70, 0.07),
+        0 1px 3px rgba(6, 95, 70, 0.05) !important;
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        border-color 0.2s ease !important;
+}
+
+.patient-dashboard .doctor-card:hover,
+.doctor-dashboard .doctor-card:hover {
+    transform: translateY(-2px) !important;
+
+    border-color: rgba(16, 185, 129, 0.42) !important;
+
+    box-shadow:
+        0 8px 22px rgba(6, 95, 70, 0.12),
+        0 2px 5px rgba(6, 95, 70, 0.06) !important;
+}
+
+
+/* ---------------------------------------------------------
+   Appointment cards
+   --------------------------------------------------------- */
+
+.patient-dashboard .appointment-card,
+.doctor-dashboard .appointment-card {
+    background: #ffffff !important;
+
+    border: 1px solid rgba(16, 185, 129, 0.24) !important;
+
+    border-radius: 14px !important;
+
+    box-shadow:
+        0 4px 14px rgba(6, 95, 70, 0.07),
+        0 1px 3px rgba(6, 95, 70, 0.05) !important;
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        border-color 0.2s ease !important;
+}
+
+.patient-dashboard .appointment-card:hover,
+.doctor-dashboard .appointment-card:hover {
+    transform: translateY(-2px) !important;
+
+    border-color: rgba(16, 185, 129, 0.40) !important;
+
+    box-shadow:
+        0 8px 22px rgba(6, 95, 70, 0.11),
+        0 2px 5px rgba(6, 95, 70, 0.05) !important;
+}
+
+
+/* ---------------------------------------------------------
+   Quick action cards
+   --------------------------------------------------------- */
+
+.patient-dashboard .quick-action-card,
+.doctor-dashboard .quick-action-card {
+    background: #ffffff !important;
+
+    border: 1px solid rgba(16, 185, 129, 0.23) !important;
+
+    border-radius: 14px !important;
+
+    box-shadow:
+        0 4px 14px rgba(6, 95, 70, 0.07),
+        0 1px 3px rgba(6, 95, 70, 0.04) !important;
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        border-color 0.2s ease !important;
+}
+
+.patient-dashboard .quick-action-card:hover,
+.doctor-dashboard .quick-action-card:hover {
+    transform: translateY(-2px) !important;
+
+    border-color: rgba(16, 185, 129, 0.40) !important;
+
+    box-shadow:
+        0 8px 22px rgba(6, 95, 70, 0.11) !important;
+}
+
+
+/* ---------------------------------------------------------
+   Chat cards
+   --------------------------------------------------------- */
+
+.patient-dashboard .chat-card,
+.patient-dashboard .chat-list,
+.patient-dashboard .chat-item,
+.doctor-dashboard .chat-card,
+.doctor-dashboard .chat-list,
+.doctor-dashboard .chat-item {
+    background: #ffffff !important;
+
+    border: 1px solid rgba(16, 185, 129, 0.23) !important;
+
+    border-radius: 14px !important;
+
+    box-shadow:
+        0 4px 14px rgba(6, 95, 70, 0.07),
+        0 1px 3px rgba(6, 95, 70, 0.04) !important;
+}
+
+
+/* ---------------------------------------------------------
+   Profile / Personal Information
+   --------------------------------------------------------- */
+
+.patient-dashboard .profile-section .card,
+.doctor-dashboard .profile-section .card,
+
+.patient-dashboard .profile-card,
+.doctor-dashboard .profile-card,
+
+.patient-dashboard .personal-info-card,
+.doctor-dashboard .personal-info-card {
+    background: #ffffff !important;
+
+    border: 1px solid rgba(16, 185, 129, 0.24) !important;
+
+    border-radius: 14px !important;
+
+    box-shadow:
+        0 4px 16px rgba(6, 95, 70, 0.07),
+        0 1px 3px rgba(6, 95, 70, 0.04) !important;
+}
+
+
+/* ---------------------------------------------------------
+   Page headers
+   --------------------------------------------------------- */
+
+.patient-dashboard .welcome-section,
+.doctor-dashboard .welcome-section,
+
+.patient-dashboard .chat-page-header,
+.doctor-dashboard .chat-page-header {
+    background: rgba(247, 255, 252, 0.98) !important;
+
+    border: 1px solid rgba(16, 185, 129, 0.25) !important;
+
+    box-shadow:
+        0 4px 16px rgba(6, 95, 70, 0.06) !important;
+}
+
+
+/* ---------------------------------------------------------
+   Find Doctors search panel
+   --------------------------------------------------------- */
+
+.patient-dashboard .doctor-search,
+.patient-dashboard .search-panel,
+.doctor-dashboard .doctor-search,
+.doctor-dashboard .search-panel {
+    background: #ffffff !important;
+
+    border: 1px solid rgba(16, 185, 129, 0.24) !important;
+
+    border-radius: 14px !important;
+
+    box-shadow:
+        0 4px 16px rgba(6, 95, 70, 0.06) !important;
+}
+
+
+/* ---------------------------------------------------------
+   Inputs / selects
+   --------------------------------------------------------- */
+
+.patient-dashboard input,
+.patient-dashboard select,
+.patient-dashboard textarea,
+
+.doctor-dashboard input,
+.doctor-dashboard select,
+.doctor-dashboard textarea {
+    background: #ffffff !important;
+
+    border: 1px solid rgba(16, 185, 129, 0.28) !important;
+
+    box-shadow:
+        inset 0 1px 2px rgba(6, 95, 70, 0.025) !important;
+}
+
+.patient-dashboard input:focus,
+.patient-dashboard select:focus,
+.patient-dashboard textarea:focus,
+
+.doctor-dashboard input:focus,
+.doctor-dashboard select:focus,
+.doctor-dashboard textarea:focus {
+    border-color: rgba(16, 185, 129, 0.55) !important;
+
+    box-shadow:
+        0 0 0 3px rgba(16, 185, 129, 0.10),
+        0 2px 8px rgba(6, 95, 70, 0.05) !important;
+}
+
+
+/* ---------------------------------------------------------
+   Buttons
+   --------------------------------------------------------- */
+
+.patient-dashboard .btn,
+.doctor-dashboard .btn {
+    box-shadow:
+        0 3px 9px rgba(6, 95, 70, 0.10) !important;
+}
+
+.patient-dashboard .btn:hover,
+.doctor-dashboard .btn:hover {
+    box-shadow:
+        0 6px 14px rgba(6, 95, 70, 0.14) !important;
+}
+
+
+/* ---------------------------------------------------------
+   Mobile - preserve same visual quality
+   --------------------------------------------------------- */
+
+@media (max-width: 640px) {
+
+    .patient-dashboard .doctor-card,
+    .doctor-dashboard .doctor-card,
+
+    .patient-dashboard .appointment-card,
+    .doctor-dashboard .appointment-card,
+
+    .patient-dashboard .stat-card,
+    .doctor-dashboard .stat-card,
+
+    .patient-dashboard .quick-action-card,
+    .doctor-dashboard .quick-action-card,
+
+    .patient-dashboard .profile-card,
+    .doctor-dashboard .profile-card {
+        border-width: 1px !important;
+
+        box-shadow:
+            0 3px 12px rgba(6, 95, 70, 0.07),
+            0 1px 3px rgba(6, 95, 70, 0.04) !important;
+    }
+}
+
+
+
+/* =========================================================
+   UPDATE PASSWORD SECTION
+   ========================================================= */
+
+.security-section {
+    margin-top: 24px;
+}
+
+.security-section .card {
+    background: var(--bg-dark);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 20px;
+}
+
+.security-section .section-header {
+    margin-bottom: 20px !important;
+    padding: 0 !important;
+}
+
+.security-section .section-header h2 {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+
+    margin: 0 0 7px;
+
+    color: #065f46;
+    font-size: 1.15rem;
+    font-weight: 800;
+}
+
+.security-section .section-header h2 i {
+    color: #059669;
+}
+
+.security-section .section-header p {
+    margin: 0;
+
+    color: #475569;
+    font-size: 0.85rem;
+}
+
+.security-section .form-group {
+    margin-bottom: 15px;
+}
+
+.security-section .form-label {
+    display: block;
+
+    margin-bottom: 6px;
+
+    color: #065f46;
+
+    font-size: 0.85rem;
+    font-weight: 700;
+}
+
+.security-section .form-control {
+    width: 100%;
+    box-sizing: border-box;
+
+    padding: 11px 13px;
+
+    border: 1px solid #b7eee0;
+    border-radius: 11px;
+
+    background: #ffffff;
+    color: #334155;
+
+    outline: none;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.security-section .form-control:focus {
+    border-color: #10b981;
+
+    box-shadow:
+        0 0 0 3px rgba(16, 185, 129, 0.12);
+}
+
+.security-section .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 8px;
+
+    min-width: 170px;
+}
+
+.password-form-message {
+    margin: 10px 0 14px;
+
+    padding: 10px 12px;
+
+    border-radius: 9px;
+
+    font-size: 0.82rem;
+    line-height: 1.4;
+}
+
+.password-form-message.success {
+    color: #065f46;
+
+    background: #ecfdf5;
+
+    border: 1px solid #a7f3d0;
+}
+
+.password-form-message.error {
+    color: #991b1b;
+
+    background: #fef2f2;
+
+    border: 1px solid #fecaca;
+}
+
+@media (max-width: 600px) {
+    .security-section {
+        margin-top: 20px;
+    }
+
+    .security-section .card {
+        padding: 16px;
+    }
+
+    .security-section .btn {
+        width: 100%;
+    }
+}

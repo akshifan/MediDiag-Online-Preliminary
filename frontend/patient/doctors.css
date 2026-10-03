@@ -1,30 +1,42 @@
-/* Doctors Page Specific Styles */
+
+/* ==========================================================================
+   Patient â€” Find Doctors
+   Grid: 2 columns on desktop and mobile (1 column only below 340px)
+   Inner vertical scroll after ~8 cards
+   ========================================================================== */
+
 .welcome-section {
   text-align: center;
-  margin-bottom: 40px;
-  padding: 40px;
+  margin-bottom: 20px;
+  padding: 20px 16px;
   background: linear-gradient(135deg, var(--bg-dark) 0%, var(--bg-light) 100%);
   border-radius: 16px;
-  border: 3px solid rgba(59, 130, 246, 0.2);
+  border: 1px solid var(--border-strong);
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .welcome-section h1 {
-  font-size: 2.5rem;
-  margin-bottom: 15px;
+  font-size: 1.40rem;
+  margin-bottom: 6px;
   color: var(--text-lighter);
   background: linear-gradient(135deg, var(--text-lighter) 0%, var(--medical-teal) 100%);
   -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
   background-clip: text;
+  -webkit-text-fill-color: transparent;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 15px;
+  gap: 8px;
+  flex-wrap: wrap;
+  line-height: 1.2;
+  font-weight: 700;
 }
 
 .welcome-section p {
   color: var(--text-light);
-  font-size: 1.1rem;
+  font-size: 0.8rem;
   max-width: 600px;
   margin: 0 auto;
 }
@@ -32,38 +44,98 @@
 /* Search & Filters */
 .search-filters {
   background: var(--bg-dark);
-  padding: 30px;
+  padding: 16px;
   border-radius: 12px;
-  border: 2px solid var(--border-color);
-  margin-bottom: 50px;
+  border: 1px solid var(--border-color);
+  margin-bottom: 18px;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .filter-row {
   display: grid;
   grid-template-columns: 2fr 1fr 1fr auto;
-  gap: 16px;
+  gap: 12px;
   align-items: end;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .filter-row .form-group {
   margin-bottom: 0;
+  min-width: 0;
+  max-width: 100%;
 }
 
-/* Doctors Grid */
+.filter-row .form-control {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+@media (max-width: 1024px) {
+  .filter-row {
+    grid-template-columns: 1fr 1fr;
+  }
+  .filter-row .btn {
+    grid-column: 1 / -1;
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 640px) {
+  .filter-row {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  .search-filters {
+    padding: 12px;
+  }
+  .filter-row .btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* Doctor grid â€” 2 col, inner vertical scroll after ~8 */
 .doctor-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
-  gap: 30px;
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 14px !important;
+  margin-bottom: 18px;
+  width: 100%;
+  max-width: 100%;
+  max-height: 760px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 4px;
+  box-sizing: border-box;
+  -webkit-overflow-scrolling: touch;
 }
 
+.doctor-grid::-webkit-scrollbar { width: 6px; }
+.doctor-grid::-webkit-scrollbar-thumb {
+  background: rgba(16, 185, 129, 0.28);
+  border-radius: 3px;
+}
+.doctor-grid::-webkit-scrollbar-track { background: transparent; }
+
+/* Doctor card */
 .doctor-card {
   background: var(--bg-dark);
   border-radius: 12px;
-  padding: 30px;
+  padding: 16px;
   border: 1px solid var(--border-color);
   transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0 !important;
 }
 
 .doctor-card::before {
@@ -73,237 +145,263 @@
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.1), transparent);
+  background: linear-gradient(90deg, transparent, rgba(36, 144, 154, 0.1), transparent);
   transition: left 0.6s ease;
 }
-
-.doctor-card:hover::before {
-  left: 100%;
-}
-
+.doctor-card:hover::before { left: 100%; }
 .doctor-card:hover {
-  transform: translateY(-5px);
-  border-color: rgba(59, 130, 246, 0.3);
+  transform: translateY(-3px);
+  border-color: var(--primary-color);
   box-shadow: var(--shadow-medical);
 }
 
 .doctor-header {
   display: flex;
   align-items: flex-start;
-  margin-bottom: 30px;
+  gap: 10px;
 }
 
 .doctor-avatar {
-  width: 80px;
-  height: 80px;
+  width: 46px;
+  height: 46px;
   border-radius: 50%;
   background: var(--gradient-medical);
-  color: var(--text-lighter);
+  color: #FFFFFF;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.8rem;
-  font-weight: bold;
-  margin-right: 20px;
+  font-size: 1rem;
+  font-weight: 700;
   flex-shrink: 0;
   box-shadow: var(--shadow-medical);
 }
 
+.doctor-info {
+  min-width: 0;
+  flex: 1 1 auto;
+}
 .doctor-info h3 {
   color: var(--text-lighter);
-  margin-bottom: 8px;
-  font-size: 1.2rem;
+  margin-bottom: 3px;
+  font-size: 0.98rem;
+  line-height: 1.2;
+  word-break: break-word;
 }
-
 .doctor-specialty {
   color: var(--medical-blue);
   font-weight: 600;
-  margin-bottom: 8px;
-  font-size: 1.1rem;
+  margin-bottom: 3px;
+  font-size: 0.82rem;
 }
-
 .doctor-experience {
   color: var(--text-light);
-  font-size: 0.9rem;
-  margin-bottom: 8px;
+  font-size: 0.75rem;
+  margin-bottom: 3px;
   display: flex;
   align-items: center;
-  gap: 5px;
+  gap: 4px;
 }
-
 .doctor-rating {
   display: flex;
   align-items: center;
-  gap: 8px;
-  margin-bottom: 8px;
+  gap: 5px;
+  font-size: 0.72rem;
 }
-
 .stars {
-  color: #fbbf24;
-  font-size: 1rem;
+  color: #ffc01f;
+  font-size: 0.8rem;
 }
-
 .doctor-rating span:last-child {
   color: var(--text-dark);
-  font-size: 0.85rem;
+  font-size: 0.72rem;
 }
 
 .doctor-details {
-  margin-bottom: 20px;
-  padding: 20px 0;
+  padding: 10px 0;
   border-top: 1px solid var(--border-color);
   border-bottom: 1px solid var(--border-color);
+  margin: 0;
 }
 
 .detail-item {
   display: flex;
   align-items: center;
-  margin-bottom: 10px;
+  margin-bottom: 5px;
   color: var(--text-light);
-  font-size: 1rem;
+  font-size: 0.78rem;
+  gap: 6px;
+  word-break: break-word;
+  line-height: 1.35;
 }
-
-.detail-item:last-child {
-  margin-bottom: 0;
-}
+.detail-item:last-child { margin-bottom: 0; }
 
 .detail-icon {
-  width: 20px;
-  margin-right: 10px;
+  width: 16px;
   text-align: center;
   color: var(--medical-blue);
+  flex-shrink: 0;
+  font-size: 0.75rem;
 }
 
+/* Actions */
 .doctor-actions {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 15px;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: auto;
 }
 
 .availability-badge {
   display: inline-flex;
   align-items: center;
-  gap: 5px;
-  padding: 10px 10px;
-  background: var(--medical-green);
-  color: var(--text-lighter);
+  gap: 4px;
+  padding: 4px 10px;
+  background: var(--primary-color);
+  color: #FFFFFF;
   border-radius: 20px;
-  font-size: 0.8rem;
-  font-weight: 600;
+  font-size: 0.7rem;
+  font-weight: 700;
+  white-space: nowrap;
+  align-self: flex-start;
 }
-
 .availability-badge.unavailable {
   background: #ef4444;
+  color: #FFFFFF;
 }
 
 .doctor-actions .btn {
-  flex: 1;
-  padding: 18px 18px;
-  font-size: 0.9rem;
-  display: flex;
+  padding: 8px 10px;
+  font-size: 0.78rem;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: 5px;
+  white-space: nowrap;
+  width: 100%;
 }
 
-/* No Doctors State */
+/* --------------------------------------------------------------------------
+   No Doctors state
+   -------------------------------------------------------------------------- */
+
 .no-doctors {
   text-align: center;
-  padding: 60px 40px;
+  padding: 40px 20px;
   color: var(--text-dark);
   grid-column: 1 / -1;
 }
-
 .no-doctors i {
-  font-size: 4rem;
-  margin-bottom: 20px;
+  font-size: 2.4rem;
+  margin-bottom: 12px;
   opacity: 0.5;
+  display: block;
 }
-
 .no-doctors h3 {
   color: var(--text-light);
-  margin-bottom: 10px;
-  font-size: 1.5rem;
+  margin-bottom: 8px;
+  font-size: 1.05rem;
 }
-
 .no-doctors p {
-  margin-bottom: 20px;
-  font-size: 1rem;
+  margin-bottom: 14px;
+  font-size: 0.88rem;
 }
 
-/* Booking Modal */
+/* --------------------------------------------------------------------------
+   Load More button
+   -------------------------------------------------------------------------- */
+
+.load-more-wrap {
+  display: flex;
+  justify-content: center;
+  padding: 8px 0 24px;
+  grid-column: 1 / -1;
+}
+
+.load-more-wrap .btn {
+  padding: 10px 22px;
+  font-size: 0.88rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.load-more-wrap .btn.disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* --------------------------------------------------------------------------
+   Booking Modal
+   -------------------------------------------------------------------------- */
+
 .booking-modal {
   display: none;
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(46, 46, 80, 0.923);
+  inset: 0;
+  background: rgba(46, 46, 80, 0.85);
   z-index: 1000;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
-  padding: 50px;
+  padding: 24px;
+  overflow-y: auto;
 }
-
-.booking-modal.active {
-  display: flex;
-}
+.booking-modal.active { display: flex; }
 
 .modal-content {
   background: var(--bg-lighter);
   border-radius: 16px;
-  padding: 40px;
+  padding: 24px;
   max-width: 500px;
   width: 100%;
-  max-height: 90vh;
+  max-height: 92vh;
   overflow-y: auto;
-  border: 3px solid var(--border-color);
+  border: 1px solid var(--border-color);
   box-shadow: var(--shadow-strong);
-  position: relative;
+  margin: auto;
 }
 
 .modal-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 30px;
-  padding-bottom: 20px;
-  border-bottom: 3px solid var(--border-color);
+  gap: 12px;
+  margin-bottom: 18px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border-color);
 }
-
 .modal-header h2 {
   color: var(--text-lighter);
-  font-size: 2rem;
+  font-size: 1.25rem;
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 8px;
+  line-height: 1.2;
+  margin: 0;
 }
 
 .close-modal {
   background: none;
   border: none;
-  font-size: 2rem;
+  font-size: 1.5rem;
   cursor: pointer;
   color: var(--text-light);
   transition: color 0.3s ease;
-  width: 30px;
-  height: 30px;
+  width: 32px;
+  height: 32px;
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 50%;
+  line-height: 1;
+  padding: 0;
+  flex-shrink: 0;
 }
-
 .close-modal:hover {
   color: var(--text-lighter);
   background: rgba(239, 68, 68, 0.1);
 }
 
-#booking-form .form-group {
-  margin-bottom: 30px;
-}
+#booking-form .form-group { margin-bottom: 14px; }
 
 #modal-doctor-name {
   background: var(--bg-dark);
@@ -311,279 +409,172 @@
   color: var(--text-lighter);
   font-weight: 600;
   margin: 0;
+  padding: 10px 12px;
+  border-radius: 10px;
+  font-size: 0.92rem;
 }
 
+/* Symptom helper */
 .symptom-helper {
-  margin-top: 30px;
-  padding: 30px;
+  margin-top: 12px;
+  padding: 12px;
   background: var(--bg-dark);
-  border-radius: 8px;
-  border: 3px solid var(--border-color);
+  border-radius: 10px;
+  border: 1px solid var(--border-color);
 }
-
 .symptom-helper small {
   color: var(--text-dark);
   display: block;
-  margin-bottom: 30px;
+  margin-bottom: 8px;
+  font-size: 0.78rem;
 }
 
 .symptom-list {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-  gap: 8px;
-  margin-bottom: 30px;
+  grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+  gap: 4px;
+  margin-bottom: 10px;
 }
-
 .symptom-list label {
   display: flex;
   align-items: center;
   gap: 5px;
   cursor: pointer;
-  padding: 5px;
-  border-radius: 4px;
+  padding: 5px 6px;
+  border-radius: 6px;
   transition: background 0.3s ease;
-  font-size: 0.85rem;
+  font-size: 0.78rem;
   color: var(--text-light);
 }
-
 .symptom-list label:hover {
-  background: rgba(59, 130, 246, 0.1);
+  background: rgba(36, 144, 154, 0.1);
 }
+.symptom-checkbox { margin: 0; flex-shrink: 0; }
 
-.symptom-checkbox {
-  margin: 0;
-}
-
+/* Diagnosis result */
 .diagnosis-result {
-  margin-top: 15px;
-  padding: 30px;
+  margin-top: 10px;
+  padding: 12px;
   background: var(--bg-dark);
-  border-radius: 8px;
-  border: 3px solid var(--border-color);
+  border-radius: 10px;
+  border: 1px solid var(--border-color);
+  font-size: 0.85rem;
 }
-
 .diagnosis-result h4 {
   color: var(--text-lighter);
-  margin-bottom: 10px;
+  margin-bottom: 6px;
   display: flex;
   align-items: center;
-  gap: 8px;
-  font-size: 1.2rem;
+  gap: 6px;
+  font-size: 0.95rem;
 }
 
 .confidence-badge {
   display: inline-block;
-  padding: 4px 8px;
+  padding: 3px 9px;
   border-radius: 12px;
-  font-size: 0.75rem;
-  font-weight: 600;
-  margin-bottom: 20px;
-}
-
-.confidence-high {
-  background: rgba(16, 185, 129, 0.2);
-  color: var(--medical-green);
-}
-
-.confidence-medium {
-  background: rgba(245, 158, 11, 0.2);
-  color: #f59e0b;
-}
-
-.confidence-low {
-  background: rgba(239, 68, 68, 0.2);
-  color: #ef4444;
-}
-
-/* Responsive Design */
-@media (max-width: 1024px) {
-  .doctor-grid {
-    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-  }
-}
-
-@media (max-width: 768px) {
-  .filter-row {
-    grid-template-columns: 1fr;
-  }
-  
-  .doctor-grid {
-    grid-template-columns: 1fr;
-  }
-  
-  .doctor-header {
-    flex-direction: column;
-    text-align: center;
-    gap: 15px;
-  }
-  
-  .doctor-avatar {
-    margin-right: 0;
-  }
-  
-  .doctor-actions {
-    flex-direction: column;
-    align-items: stretch;
-  }
-  
-  .modal-content {
-    padding: 30px 25px;
-  }
-  
-  .symptom-list {
-    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-  }
-}
-
-@media (max-width: 480px) {
-  .welcome-section {
-    padding: 30px 20px;
-  }
-  
-  .welcome-section h1 {
-    font-size: 2rem;
-    flex-direction: column;
-    gap: 10px;
-  }
-  
-  .search-filters {
-    padding: 25px 20px;
-  }
-  
-  .doctor-card {
-    padding: 25px 20px;
-  }
-  
-  .modal-content {
-    padding: 25px 20px;
-  }
-  
-  .symptom-list {
-    grid-template-columns: 1fr 1fr;
-  }
-}
-.patient-dashboard {
-    margin-top: 80px !important;   /* Adjust value if you want more space */
-}
-/* ===== SIDEBAR — perfectly matching dashboard.css ===== */
-
-.sidebar {
-  background: var(--bg-lighter);
-  border-radius: 16px;
-  padding: 24px;
-  box-shadow: var(--shadow);
-  border: 1px solid var(--border-color);
-  position: sticky;
-  top: 120px; /* matches dashboard */
-  max-height: calc(100vh - 160px);
-  overflow-y: auto;
-  transition: all 0.25s ease;
-  z-index: 2;
-}
-
-/* Sidebar Header */
-.sidebar-header {
-  text-align: center;
-  margin-bottom: 22px;
-  padding-bottom: 16px;
-  border-bottom: 1px solid var(--border-color);
-}
-
-.user-avatar-large {
-  width: 72px;
-  height: 72px;
-  border-radius: 50%;
-  background: var(--gradient-medical);
-  color: var(--text-lighter);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.6rem;
+  font-size: 0.7rem;
   font-weight: 700;
-  margin: 0 auto 12px;
-  box-shadow: var(--shadow-medical);
-}
-
-.sidebar-header h3 {
-  color: var(--text-lighter);
-  margin-bottom: 6px;
-  font-size: 1.5rem;
-}
-
-.sidebar-header p {
-  color: var(--text-dark);
-  font-size: 0.9rem;
-}
-
-/* NAV ITEMS */
-.sidebar-nav {
-  list-style: none;
-  padding: 10px;
-  margin: 0;
-}
-
-.sidebar-nav li {
   margin-bottom: 8px;
 }
+.confidence-high   { background: rgba(16, 185, 129, 0.2); color: var(--medical-green); }
+.confidence-medium { background: rgba(245, 158, 11, 0.2); color: #f59e0b; }
+.confidence-low    { background: rgba(239, 68, 68, 0.2); color: #ef4444; }
 
-.sidebar-nav a {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 12px 14px;
-  text-decoration: none;
-  color: var(--text-light);
-  border-radius: 10px;
-  transition: all 0.22s ease;
-  position: relative;
-  overflow: hidden;
-  font-weight: 500;
-  font-size: 1.2rem;
-}
+/* --------------------------------------------------------------------------
+   Mobile â€” keep 2 columns (1 col only below 340px)
+   -------------------------------------------------------------------------- */
 
-/* Sweep Hover Animation */
-.sidebar-nav a::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(59,130,246,0.08),
-    transparent
-  );
-  transition: left 0.45s ease;
-}
-
-.sidebar-nav a:hover::before,
-.sidebar-nav a.active::before {
-  left: 100%;
-}
-
-/* Active + Hover State */
-.sidebar-nav a:hover,
-.sidebar-nav a.active {
-  background: var(--gradient-medical);
-  color: var(--text-lighter);
-  transform: translateX(6px);
-  box-shadow: var(--shadow-medical);
-}
-
-/* Responsive — matches dashboard */
-@media (max-width: 1024px) {
-  .sidebar {
-    position: relative;
-    top: 0;
-    max-height: none;
-    margin-bottom: 14px;
+@media (max-width: 640px) {
+  .doctor-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 10px !important;
+    max-height: 720px;
   }
+
+  .doctor-card { padding: 12px 10px; gap: 8px; }
+
+  .doctor-avatar { width: 38px; height: 38px; font-size: 0.88rem; }
+
+  .doctor-info h3 { font-size: 0.85rem; }
+  .doctor-specialty { font-size: 0.72rem; }
+  .doctor-experience { font-size: 0.68rem; }
+  .doctor-rating { font-size: 0.65rem; }
+  .stars { font-size: 0.72rem; }
+  .doctor-rating span:last-child { font-size: 0.65rem; }
+
+  .doctor-details { padding: 8px 0; }
+  .detail-item { font-size: 0.68rem; margin-bottom: 4px; gap: 5px; }
+  .detail-icon { font-size: 0.68rem; width: 14px; }
+
+  .availability-badge { font-size: 0.62rem; padding: 3px 8px; }
+  .doctor-actions .btn { font-size: 0.7rem; padding: 7px 6px; }
+
+  .welcome-section { padding: 16px 12px; margin-bottom: 14px; }
+  .welcome-section h1 { font-size: 1.40rem; }
+  .welcome-section p { font-size: 0.8rem; }
+
+  .booking-modal { padding: 10px; align-items: flex-start; }
+  .modal-content { padding: 18px 14px; border-radius: 12px; }
+  .modal-header h2 { font-size: 1.1rem; }
+  .symptom-list { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px; }
+  .symptom-list label { font-size: 0.72rem; padding: 4px 5px; }
 }
 
-@media (max-width: 768px) {
-  .sidebar {
-    padding: 16px;
+@media (max-width: 340px) {
+  .doctor-grid {
+    grid-template-columns: 1fr !important;
+    max-height: none;
+  }
+  .symptom-list { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 360px) {
+  .doctor-card { padding: 12px; }
+  .doctor-avatar { width: 40px; height: 40px; font-size: 0.9rem; }
+  .doctor-info h3 { font-size: 0.9rem; }
+}
+
+
+
+
+/* ==========================================================================
+   Final Find Doctors grid alignment / pagination presentation
+   ========================================================================== */
+
+.doctor-grid {
+  align-items: stretch !important;
+  max-height: none !important;
+  overflow-y: visible !important;
+  overflow-x: hidden !important;
+}
+
+.doctor-grid .doctor-card {
+  height: 100% !important;
+  min-height: 0 !important;
+}
+
+.doctor-grid .doctor-actions {
+  margin-top: auto !important;
+}
+
+.doctor-results-info {
+  width: 100%;
+  margin: 0 auto 8px;
+  text-align: center;
+  color: var(--text-dark);
+  font-size: .75rem;
+  font-weight: 600;
+}
+
+@media (max-width: 640px) {
+  .doctor-grid {
+    align-items: stretch !important;
+    max-height: none !important;
+    overflow: visible !important;
+  }
+
+  .doctor-grid .doctor-card {
+    height: 100% !important;
   }
 }

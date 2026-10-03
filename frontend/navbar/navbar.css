@@ -1,19 +1,28 @@
+
+/* ==========================================================================
+   MediDiag â€” navbar.css (Final, professional drawer)
+   ========================================================================== */
+
 .navbar {
-  background: rgba(26, 26, 46, 0.95);
-  backdrop-filter: blur(20px);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  /* Glassmorphism â€” transparent with strong blur */
+  background: rgba(255, 255, 255, 0.35);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.6) inset,
+              0 4px 24px rgba(16, 185, 129, 0.08);
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
+  top: 0; left: 0; right: 0;
   z-index: 1000;
-  border-bottom: 1px solid rgba(59, 130, 246, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.45);
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .navbar.scrolled {
-  background: rgba(10, 10, 26, 0.98);
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(24px) saturate(190%);
+  -webkit-backdrop-filter: blur(24px) saturate(190%);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.6) inset,
+              0 8px 30px rgba(16, 185, 129, 0.14);
 }
 
 .navbar-container {
@@ -27,39 +36,33 @@
 }
 
 .navbar-brand {
-  font-size: 1.75rem;
+  font-size: 1.6rem;
   font-weight: 800;
   color: var(--text-lighter);
   text-decoration: none;
-  background: linear-gradient(135deg, var(--text-lighter) 0%, var(--medical-teal) 100%);
+  background: linear-gradient(135deg, #064E3B 0%, #059669 55%, #34D399 100%);
   -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
   background-clip: text;
-  transition: all 0.3s ease;
+  -webkit-text-fill-color: transparent;
   position: relative;
   padding: 8px 0;
+  white-space: nowrap;
 }
-
 .navbar-brand::after {
   content: '';
   position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 0;
-  height: 2px;
+  bottom: 0; left: 0;
+  width: 0; height: 2px;
   background: var(--gradient-medical);
   transition: width 0.3s ease;
 }
-
-.navbar-brand:hover::after {
-  width: 100%;
-}
+.navbar-brand:hover::after { width: 100%; }
 
 .navbar-nav {
   display: flex;
   list-style: none;
   align-items: center;
-  gap: 40px;
+  gap: 32px;
   margin: 0;
   padding: 0;
 }
@@ -68,339 +71,506 @@
   text-decoration: none;
   color: var(--text-light);
   font-weight: 600;
-  font-size: 1rem;
+  font-size: 0.95rem;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   padding: 8px 0;
+  white-space: nowrap;
 }
-
 .navbar-nav a::before {
   content: '';
   position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 0;
-  height: 2px;
+  bottom: 0; left: 0;
+  width: 0; height: 2px;
   background: var(--gradient-medical);
   transition: width 0.3s ease;
 }
+.navbar-nav a:hover { color: var(--primary-dark); }
+.navbar-nav a:hover::before { width: 100%; }
+.navbar-nav a.active { color: var(--primary-dark); }
+.navbar-nav a.active::before { width: 100%; }
 
-.navbar-nav a:hover {
-  color: var(--text-lighter);
-  transform: translateY(-2px);
-}
-
-.navbar-nav a:hover::before {
-  width: 100%;
-}
-
-.navbar-nav a.active {
-  color: var(--text-lighter);
-}
-
-.navbar-nav a.active::before {
-  width: 100%;
-  background: var(--gradient-medical);
-}
-
-.navbar-actions {
-  display: flex;
-  gap: 20px;
-  align-items: center;
-}
-
-/* User Menu Styles */
-.user-menu {
-  position: relative;
-}
+.navbar-actions { display: flex; gap: 12px; align-items: center; }
+.user-menu { position: relative; }
 
 .user-trigger {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 10px 16px;
-  background: var(--bg-lighter);
-  border: 1px solid rgba(59, 130, 246, 0.2);
+  gap: 10px;
+  padding: 8px 14px;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid var(--border-color);
   border-radius: 12px;
   color: var(--text-light);
   cursor: pointer;
   transition: all 0.3s ease;
   font-weight: 600;
+  text-decoration: none;
+  font-size: 0.9rem;
 }
-
 .user-trigger:hover {
-  background: rgba(59, 130, 246, 0.1);
-  border-color: rgba(59, 130, 246, 0.4);
-  color: var(--text-lighter);
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-medical);
+  background: rgba(236, 253, 245, 0.95);
+  border-color: var(--primary-color);
+  color: var(--primary-dark);
 }
 
 .user-avatar {
-  width: 36px;
-  height: 36px;
+  width: 32px; height: 32px;
   border-radius: 50%;
   background: var(--gradient-medical);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--text-lighter);
+  color: #FFFFFF;
   font-weight: 700;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
+  flex-shrink: 0;
 }
 
-.user-dropdown {
-  position: absolute;
-  top: calc(100% + 10px);
-  right: 0;
-  background: var(--bg-lighter);
-  border: 1px solid rgba(59, 130, 246, 0.2);
-  border-radius: 16px;
-  box-shadow: var(--shadow-lg);
-  padding: 12px 0;
-  min-width: 220px;
-  opacity: 0;
-  visibility: hidden;
-  transform: translateY(-10px);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  z-index: 1001;
-}
+.user-menu-simple { display: flex; align-items: center; gap: 12px; }
+.user-menu-simple .user-trigger { text-decoration: none; }
+.user-menu-simple .user-name-text { font-weight: 600; color: var(--text-light); }
 
-.user-dropdown.active {
-  opacity: 1;
-  visibility: visible;
-  transform: translateY(0);
-}
-
-.user-dropdown::before {
-  content: '';
-  position: absolute;
-  top: -8px;
-  right: 20px;
-  width: 16px;
-  height: 16px;
-  background: var(--bg-lighter);
-  border-top: 1px solid rgba(59, 130, 246, 0.2);
-  border-left: 1px solid rgba(59, 130, 246, 0.2);
-  transform: rotate(45deg);
-}
-
-.user-dropdown a {
-  display: flex;
+.btn-logout {
+  padding: 9px 16px;
+  font-size: 0.85rem;
+  display: inline-flex;
   align-items: center;
-  gap: 12px;
-  padding: 14px 20px;
-  text-decoration: none;
-  color: var(--text-light);
-  transition: all 0.3s ease;
-  position: relative;
-  overflow: hidden;
+  gap: 6px;
 }
 
-.user-dropdown a::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.1), transparent);
-  transition: left 0.6s ease;
-}
-
-.user-dropdown a:hover::before {
-  left: 100%;
-}
-
-.user-dropdown a:hover {
-  background: rgba(59, 130, 246, 0.05);
-  color: var(--text-lighter);
-  padding-left: 24px;
-}
-
-.user-dropdown a i {
-  width: 20px;
-  text-align: center;
-  font-size: 1.1rem;
-}
-
-/* Mobile Menu Button */
 .mobile-menu-btn {
   display: none;
   background: var(--gradient-medical);
   border: none;
   border-radius: 12px;
-  width: 48px;
-  height: 48px;
+  width: 44px;
+  height: 44px;
   cursor: pointer;
   align-items: center;
   justify-content: center;
-  color: var(--text-lighter);
-  font-size: 1.5rem;
+  color: #FFFFFF;
+  font-size: 1.4rem;
   transition: all 0.3s ease;
   box-shadow: var(--shadow-medical);
+  padding: 0;
+  line-height: 1;
+  flex-shrink: 0;
 }
+.mobile-menu-btn:hover { transform: scale(1.05); }
 
-.mobile-menu-btn:hover {
-  transform: scale(1.05);
-  box-shadow: 0 0 30px rgba(59, 130, 246, 0.6);
-}
+.auth-buttons { display: flex; gap: 12px; align-items: center; }
 
-/* Auth Buttons - Only Login Button Visible */
-.auth-buttons {
-  display: flex;
-  gap: 16px;
-  align-items: center;
-}
-
-.btn-login {
-  padding: 12px 28px;
+/* Both Login and Sign Up buttons â€” same size and colour */
+.btn-login,
+.auth-buttons .btn-outline {
+  padding: 11px 24px;
+  min-width: 110px;
   background: var(--gradient-medical);
   border: none;
   border-radius: 12px;
-  color: var(--text-lighter);
+  color: #FFFFFF;
   font-weight: 600;
   text-decoration: none;
-  transition: all 0.3s ease;
   box-shadow: var(--shadow-medical);
+  font-size: 0.9rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  text-align: center;
 }
-
-.btn-login:hover {
+.btn-login:hover,
+.auth-buttons .btn-outline:hover {
   transform: translateY(-2px);
-  box-shadow: 0 0 30px rgba(59, 130, 246, 0.6);
+  box-shadow: 0 12px 32px rgba(5, 150, 105, 0.35);
+  background: linear-gradient(135deg, #047857 0%, #059669 55%, #34D399 100%);
+  color: #FFFFFF;
+  border-color: transparent;
 }
 
-/* Hide Signup Button */
-.btn-signup {
-  display: none !important;
-}
+.btn-signup { display: none !important; }
 
-/* Mobile Styles */
-@media (max-width: 968px) {
-  .navbar-nav {
-    gap: 24px;
-  }
-  
-  .navbar-actions .auth-buttons {
-    display: none;
-  }
-}
+/* ==========================================================================
+   Mobile â€” right-side sheet drawer with blurred backdrop
+   ========================================================================== */
 
 @media (max-width: 768px) {
-  .mobile-menu-btn {
-    display: flex;
-  }
-  
-  .navbar-nav {
+  .mobile-menu-btn { display: flex; }
+
+  /* Dim + blur backdrop covering the whole viewport behind the drawer.
+     Rendered via ::before on the nav element. */
+    /* Drawer backdrop â€” dims page content behind the drawer.
+     No backdrop-filter here so the navbar keeps its glass look. */
+  .navbar-nav::before {
+    content: '';
     position: fixed;
-    top: 80px;
-    left: 0;
-    right: 0;
-    background: var(--bg-lighter);
-    flex-direction: column;
-    padding: 40px 20px;
-    box-shadow: var(--shadow-lg);
-    border-top: 1px solid rgba(59, 130, 246, 0.1);
+    inset: 0;
+    background: rgba(16, 185, 129, 0.22);
     opacity: 0;
     visibility: hidden;
-    transform: translateY(-20px);
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    gap: 0;
+    pointer-events: none;
+    transition: opacity 0.35s ease, visibility 0.35s ease;
+    z-index: -1;
   }
-  
-  .navbar-nav.active {
-    opacity: 1;
-    visibility: visible;
-    transform: translateY(0);
-  }
-  
-  .navbar-nav li {
-    width: 100%;
-    border-bottom: 1px solid rgba(59, 130, 246, 0.1);
-  }
-  
-  .navbar-nav li:last-child {
-    border-bottom: none;
-  }
-  
-  .navbar-nav a {
-    display: block;
-    padding: 20px 0;
-    font-size: 1.1rem;
-    width: 100%;
-  }
-  
-  .navbar-nav a::before {
-    display: none;
-  }
-  
-  .navbar-nav a.active {
-    background: rgba(59, 130, 246, 0.1);
-    border-radius: 12px;
-    padding: 20px;
-    margin: 0 -20px;
-  }
-  
-  .navbar-actions {
-    flex-direction: column;
-    gap: 16px;
-    width: 100%;
-    margin-top: 20px;
-  }
-  
-  .auth-buttons {
-    display: flex !important;
-    flex-direction: column;
-    width: 100%;
-    gap: 12px;
-  }
-  
-  .btn-login {
-    width: 100%;
-    text-align: center;
-    justify-content: center;
-  }
-  
-  .user-menu {
-    width: 100%;
-  }
-  
-  .user-trigger {
-    width: 100%;
-    justify-content: center;
-  }
-  
-  .user-dropdown {
-    position: static;
-    opacity: 1;
-    visibility: visible;
-    transform: none;
-    box-shadow: none;
-    border: 1px solid rgba(59, 130, 246, 0.2);
-    margin-top: 10px;
-    display: none;
-  }
-  
-  .user-dropdown.active {
-    display: block;
-  }
-  
-  .user-dropdown::before {
-    display: none;
-  }
-}
 
-@media (max-width: 480px) {
+  .navbar-nav.active::before {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+  }
+
   .navbar-container {
     height: 70px;
     padding: 0 16px;
   }
-  
-  .navbar-brand {
-    font-size: 1.5rem;
+
+  .navbar-brand { font-size: 1.4rem; }
+
+  /* Right-side drawer: slides in from the right.
+     Width: 78% of viewport, capped so it never looks stretched. */
+      .navbar-nav {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: auto;
+    width: 78vw;
+    max-width: 340px;
+    height: 100dvh;
+    /* Mint-glass to match MediDiag theme */
+    background: linear-gradient(
+      180deg,
+      rgba(240, 253, 248, 0.96) 0%,
+      rgba(236, 253, 245, 0.96) 100%
+    );
+    backdrop-filter: blur(24px) saturate(180%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    border-left: 1px solid rgba(167, 243, 208, 0.7);
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+    padding: calc(70px + 16px) 22px 24px;
+    box-shadow: -12px 0 40px rgba(6, 78, 59, 0.20);
+    border-radius: 0;
+    border: none;
+    border-left: 1px solid var(--border-color);
+    opacity: 1;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translateX(100%);
+    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+                visibility 0.35s ease;
+    gap: 0;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    z-index: 1001;
+    margin: 0;
+    box-sizing: border-box;
   }
-  
-  .navbar-nav {
-    top: 70px;
+
+  .navbar-nav.active {
+    visibility: visible;
+    pointer-events: auto;
+    transform: translateX(0);
+  }
+
+  /* Close (X) button pinned top-right of the drawer */
+    .navbar-nav::after {
+    content: 'âœ•';
+    position: absolute;
+    top: 18px;
+    right: 18px;
+    width: 38px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    background: rgba(167, 243, 208, 0.55);
+    color: var(--primary-dark);
+    font-size: 1.05rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease;
+    z-index: 2;
+  }
+  .navbar-nav.active::after:hover {
+    background: rgba(167, 243, 208, 0.9);
+    color: var(--text-lighter);
+  }
+
+  /* Drawer header: MediDiag brand inside drawer */
+  .navbar-nav > .drawer-brand {
+    display: block;
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--text-lighter);
+    background: linear-gradient(135deg, #064E3B 0%, #059669 55%, #34D399 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-decoration: none;
+    margin-bottom: 8px;
+    padding: 0 0 16px;
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  /* Nav links: clean rows, no top borders, subtle hover */
+  .navbar-nav > a {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px 6px;
+    font-size: 0.98rem;
+    width: 100%;
+    color: var(--text-light);
+    border-bottom: 1px solid rgba(209, 250, 229, 0.7);
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.2s ease, padding-left 0.2s ease;
+  }
+  .navbar-nav > a::before { display: none; }
+  .navbar-nav > a:hover {
+    color: var(--primary-dark);
+    padding-left: 12px;
+  }
+  .navbar-nav > a.active {
+    color: var(--primary-dark);
+    padding-left: 12px;
+  }
+
+  .user-menu,
+  .user-menu-simple {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 10px;
+    margin-top: 18px;
+    padding-top: 18px;
+    border-top: 1px solid var(--border-color);
+  }
+
+  .user-trigger,
+  .btn-logout {
+    width: 100%;
+    justify-content: center;
+    padding: 13px 16px;
+    font-size: 0.95rem;
+    border-radius: 12px;
+  }
+
+  .navbar-actions {
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid var(--border-color);
+  }
+
+      .auth-buttons {
+    display: flex !important;
+    flex-direction: column;
+    width: 100%;
+    gap: 10px;
+  }
+
+  /* Both Login and Sign Up â€” identical sizing, gradient, WHITE text */
+  .navbar .auth-buttons .btn-login,
+  .navbar .auth-buttons .btn-outline,
+  .navbar .auth-buttons a[href="/auth/login"],
+  .navbar .auth-buttons a[href="/auth/register"] {
+    width: 100%;
+    min-width: 0;
+    padding: 13px 16px;
+    font-size: 0.95rem;
+    text-align: center;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--gradient-medical) !important;
+    color: #FFFFFF !important;
+    -webkit-text-fill-color: #FFFFFF !important;
+    border: none !important;
+    border-radius: 12px !important;
+    font-weight: 600 !important;
+    box-shadow: var(--shadow-medical);
+    transition: all 0.3s ease;
+    opacity: 1;
+  }
+
+  .navbar .auth-buttons .btn-login:hover,
+  .navbar .auth-buttons .btn-outline:hover,
+  .navbar .auth-buttons a[href="/auth/login"]:hover,
+  .navbar .auth-buttons a[href="/auth/register"]:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 32px rgba(5, 150, 105, 0.35);
+    background: linear-gradient(135deg, #047857 0%, #059669 55%, #34D399 100%) !important;
+    color: #FFFFFF !important;
+    -webkit-text-fill-color: #FFFFFF !important;
+    border-color: transparent !important;
+  }
+
+      /* Prevent page scroll while drawer is open â€” simple overflow only.
+     Never use position: fixed here; it breaks scroll restoration. */
+  body.nav-open {
+    overflow: hidden;
+    touch-action: none;
   }
 }
+
+@media (max-width: 480px) {
+  .navbar-container { height: 66px; padding: 0 14px; }
+  .navbar-brand { font-size: 1.3rem; }
+  .navbar-nav {
+    width: 82vw;
+    padding: calc(66px + 14px) 20px 20px;
+    overscroll-behavior: contain;
+    touch-action: pan-y;
+  }
+  .navbar-nav::after { top: 14px; right: 14px; width: 36px; height: 36px; font-size: 1.05rem; }
+  .navbar-nav > a { padding: 14px 4px; font-size: 0.95rem; }
+  .mobile-menu-btn { width: 42px; height: 42px; font-size: 1.3rem; }
+}
+
+@media (max-width: 360px) {
+  .navbar-container { height: 62px; padding: 0 12px; }
+  .navbar-brand { font-size: 1.2rem; }
+  .navbar-nav { width: 88vw; padding: calc(62px + 12px) 18px 18px; }
+  .navbar-nav > a { padding: 12px 4px; font-size: 0.9rem; }
+  .mobile-menu-btn { width: 40px; height: 40px; font-size: 1.2rem; }
+}
+
+/* ==========================================================================
+   Portal sidebar â€” sticky horizontal strip on mobile (below navbar)
+   ========================================================================== */
+
+@media (max-width: 768px) {
+  .patient-dashboard,
+  .doctor-dashboard {
+    padding-top: 0;
+  }
+
+  .patient-dashboard .sidebar,
+  .doctor-dashboard .sidebar {
+    position: sticky !important;
+    top: 70px !important;
+    z-index: 900;
+    background: rgba(255, 255, 255, 0.98);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-radius: 0 !important;
+    border: none !important;
+    border-bottom: 1px solid var(--border-color) !important;
+    padding: 8px 0 !important;
+    margin: 0 -14px 14px -14px !important;
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.08);
+    max-height: none;
+    overflow: visible;
+  }
+
+  .patient-dashboard .sidebar-nav,
+  .doctor-dashboard .sidebar-nav,
+  .patient-dashboard .sidebar-nav ul,
+  .doctor-dashboard .sidebar-nav ul {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    gap: 8px !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    padding: 4px 14px !important;
+    margin: 0 !important;
+    list-style: none !important;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  .patient-dashboard .sidebar-nav::-webkit-scrollbar,
+  .doctor-dashboard .sidebar-nav::-webkit-scrollbar { display: none; }
+
+  .patient-dashboard .sidebar-nav li,
+  .doctor-dashboard .sidebar-nav li {
+    flex: 0 0 auto !important;
+    margin: 0 !important;
+    border: none !important;
+  }
+
+  .patient-dashboard .sidebar-nav a,
+  .doctor-dashboard .sidebar-nav a {
+    display: inline-flex !important;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+    padding: 8px 14px !important;
+    font-size: 0.85rem !important;
+    font-weight: 600;
+    border-radius: 999px !important;
+    background: var(--bg-light);
+    border: 1px solid var(--border-color);
+    color: var(--text-light);
+    text-decoration: none;
+    transform: none !important;
+  }
+
+  .patient-dashboard .sidebar-nav a:hover,
+  .patient-dashboard .sidebar-nav a.active,
+  .doctor-dashboard .sidebar-nav a:hover,
+  .doctor-dashboard .sidebar-nav a.active {
+    background: var(--gradient-medical);
+    color: #FFFFFF;
+    border-color: transparent;
+  }
+
+  .patient-dashboard .sidebar-nav a i,
+  .doctor-dashboard .sidebar-nav a i {
+    font-size: 0.85rem;
+    width: auto;
+  }
+}
+
+
+
+/* Final mobile menu controls: real buttons, never mojibake/unicode text. */
+.mobile-menu-close {
+  display: none;
+  border: 0;
+  width: 38px;
+  height: 38px;
+  padding: 0;
+  border-radius: 10px;
+  background: rgba(167, 243, 208, 0.65);
+  color: var(--primary-dark);
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 1rem;
+  line-height: 1;
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  z-index: 10;
+}
+
+.mobile-menu-close:hover {
+  background: rgba(167, 243, 208, 0.95);
+}
+
+@media (max-width: 768px) {
+  .navbar-nav::after { content: none !important; display: none !important; }
+  .mobile-menu-close { display: flex; }
+}
+
+@media (min-width: 769px) {
+  .mobile-menu-close { display: none !important; }
+}
+
+/* Use HTML entities for menu glyphs so Windows/source encoding cannot turn them into mojibake. */
+.mobile-menu-btn > span,
+.mobile-menu-close > span {
+  display: block;
+  line-height: 1;
+  font-family: Arial, sans-serif;
+  font-weight: 700;
+}
+.mobile-menu-btn > span { font-size: 1.45rem; }
+.mobile-menu-close > span { font-size: 1.65rem; }

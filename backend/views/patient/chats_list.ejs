@@ -1,0 +1,233 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Chats - MediDiag</title>
+    <link rel="stylesheet" href="/main/main.css">
+    <link rel="stylesheet" href="/navbar/navbar.css">
+    <link rel="stylesheet" href="/patient/dashboard.css">
+    <link rel="stylesheet" href="/footer/footer.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/portal/portal-fixes.css">
+</head>
+<body>
+    <%- include('../headers/launchheader') %>
+
+    <div class="container patient-dashboard">
+        <div class="dashboard-grid">
+            <aside class="sidebar">
+                <nav class="sidebar-nav">
+                    <ul>
+                        <li>
+                            <a href="/patient/dashboard">
+                                <i class="fas fa-tachometer-alt"></i>
+                                Dashboard
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/patient/doctors">
+                                <i class="fas fa-user-md"></i>
+                                Find Doctors
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/patient/appointments">
+                                <i class="fas fa-calendar-check"></i>
+                                My Appointments
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/patient/chats" class="active">
+                                <i class="fas fa-comments"></i>
+                                Chats
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/patient/profile">
+                                <i class="fas fa-user"></i>
+                                Profile
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/auth/logout">
+                                <i class="fas fa-sign-out-alt"></i>
+                                Logout
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </aside>
+
+            <main class="dashboard-content">
+<div class="chat-page-header">
+    <h1>
+        <i class="fas fa-comments"></i>
+        My Chats
+    </h1>
+
+    <p>
+        View your conversations with doctors and continue your healthcare discussions.
+    </p>
+</div>
+                <% if (!threads || threads.length === 0) { %>
+
+    <div class="card empty-appointments">
+        <div class="empty-state">
+            <i class="fas fa-comment-slash"></i>
+
+            <h3>No chats yet</h3>
+
+            <p>
+                Book an appointment or visit
+                <a href="/patient/doctors">Find Doctors</a>
+                to start a conversation.
+            </p>
+
+            <a href="/patient/doctors" class="btn btn-primary">
+                <i class="fas fa-user-md"></i>
+                Find Doctors
+            </a>
+        </div>
+    </div>
+
+<% } else { %>
+
+    <div class="chat-thread-list">
+
+    <% threads.forEach(function (t) { %>
+
+        <a
+            href="/patient/chat/doctor/<%= t.doctorId %>"
+            class="card chat-thread-item"
+        >
+
+            <div class="chat-thread-avatar">
+                <%= (t.doctorName || 'D')
+                    .charAt(0)
+                    .toUpperCase() %>
+            </div>
+
+            <div class="chat-thread-info">
+
+                <h3>
+                    Dr. <%= t.doctorName || 'Doctor' %>
+                </h3>
+
+                <p>
+                    <%= t.lastMessage || 'No messages yet' %>
+                </p>
+
+            </div>
+
+            <div class="chat-thread-meta">
+
+                <% if (Number(t.unreadCount || 0) > 0) { %>
+
+                    <span class="badge">
+                        <%= t.unreadCount %>
+                    </span>
+
+                <% } %>
+
+                <% if (t.lastAt) { %>
+
+                    <small>
+                        <%= new Date(
+                            t.lastAt
+                        ).toLocaleDateString() %>
+                    </small>
+
+                <% } %>
+
+            </div>
+
+        </a>
+
+    <% }); %>
+
+</div>
+
+<% } %>
+            </main>
+        </div>
+    </div>
+
+    <%- include('../main/footer') %>
+
+    <script src="/navbar/navbar.js"></script>
+
+    <style>
+        .chat-thread-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .chat-thread-item {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 14px;
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.3s ease;
+        }
+        .chat-thread-item:hover {
+            transform: translateX(4px);
+            border-color: var(--primary-color);
+            box-shadow: var(--shadow-medical);
+        }
+        .chat-thread-avatar {
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            background: var(--gradient-medical);
+            color: #FFFFFF;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+        .chat-thread-info {
+            flex: 1 1 auto;
+            min-width: 0;
+        }
+        .chat-thread-info h3 {
+            color: var(--text-lighter);
+            font-size: 1rem;
+            margin-bottom: 3px;
+            word-break: break-word;
+        }
+        .chat-thread-info p {
+            color: var(--text-dark);
+            font-size: 0.82rem;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .chat-thread-meta {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 4px;
+            flex-shrink: 0;
+        }
+        .chat-thread-meta .badge {
+            background: var(--primary-color);
+            color: #FFFFFF;
+            padding: 3px 9px;
+            border-radius: 20px;
+            font-size: 0.72rem;
+            font-weight: 700;
+        }
+        .chat-thread-meta small {
+            color: var(--text-dark);
+            font-size: 0.7rem;
+        }
+    </style>
+</body>
+</html>
