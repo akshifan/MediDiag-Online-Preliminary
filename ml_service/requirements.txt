@@ -11,3 +11,4 @@ flask-socketio==5.4.0
 python-socketio==5.9.0
 eventlet==0.33.3
 openai
+gunicorn==23.0.0
