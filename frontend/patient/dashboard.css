@@ -936,9 +936,9 @@
 @media (max-width: 340px) {
   .appointment-scroll-grid {
     grid-template-columns: 1fr !important;
-    width: 260px !important;
-        min-width: 260px !important;
-        max-width: 260px !important;
+    width: 280px !important;
+        min-width: 280px !important;
+        max-width: 280px !important;
   }
 }
 
