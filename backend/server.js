@@ -64,6 +64,14 @@ app.use((req, res, next) => {
   next();
 });
 
+// Render health check
+app.get('/health', (req, res) => {
+  res.status(200).json({
+    status: 'ok',
+    service: 'MediDiag Backend'
+  });
+});
+
 // Require an authenticated session for /api/* proxy routes.
 function requireAuth(req, res, next) {
   if (req.session && req.session.user) return next();
