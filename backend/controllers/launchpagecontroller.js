@@ -1,6 +1,7 @@
 const path = require('path');
 const { pool } = require('../config/db');
-const { transporter } = require('../utils/mailer');
+const { sendEmail } = require('../utils/mailer'); // <-- Update import
+
 
 exports.getHome = (req, res) => {
   if (req.session.user) {
@@ -81,16 +82,7 @@ exports.postContact = async (req, res) => {
         }
 
         // Check Brevo configuration
-        if (!process.env.BREVO_SMTP_USER) {
-            console.error('[CONTACT] BREVO_SMTP_USER is missing');
-
-            return res.status(500).render('launchpage/contact', {
-                title: 'Contact Us - MediDiag',
-                user: req.session.user,
-                success: null,
-                error: 'Email service is not configured.'
-            });
-        }
+        
 
         if (!process.env.BREVO_API_KEY) {
             console.error('[CONTACT] BREVO_API_KEY is missing');
@@ -130,21 +122,11 @@ exports.postContact = async (req, res) => {
         const safeMessage = escapeHtml(message);
 
         // Send email through Brevo SMTP
-        await transporter.sendMail({
-            from: {
-                name: process.env.EMAIL_FROM_NAME || 'MediDiag',
-                address: process.env.EMAIL_FROM
-            },
-
-            // Receiving email
-            to: 'looserrr234@gmail.com',
-
-            // Reply button in Gmail will reply to form submitter
-            replyTo: email,
-
-            subject: `MediDiag Contact Form: ${subject}`,
-
-            text: `
+        await sendEmail({
+    to: 'looserrr234@gmail.com', // Or use an env variable for the recipient
+    replyTo: email,
+    subject: `MediDiag Contact Form: ${subject}`,
+    text: `
 New message received from the MediDiag contact form.
 
 Name: ${full_name}
@@ -153,112 +135,29 @@ Subject: ${subject}
 
 Message:
 ${message}
-            `.trim(),
-
-            html: `
+    `.trim(),
+    html: `
 <!DOCTYPE html>
 <html>
-<head>
-    <meta charset="UTF-8">
-    <title>MediDiag Contact Message</title>
-</head>
-
-<body style="
-    margin:0;
-    padding:30px;
-    background:#f0fdf8;
-    font-family:Arial,Helvetica,sans-serif;
-">
-
-    <div style="
-        max-width:650px;
-        margin:0 auto;
-        background:#ffffff;
-        border:1px solid #b7eee0;
-        border-radius:16px;
-        padding:30px;
-        box-shadow:0 10px 30px rgba(16,185,129,0.10);
-    ">
-
-        <h2 style="
-            margin-top:0;
-            color:#065f46;
-        ">
-            New MediDiag Contact Message
-        </h2>
-
-        <p style="
-            color:#64748b;
-            font-size:14px;
-        ">
-            Someone submitted a message through the MediDiag
-            contact form.
-        </p>
-
-        <hr style="
-            border:none;
-            border-top:1px solid #d1fae5;
-            margin:25px 0;
-        ">
-
-        <p>
-            <strong>Name:</strong><br>
-            ${safeName}
-        </p>
-
-        <p>
-            <strong>Email:</strong><br>
-            ${safeEmail}
-        </p>
-
-        <p>
-            <strong>Subject:</strong><br>
-            ${safeSubject}
-        </p>
-
-        <div style="
-            margin-top:25px;
-            padding:20px;
-            background:#ecfdf5;
-            border-radius:12px;
-            border:1px solid #d1fae5;
-        ">
-
-            <strong style="color:#065f46;">
-                Message
-            </strong>
-
-            <p style="
-                margin-bottom:0;
-                color:#334155;
-                line-height:1.7;
-                white-space:pre-wrap;
-            ">
-                ${safeMessage}
-            </p>
-
+<body style="margin:0; padding:30px; background:#f0fdf8; font-family:Arial,Helvetica,sans-serif;">
+    <div style="max-width:650px; margin:0 auto; background:#ffffff; border:1px solid #b7eee0; border-radius:16px; padding:30px; box-shadow:0 10px 30px rgba(16,185,129,0.10);">
+        <h2 style="margin-top:0; color:#065f46;">New MediDiag Contact Message</h2>
+        <p style="color:#64748b; font-size:14px;">Someone submitted a message through the MediDiag contact form.</p>
+        <hr style="border:none; border-top:1px solid #d1fae5; margin:25px 0;">
+        <p><strong>Name:</strong><br>${full_name}</p>
+        <p><strong>Email:</strong><br>${email}</p>
+        <p><strong>Subject:</strong><br>${subject}</p>
+        <div style="margin-top:25px; padding:20px; background:#ecfdf5; border-radius:12px; border:1px solid #d1fae5;">
+            <strong style="color:#065f46;">Message</strong>
+            <p style="margin-bottom:0; color:#334155; line-height:1.7; white-space:pre-wrap;">${message}</p>
         </div>
-
-        <hr style="
-            border:none;
-            border-top:1px solid #e2e8f0;
-            margin:25px 0;
-        ">
-
-        <p style="
-            margin:0;
-            color:#065f46;
-            font-weight:600;
-        ">
-            MediDiag Contact System
-        </p>
-
+        <hr style="border:none; border-top:1px solid #e2e8f0; margin:25px 0;">
+        <p style="margin:0; color:#065f46; font-weight:600;">MediDiag Contact System</p>
     </div>
-
 </body>
 </html>
-            `
-        });
+    `
+});
 
         console.log(
             `[CONTACT] Message successfully sent from ${email} to looserrr234@gmail.com`
